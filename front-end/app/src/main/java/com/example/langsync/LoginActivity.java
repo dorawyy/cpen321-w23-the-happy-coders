@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.d(TAG, "Account token: " + idToken);
 
 //            // TODO(developer): send ID Token to server and validate
-            String url = "http://10.0.2.2:8081/authentication/" + idToken;
+            String url = "http://10.0.2.2:8081/authentication/login/" + idToken;
             Request request = new Request.Builder()
                     .url(url)
                     .build();

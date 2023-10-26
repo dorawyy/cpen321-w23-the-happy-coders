@@ -6,6 +6,7 @@ const client = new MongoClient(process.env.DATABASE_URL);
 
 const agoraTokenRoutes = require('./routes/agoraTokenRoutes');
 const usersRoutes = require('./routes/usersRoutes');
+const authenticationRoutes = require('./routes/authenticationRoutes');
 
 var app = express();
 
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 //Routes
 app.use('/agoraToken', agoraTokenRoutes);
 app.use("/users", usersRoutes);
+app.use("/authentication", authenticationRoutes)
 
 async function run(){
     try{
