@@ -1,5 +1,11 @@
 var express = require("express");
+require('dotenv').config()
+
+const {MongoClient} = require('mongodb');
+const client = new MongoClient(process.env.DATABASE_URL);
+
 const agoraTokenRoutes = require('./routes/agoraTokenRoutes');
+const usersRoutes = require('./routes/usersRoutes');
 
 var app = express();
 
@@ -11,9 +17,23 @@ app.get("/", (req, res) => {
 
 //Routes
 app.use('/agoraToken', agoraTokenRoutes);
+app.use("/users", usersRoutes);
 
 async function run(){
-    app.listen(8081)
+    try{
+        await client.connect();
+        console.log("Connected to database");
+        var server = app.listen(8081, (req, res) => {
+            var host = server.address().address;
+            var port = server.address().port;
+            console.log("Server succesfully running at http://%s:%s", host, port);
+        });
+    }
+    catch (err) {
+        console.log(err);
+        await client.close();
+        
+    }
 }
 
 run()

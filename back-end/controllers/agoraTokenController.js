@@ -1,9 +1,9 @@
 // matchingController.js
 const agoraTokenService = require('../services/agoraTokenService'); 
 const { RtcRole } = require('agora-access-token');
-require('dotenv').config()
+require('dotenv').config();
 
-exports.getRTCToken = (req, resp) => { 
+exports.getRTCToken = async (req, resp) => { 
     resp.header('Access-Control-Allow-Origin', '*');
     const channelName = req.params.channel;
     if (!channelName) {
