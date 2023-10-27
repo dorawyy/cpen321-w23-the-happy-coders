@@ -1,8 +1,6 @@
-const express = require('express');
-const router = express.Router();
 const authenticationServices = require('../services/authenticationService');
 
-async function handleGoogleLogin(req, res) {
+exports.handleLogin = async (req, res) => {
     let idToken = req.params.idToken;
 
     const verificationResult = await authenticationServices.verifyGoogleToken(idToken);
@@ -13,9 +11,9 @@ async function handleGoogleLogin(req, res) {
     } else {
         res.status(401).json({ success: false, message: verificationResult.error });
     }
-}
+};
 
-async function handleGoogleSignUp(req, res) {
+exports.handleSignup = async (req, res) => {
     let idToken = req.params.idToken;
 
     const verificationResult = await authenticationServices.verifyGoogleToken(idToken);
@@ -26,6 +24,4 @@ async function handleGoogleSignUp(req, res) {
     } else {
         res.status(401).json({ success: false, message: verificationResult.error });
     }
-}
-
-module.exports = router;
+};

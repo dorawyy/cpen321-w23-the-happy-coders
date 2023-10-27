@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn();
+                login();
             }
         });
     }
@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     });
 
-    private void signIn() {
+    private void login() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         loginLauncher.launch(signInIntent);
     }
