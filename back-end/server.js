@@ -1,4 +1,6 @@
 var express = require("express");
+var app = express();
+
 require('dotenv').config()
 const { default: mongoose } = require("mongoose");
 
@@ -6,8 +8,8 @@ const agoraTokenRoutes = require('./routes/agoraTokenRoutes');
 const usersRoutes = require('./routes/usersRoutes');
 const authenticationRoutes = require('./routes/authenticationRoutes');
 const googleCalendarRoutes = require('./routes/googleCalendarRoutes');
+const matchingRoutes = require('./routes/matchingRoutes');
 
-var app = express();
 
 app.use(express.json());
 
@@ -20,6 +22,7 @@ app.use('/agoraToken', agoraTokenRoutes);
 app.use("/users", usersRoutes);
 app.use("/authentication", authenticationRoutes)
 app.use("/googleCalendar", googleCalendarRoutes);
+app.use("/matches", matchingRoutes)
 
 async function run(){
     try{
