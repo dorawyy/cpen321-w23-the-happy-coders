@@ -1,26 +1,124 @@
 require('dotenv').config();
+const userServices = require('../services/userService');
 
 exports.createUser = (req, resp) => { 
     const body = req.body;
     
+    const user = userServices.findOrCreateUser(body);
     return resp.json({ body });
 };
 
-exports.updateUser = (req, resp) => { 
-    const body = req.body;
-    
-    return resp.json({ body });
-};  
+exports.updateUserProfile = async (req, resp) => {
+    try {
+        const user = await userServices.findUserByID(req.param.id);
 
+        if (user == null) {
+            return resp.status(404).json({ success: false });
+        }
+        const body = req.body;
+
+        //Update each field for the user and save to database
+        user.proficientLanguages = body.proficientLanguages;
+        user.interestedLanguages = body.interestedLanguages;
+        user.learningPreference = body.learningPreference;
+        user.interests = body.interests;
+
+        user.save();
+
+        return resp.status(200).json({ success: true });
+    } catch (error) {
+        return resp.status(500).json({ success: false, message: "Error saving updates to user"});
+    }
+};
+
+exports.updateMatchedUsers = async (req, resp) => {
+    try {
+        const user = await userServices.findUserByID(req.param.id);
+
+        if (user == null) {
+            return resp.status(404).json({ success: false });
+        }
+        const body = req.body;
+
+        user.matchedUsers.push(body.matchedUser);
+
+        user.save();
+
+        return resp.status(200).json({ success: true });
+    } catch (error) {
+        return resp.status(500).json({ success: false, mesage: "Error adding a new matched user"});
+    }
+}
+
+exports.updateBlockedUsers = async (req, resp) => {
+    try {
+        const user = await userServices.findUserByID(req.param.id);
+
+        if (user == null) {
+            return resp.status(404).json({ success: false });
+        }
+        const body = req.body;
+
+        user.blockedUsers.push(body.blockedUser);
+
+        user.save();
+
+        return resp.status(200).json({ success: true });
+    } catch (error) {
+        return resp.status(500).json({ success: false, mesage: "Error adding a blocked user"});
+    }
+}
+
+exports.updateLikedUsers = async (req, resp) => {
+    try {
+        const user = await userServices.findUserByID(req.param.id);
+
+        if (user == null) {
+            return resp.status(404).json({ success: false });
+        }
+        const body = req.body;
+
+        user.likedUsers.push(body.likedUser);
+
+        user.save();
+
+        return resp.status(200).json({ success: true });
+    } catch (error) {
+        return resp.status(500).json({ success: false, mesage: "Error adding a new liked user"});
+    }
+}
+
+exports.updateBadges = async (req, resp) => {
+    try {
+        const user = await userServices.findUserByID(req.param.id);
+
+        if (user == null) {
+            return resp.status(404).json({ success: false });
+        }
+        const body = req.body;
+
+        user.badges.push(body.badge);
+
+        user.save();
+
+        return resp.status(200).json({ success: true });
+    } catch (error) {
+        return resp.status(500).json({ success: false, mesage: "Error adding a new badge"});
+    }
+}
 
 exports.getUser = (req, resp) => { 
-    const body = req.body;
+    let user = userServices.findUserByID(req.param.id);
+
+    if (user == null) {
+        return resp.status(404).json({ success: false });
+    }
     
-    return resp.json({ body });
+    return resp.status(200).json({ success: true, user: user });
 };
 
-exports.getFilteredUser = (req, resp) => {
-    const body = req.body;
-
-    return resp.json({ body });
+exports.getFilteredUser = (filter) => {
+    let users = userServices.findUsers(filter);
+    
+    return users;
 };

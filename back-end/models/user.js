@@ -42,23 +42,23 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     matchedUsers: {
-        type: [Number],
+        type: [mongoose.Schema.Types.ObjectId],
         required: true
     },
     blockedUsers: {
-        type: [Number],
+        type: [mongoose.Schema.Types.ObjectId],
         required: true
     },
     likedUsers: {
-        type: [Number],
+        type: [mongoose.Schema.Types.ObjectId],
         required: true
     },
     chatroomIDs: {
-        type: [Number],
+        type: [mongoose.Schema.Types.ObjectId],
         required: true
     },
     badges: {
-        type: [Number],
+        type: [mongoose.Schema.Types.ObjectId],
         required: true
     },
     interests: {
