@@ -1,7 +1,11 @@
 const { OAuth2Client } = require('google-auth-library');
-require('dotenv').config()
+const { google } = require('googleapis');
+require('dotenv').config();
 
-const client = new OAuth2Client(process.env.CLIENT_ID);
+const client = new OAuth2Client({
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET
+})
 
 // Verifies that the tokens retrieved from login and sign up are valid
 async function verifyGoogleToken(idToken) {
@@ -9,17 +13,47 @@ async function verifyGoogleToken(idToken) {
         const ticket = await client.verifyIdToken({
             idToken: idToken,
             audience: process.env.CLIENT_ID,
-        });
+        });        
 
-        const payload = ticket.getPayload();
-        // TODO: Determine what info to return to the front-end
-        const email = payload.email;
-
-        return { success: true, email };
+        return { success: true, ticket: ticket };
     } catch (error) {
         console.error('Error verifying Google token:', error);
         return { success: false, error: 'Token verification failed' };
     }
 }
 
-module.exports = {verifyGoogleToken};
+
+// Retrieves the access token and refresh token from the authorization code
+async function retrieveTokens(authorizationCode) {
+    try {
+        const { tokens } = await client.getToken(authorizationCode);
+        return { success: true, tokens: tokens };
+    } catch (error) {
+        console.error('Error retrieving access code:', error);
+        return { success: false, error: 'Access code retrieval failed' };
+    }
+}
+
+async function getGoogleClient(authCode){
+    const tokensResponse = await retrieveTokens(authCode);
+
+    if(!tokensResponse.success) {
+        return tokensResponse;
+    }
+
+    const acccessToken  = tokensResponse.tokens.access_token;
+
+
+    const auth = new google.auth.OAuth2(
+        process.env.CLIENT_ID,
+        process.env.CLIENT_SECRET,
+    );
+
+    auth.setCredentials({
+        access_token: acccessToken,
+    });
+
+    return {success: true, auth: auth};
+}
+
+module.exports = { verifyGoogleToken, retrieveTokens, getGoogleClient };
