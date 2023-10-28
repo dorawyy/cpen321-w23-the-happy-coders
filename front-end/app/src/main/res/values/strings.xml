@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">LangSync</string>
     <string name="login_with_google">Login with Google</string>
-    <string name="signup_with_google">Signup with Google</string>
+    <string name="signup_with_google">Sign Up with Google</string>
     <string name="logo_text">LangSync</string>
     <string name="sign_up_text"><u>Don\'t have an account? Sign up</u></string>
     <string name="have_account"><u>Already have an account? Login</u></string>
@@ -15,4 +15,7 @@
     <string name="recent_message">Recent Message</string>
     <string name="text_placeholder">Text Placeholder!</string>
     <string name="message_hint">Message...</string>
+    <string name="desired_lang_text">Languages you want to learn...</string>
+    <string name="proficient_lang_text">Languages you are proficient in...</string>
+    <string name="learn_pref_text">Who do you want to learn from?</string>
 </resources>
