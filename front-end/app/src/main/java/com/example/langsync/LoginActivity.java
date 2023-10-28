@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -22,11 +23,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
@@ -44,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
+                .requestServerAuthCode(getString(R.string.server_client_id))
+                .requestScopes(new Scope("https://www.googleapis.com/auth/calendar"))
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -60,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
     ActivityResultLauncher<Intent> loginLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
+            Log.d(TAG, result.toString());
             if (result.getResultCode() == RESULT_OK) {
                 Intent data = result.getData();
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -77,13 +84,20 @@ public class LoginActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             String idToken = account.getIdToken();
+            String authCode = account.getServerAuthCode();
 
             Log.d(TAG, "Account token: " + idToken);
+            Log.d(TAG, "Account Auth Code:" + authCode);
+
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), "{" +
+                    "\"idToken\": \"" + idToken + "\"" +
+                    "}");
 
 //            // TODO(developer): send ID Token to server and validate
-            String url = "http://10.0.2.2:8081/authentication/login/" + idToken;
+            String url = "http://10.0.2.2:8081/authentication/login/";
             Request request = new Request.Builder()
                     .url(url)
+                    .post(requestBody)
                     .build();
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -98,6 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         assert response.body() != null;
                         String jsonData = response.body().string();
+                        Log.d(TAG, jsonData);
                         // TODO: Ensure token was authenticated, else tell them to login again
                     }
                 }
