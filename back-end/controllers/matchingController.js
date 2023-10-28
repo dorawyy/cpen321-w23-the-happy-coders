@@ -1,21 +1,23 @@
-// matchingController.js
-const express = require('express');
-const router = express.Router();
 const matchingService = require('../services/matchingService'); 
 
-// POST /api/match
-router.post('/match', async (req, res) => {
+exports.createMatch = async(req,res) =>{
+    const sourceUserId = req.body.sourceUserId;
+    const targetUserId = req.body.targetUserId;
 
-});
+    let isMatch = matchingService.createMatch(sourceUserId, targetUserId)
 
-// GET /api/match/:userId
-router.get('/match/:userId', async (req, res) => {
-   
-});
+    if(isMatch){
+       return res.json({match : true}) 
+    }
 
-// GET /api/match
-router.get('/match', async (req, res) => {
+    return res.json({match: false})
+}
 
-});
+exports.getAllMatches = async(req,res) =>{
+    console.log("here")
+    const userId = req.body.userId;
+    
+    let matchList = matchingService.getAllMatches(userId);
 
-module.exports = router;
+    return res.json({matches: matchList})
+}
