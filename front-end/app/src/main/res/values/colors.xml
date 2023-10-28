@@ -5,4 +5,6 @@
     <color name="stroke_color">#BCBCBC</color>
     <color name="text_color">#666666</color>
     <color name="link_color">#0C499A</color>
+    <color name="received_msg">#186FBA</color>
+    <color name="sent_msg">#49A8CE</color>
 </resources>

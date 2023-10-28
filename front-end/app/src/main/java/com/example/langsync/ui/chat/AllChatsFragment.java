@@ -12,16 +12,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.langsync.R;
-import com.example.langsync.databinding.FragmentChatBinding;
+import com.example.langsync.databinding.FragmentAllChatsBinding;
 
 import org.json.JSONObject;
 
 import java.util.List;
 
-public class ChatFragment extends Fragment {
+public class AllChatsFragment extends Fragment {
 
-    private FragmentChatBinding binding;
-    private RecyclerView recyclerView;
+    private FragmentAllChatsBinding binding;
 
     private List<JSONObject> chats;
 
@@ -30,10 +29,10 @@ public class ChatFragment extends Fragment {
         ChatViewModel dashboardViewModel =
                 new ViewModelProvider(this).get(ChatViewModel.class);
 
-        binding = FragmentChatBinding.inflate(inflater, container, false);
+        binding = FragmentAllChatsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        recyclerView = root.findViewById(R.id.chat_recycler_view);
+        RecyclerView recyclerView = root.findViewById(R.id.chat_recycler_view);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -41,7 +40,7 @@ public class ChatFragment extends Fragment {
         RecyclerView.Adapter chatRecyclerAdapter = new AllChatsRecyclerAdapter(getContext(), chats);
 
         recyclerView.setAdapter(chatRecyclerAdapter);
-        
+
         return root;
     }
 

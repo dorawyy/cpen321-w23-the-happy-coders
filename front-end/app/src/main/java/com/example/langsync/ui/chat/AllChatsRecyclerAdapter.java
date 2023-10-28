@@ -62,6 +62,10 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             vh.chat_name.setText(chat.getString("name"));
             vh.chat_last_message.setText(chat.getString("recentMsg"));
             vh.chat_profile_pic.setImageBitmap((Bitmap) chat.get("profilePic"));
+
+            vh.itemView.setOnClickListener(v -> {
+
+            });
         } catch (JSONException ex) {
             throw new RuntimeException(ex);
         }
