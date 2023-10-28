@@ -5,10 +5,14 @@
     <string name="logo_text">LangSync</string>
     <string name="sign_up_text"><u>Don\'t have an account? Sign up</u></string>
     <string name="have_account"><u>Already have an account? Login</u></string>
-    <string name="title_home">Home</string>
+    <string name="title_matches">Matches</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="john_doe">John Doe</string>
     <string name="name_placeholder">John Doe</string>
     <string name="server_client_id">439657244083-4ecuib7ub8dpn8aar11gqjkcvem1tnun.apps.googleusercontent.com</string>
+    <string name="chat_name_placeholder">John Doe</string>
+    <string name="recent_message">Recent Message</string>
+    <string name="text_placeholder">Text Placeholder!</string>
+    <string name="message_hint">Message...</string>
 </resources>
