@@ -18,4 +18,8 @@
     <string name="desired_lang_text">Languages you want to learn...</string>
     <string name="proficient_lang_text">Languages you are proficient in...</string>
     <string name="learn_pref_text">Who do you want to learn from?</string>
+    <string name="login_error">Login failed. Please try again.</string>
+    <string name="login_granted">Login granted.</string>
+    <string name="sign_up_error">Sign Up failed. Please try again.</string>
+    <string name="sign_up_granted">Sign Up granted.</string>
 </resources>
