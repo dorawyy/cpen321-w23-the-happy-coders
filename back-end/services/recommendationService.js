@@ -1,6 +1,7 @@
 const { User } = require("../models/user");
 const { getDefaultInitialIdealMatch } = require("../models/idealMatch");
 
+
 // Check if targetUser likes sourceUser and matches
 async function getRecommendedUsers(userId){
     let user = await User.findById(userId);
