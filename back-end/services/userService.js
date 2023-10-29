@@ -19,7 +19,7 @@ async function findOrCreateUser(ticket) {
 }
 
 async function findUserByID(userID) {
-    let user = await User.findOne({ userID : userID });
+    let user = await User.findOne({ _id : userID });
 
     if (!user) {
         return null;

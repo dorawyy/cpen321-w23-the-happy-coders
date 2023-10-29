@@ -31,25 +31,6 @@ exports.updateUserProfile = async (req, resp) => {
     }
 };
 
-exports.updateMatchedUsers = async (req, resp) => {
-    try {
-        const user = await userServices.findUserByID(req.param.id);
-
-        if (user == null) {
-            return resp.status(404).json({ success: false });
-        }
-        const body = req.body;
-
-        user.matchedUsers.push(body.matchedUser);
-
-        user.save();
-
-        return resp.status(200).json({ success: true });
-    } catch (error) {
-        return resp.status(500).json({ success: false, mesage: "Error adding a new matched user"});
-    }
-}
-
 exports.updateBlockedUsers = async (req, resp) => {
     try {
         const user = await userServices.findUserByID(req.param.id);
@@ -66,25 +47,6 @@ exports.updateBlockedUsers = async (req, resp) => {
         return resp.status(200).json({ success: true });
     } catch (error) {
         return resp.status(500).json({ success: false, mesage: "Error adding a blocked user"});
-    }
-}
-
-exports.updateLikedUsers = async (req, resp) => {
-    try {
-        const user = await userServices.findUserByID(req.param.id);
-
-        if (user == null) {
-            return resp.status(404).json({ success: false });
-        }
-        const body = req.body;
-
-        user.likedUsers.push(body.likedUser);
-
-        user.save();
-
-        return resp.status(200).json({ success: true });
-    } catch (error) {
-        return resp.status(500).json({ success: false, mesage: "Error adding a new liked user"});
     }
 }
 
