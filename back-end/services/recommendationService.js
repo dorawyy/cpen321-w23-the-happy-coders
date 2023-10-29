@@ -83,3 +83,5 @@ function calculateScore(user, targetUser) {
 
     return similarityScore;
 }
+
+module.exports = {getRecommendedUsers};
