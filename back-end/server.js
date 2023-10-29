@@ -11,6 +11,7 @@ const usersRoutes = require('./routes/usersRoutes');
 const authenticationRoutes = require('./routes/authenticationRoutes');
 const googleCalendarRoutes = require('./routes/googleCalendarRoutes');
 const matchingRoutes = require('./routes/matchingRoutes');
+const communicationRoutes = require('./routes/communicationRoutes');
 
 
 app.use(express.json());
@@ -25,6 +26,7 @@ app.use("/users", usersRoutes);
 app.use("/authentication", authenticationRoutes)
 app.use("/googleCalendar", googleCalendarRoutes);
 app.use("/matches", matchingRoutes)
+app.use("/chatrooms", communicationRoutes)
 
 async function run(){
     try{
