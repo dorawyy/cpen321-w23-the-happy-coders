@@ -1,16 +1,17 @@
 require('dotenv').config();
 const userServices = require('../services/userService');
 
-exports.createUser = (req, resp) => { 
+exports.createUser = async (req, resp) => { 
     const body = req.body;
     
-    const user = userServices.findOrCreateUser(body);
+    const user = await userServices.createUser(body);
+
     return resp.status(200).json({user: user});
 };
 
 exports.updateUserProfile = async (req, resp) => {
     try {
-        const user = await userServices.findUserByID(req.param.id);
+        const user = await userServices.createUser(req.params.id);
 
         if (user == null) {
             return resp.status(404).json({ success: false });
@@ -33,7 +34,7 @@ exports.updateUserProfile = async (req, resp) => {
 
 exports.updateBlockedUsers = async (req, resp) => {
     try {
-        const user = await userServices.findUserByID(req.param.id);
+        const user = await userServices.findUserByID(req.params.id);
 
         if (user == null) {
             return resp.status(404).json({ success: false });
@@ -52,7 +53,7 @@ exports.updateBlockedUsers = async (req, resp) => {
 
 exports.updateBadges = async (req, resp) => {
     try {
-        const user = await userServices.findUserByID(req.param.id);
+        const user = await userServices.findUserByID(req.params.id);
 
         if (user == null) {
             return resp.status(404).json({ success: false });
@@ -69,8 +70,8 @@ exports.updateBadges = async (req, resp) => {
     }
 }
 
-exports.getUser = (req, resp) => { 
-    let user = userServices.findUserByID(req.param.id);
+exports.getUser =  async (req, resp) => { 
+    let user =  await userServices.findUserByID(req.params.id);
 
     if (user == null) {
         return resp.status(404).json({ success: false });

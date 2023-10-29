@@ -31,3 +31,5 @@ async function createChatroom(user1Id, user2Id){
 
     Chatroom.create()
 }
+
+module.exports = {sendMessage, getChatrooms, createChatroom};

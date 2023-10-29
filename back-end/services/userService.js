@@ -37,7 +37,8 @@ async function findUserByEmail(email) {
 
 
 async function findUserByID(userID) {
-    let user = await User.findOne({ _id : userID });
+    // let user = await User.findOne({ _id : userID });
+    let user = await User.findById(userID);
 
     if (!user) {
         return null;

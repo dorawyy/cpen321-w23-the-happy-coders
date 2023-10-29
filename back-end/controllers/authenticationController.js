@@ -1,5 +1,3 @@
-
-const { captureRejectionSymbol } = require('johnny-five/lib/board');
 const authenticationServices = require('../services/authenticationService');
 const userServices = require('../services/userService');
 
