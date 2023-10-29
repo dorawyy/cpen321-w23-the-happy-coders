@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { desiredUserSchema } = require('./desiredUser');
+const { idealMatchSchema } = require('./idealMatch');
 
 const userSchema = new mongoose.Schema({
     age: {
@@ -103,8 +103,8 @@ const userSchema = new mongoose.Schema({
             default: false
         }
     },
-    desiredUser:{
-        type: desiredUserSchema,
+    idealMatch:{
+        type: idealMatchSchema,
         required: true,
         default:  {
             age: 0,
