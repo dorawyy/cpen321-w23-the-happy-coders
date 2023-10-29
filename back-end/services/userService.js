@@ -1,5 +1,6 @@
 require('dotenv').config()
 const {User} = require('../models/user');
+const {getDefaultInitialIdealMatch} = require('../models/idealMatch');
 
 async function findUnregistredOrCreateUser(ticket) {
     const payload = ticket.getPayload();
@@ -11,13 +12,8 @@ async function findUnregistredOrCreateUser(ticket) {
 
     if (!user){
         try {
-            userData = {
-                email: email,
-                displayName: displayName,
-                picture: picture,
-            }
-            user = new User(userData);
-            await user.save();
+            user = await createUser(email, displayName, picture);
+            
             return {success: true, user: user};
         } catch (error) {
             return {success: false, error: error};
@@ -58,10 +54,41 @@ async function findUsers(filter){
     return users;
 }
 
-async function createUser(body) {
-    let user = getDefaultUser(body.email, body.displayName, body.picture);
+async function createUser(email, displayName, picture) {
+    userData = {
+        email: email,
+        displayName: displayName,
+        picture: picture,
+    }
+    let user = new User(userData);
     await user.save();
-    return user;
+    return user; 
 }
 
-module.exports = { findUnregistredOrCreateUser, findUserByEmail, findUserByID, findUsers, createUser };
+async function updateUser(userID, userData) {
+    user = await User.findById(userID);
+
+    if (!user) {
+        return {success: false, error: "User not found"};
+    }
+
+    try {
+        user.proficientLanguages = userData.proficientLanguages;
+        user.interestedLanguages = userData.interestedLanguages;
+        user.learningPreference = userData.learningPreference;
+        user.interests = userData.interests;
+
+        if (userData.registered === false) {
+            user.idealMatch = getDefaultInitialIdealMatch(user);
+            user.registered = true;
+        }
+
+        user.save();
+
+        return {success: true, message: "User updated successfully"};
+    } catch (error) {
+        return {success: false, error: error};
+    }
+}
+
+module.exports = { findUnregistredOrCreateUser, findUserByEmail, findUserByID, findUsers, createUser, updateUser };
