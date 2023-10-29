@@ -11,7 +11,7 @@ exports.sendMessage = async(req,res) =>{
 }
 
 exports.getChatrooms = async(req,res) =>{
-    const sourceUserId = req.body.sourceUserId;
+    const sourceUserId = req.params.id;
 
     let chatrooms = communicationService.getChatrooms(sourceUserId);
 
