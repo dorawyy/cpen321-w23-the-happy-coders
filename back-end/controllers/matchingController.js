@@ -1,6 +1,7 @@
 const matchingService = require('../services/matchingService'); 
 
 exports.createMatch = async(req,res) =>{
+    console.log("here")
     const sourceUserId = req.body.sourceUserId;
     const targetUserId = req.body.targetUserId;
 
@@ -14,9 +15,8 @@ exports.createMatch = async(req,res) =>{
 }
 
 exports.getAllMatches = async(req,res) =>{
-    console.log("here")
     const userId = req.body.userId;
-    
+
     let matchList = matchingService.getAllMatches(userId);
 
     return res.json({matches: matchList})
