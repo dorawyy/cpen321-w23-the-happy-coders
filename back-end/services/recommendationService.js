@@ -1,5 +1,6 @@
 const { User } = require("../models/user");
-const {getDefaultInitialDesiredUser} = require("../models/desiredUser");
+const { getDefaultInitialIdealMatch } = require("../models/idealMatch");
+
 
 // Check if targetUser likes sourceUser and matches
 async function getRecommendedUsers(userId){
@@ -27,24 +28,24 @@ async function getRecommendedUsers(userId){
         }
     }
 
-    const sortedScoredUsers = sortUsersOnScore(scoredUsers, user.desiredUser);
+    const sortedScoredUsers = sortUsersOnScore(scoredUsers, user.idealMatch);
     const recommendedUsers = arbitraryTopUsers.concat(sortedScoredUsers);
 
     return recommendedUsers;
 }
 
-function sortUsersOnScore (users, desiredUser) {
+function sortUsersOnScore (users, idealMatch) {
     const usersWithScore = users.map((user) => {
-        const score = getScore(user, desiredUser);
+        const score = getScore(user, idealMatch);
         return { user, score };
     });
     const sortedUsersWithScore = usersWithScore.sort((a, b) => a.score - b.score);
     return sortedUsersWithScore.map((userWithScore) => userWithScore.user);
 }
 
-function getScore(user, desiredUser) {
-    const formatedUser = getDefaultInitialDesiredUser(user);
-    const score = calculateScore(formatedUser, desiredUser);
+function getScore(user, idealMatch) {
+    const formatedUser = getDefaultInitialIdealMatch(user);
+    const score = calculateScore(formatedUser, idealMatch);
     return score;
 }
 

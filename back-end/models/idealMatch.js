@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const desiredUserSchema = new mongoose.Schema({
+const idealMatchSchema = new mongoose.Schema({
     age: {
         type: Number,
         required: true,
@@ -67,7 +67,7 @@ const desiredUserSchema = new mongoose.Schema({
     }
 });
 
-function getDefaultDesiredUserInterests(interest){
+function getDefaultIdealMatchInterests(interest){
     const defaultInterests = {};
     for (const [key, value] of Object.entries(interest)) {
         defaultInterests[key] = value ? 1.0 : 0;
@@ -75,7 +75,7 @@ function getDefaultDesiredUserInterests(interest){
     return defaultInterests;
 }
 
-function getDefaultDesiredUserLearningPreference(learningPreference){
+function getDefaultIdealMatchLearningPreference(learningPreference){
     const defaultLearningPreference = {
         expert: 1.0,
         partner: 1.0
@@ -92,17 +92,17 @@ function getDefaultDesiredUserLearningPreference(learningPreference){
     return defaultLearningPreference;
 }
 
-function getDefaultInitialDesiredUser( user) {
-    const desiredUserInterest = getDefaultDesiredUserInterests(user.interests);
-    const desiredUserLearningPreference = getDefaultDesiredUserLearningPreference(user.learningPreference);
+function getDefaultInitialIdealMatch( user) {
+    const idealMatchInterest = getDefaultIdealMatchInterests(user.interests);
+    const idealMatchLearningPreference = getDefaultIdealMatchLearningPreference(user.learningPreference);
 
     return {
         age: user.age,
-        interests: desiredUserInterest,
-        learningPreference: desiredUserLearningPreference
+        interests: idealMatchInterest,
+        learningPreference: idealMatchLearningPreference
     }
 }
 
 
 
-module.exports = {desiredUserSchema, getDefaultInitialDesiredUser};
+module.exports = {idealMatchSchema, getDefaultInitialIdealMatch};
