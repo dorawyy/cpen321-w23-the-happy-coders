@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const matchingController = require('../controllers/matchingController'); 
 
-router.post('/match', matchingController.createMatch); 
-router.get('/match', matchingController.getAllMatches); 
+router.post('', matchingController.createMatch); 
+router.get('', matchingController.getAllMatches); 
 
 module.exports = router;

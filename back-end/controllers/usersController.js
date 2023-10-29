@@ -11,22 +11,18 @@ exports.createUser = async (req, resp) => {
 
 exports.updateUserProfile = async (req, resp) => {
     try {
-        const user = await userServices.createUser(req.params.id);
 
-        if (user == null) {
-            return resp.status(404).json({ success: false });
-        }
+        const userId = req.params.id;
         const body = req.body;
 
-        //Update each field for the user and save to database
-        user.proficientLanguages = body.proficientLanguages;
-        user.interestedLanguages = body.interestedLanguages;
-        user.learningPreference = body.learningPreference;
-        user.interests = body.interests;
+        const updateResponse = await userServices.updateUser(userId, body);
 
-        user.save();
+        if (updateResponse.success) {
+            return resp.status(200).json(updateResponse);
+        }else{
+            return resp.status(500).json(updateResponse);
+        }
 
-        return resp.status(200).json({ success: true });
     } catch (error) {
         return resp.status(500).json({ success: false, message: "Error saving updates to user"});
     }
