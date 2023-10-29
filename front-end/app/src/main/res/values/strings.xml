@@ -17,9 +17,15 @@
     <string name="message_hint">Message...</string>
     <string name="desired_lang_text">Languages you want to learn...</string>
     <string name="proficient_lang_text">Languages you are proficient in...</string>
-    <string name="learn_pref_text">Who do you want to learn from?</string>
+    <string name="learn_pref_text">How do you want to learn?</string>
     <string name="login_error">Login failed. Please try again.</string>
     <string name="login_granted">Login granted.</string>
     <string name="sign_up_error">Sign Up failed. Please try again.</string>
     <string name="sign_up_granted">Sign Up granted.</string>
+    <string name="select_languages">Select Languages</string>
+    <string name="select_learning_preference">Select a Learning Preference</string>
+    <string name="interests_text">What are your interests?</string>
+    <string name="select_interests_text">Select your interests</string>
+    <string name="how_old_are_you">How old are you?</string>
+    <string name="age">Age</string>
 </resources>

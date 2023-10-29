@@ -128,7 +128,7 @@ public class SignupActivity extends AppCompatActivity {
                             utilities.showToast(getString(R.string.sign_up_error));
                         }
                     } else { //Successful Sign Up
-                        utilities.navigateTo(MainActivity.class, getString(R.string.sign_up_granted));
+                        utilities.navigateTo(FormActivity.class, getString(R.string.sign_up_granted));
                     }
                 }
             });

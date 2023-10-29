@@ -124,6 +124,14 @@ const userSchema = new mongoose.Schema({
             music: {
                 type: Number,
                 required: true
+            },
+            reading: {
+                type: Number,
+                required: true
+            },
+            gaming: {
+                type: Number,
+                required: true
             }
         },
         languagePreferences: {
@@ -160,7 +168,9 @@ function getDefaultUser( email, displayName, picture) {
             travel: false,
             movies: false,
             art: false,
-            music: false
+            music: false,
+            reading: false,
+            gaming: false,
         },
         desiredUser: {
             age: 0,
@@ -171,7 +181,9 @@ function getDefaultUser( email, displayName, picture) {
                 travel: 0,
                 movies: 0,
                 art: 0,
-                music: 0
+                music: 0,
+                reading: 0,
+                gaming: 0,
             },
             languagePreferences: {
                 expert: 0,
