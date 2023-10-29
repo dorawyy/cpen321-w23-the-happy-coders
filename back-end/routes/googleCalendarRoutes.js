@@ -3,6 +3,6 @@ const router = express.Router();
 const googleCalendarController = require('../controllers/googleCalendarController');
 
 // Routes
-router.post('/createEvent', googleCalendarController.createEvent);
+router.post('', googleCalendarController.createEvent);
 
 module.exports = router;
