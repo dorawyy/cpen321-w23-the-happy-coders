@@ -1,4 +1,3 @@
-// matchingController.js
 const agoraTokenService = require('../services/agoraTokenService'); 
 const { RtcRole } = require('agora-access-token');
 require('dotenv').config();

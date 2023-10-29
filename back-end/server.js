@@ -1,8 +1,10 @@
 var express = require("express");
-var app = express();
-
 require('dotenv').config()
 const { default: mongoose } = require("mongoose");
+
+var app = express();
+
+
 
 const agoraTokenRoutes = require('./routes/agoraTokenRoutes');
 const usersRoutes = require('./routes/usersRoutes');

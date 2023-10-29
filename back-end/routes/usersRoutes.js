@@ -2,9 +2,17 @@ var express = require("express");
 var router = express.Router();
 var usersController = require("../controllers/usersController");
 
+
+// Creates a new user
 router.post("/create", usersController.createUser);
-router.put("/update/:id", usersController.updateUser);
+// Updates the preferences for a user
+router.put("/updateProfile/:id", usersController.updateUserProfile);
+// Adds a new blocked user for a user
+router.put("/updateBlocks/:id", usersController.updateBlockedUsers);
+// Adds a new badge for a user
+router.put("/updateBadges/:id", usersController.updateBadges);
+// Returns a user's data
 router.get("/get/:id", usersController.getUser);
-router.get("/getFiltered", usersController.getFilteredUser);
+
 
 module.exports = router;
