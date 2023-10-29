@@ -28,4 +28,5 @@
     <string name="select_interests_text">Select your interests</string>
     <string name="how_old_are_you">How old are you?</string>
     <string name="age">Age</string>
+    <string name="complete_sign_up">Complete Sign Up</string>
 </resources>
