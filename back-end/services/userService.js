@@ -1,5 +1,5 @@
 require('dotenv').config()
-const {User, getDefaultUser} = require('../models/user');
+const {User} = require('../models/user');
 
 async function findUnregistredOrCreateUser(ticket) {
     const payload = ticket.getPayload();
@@ -11,7 +11,12 @@ async function findUnregistredOrCreateUser(ticket) {
 
     if (!user){
         try {
-            user = getDefaultUser(email,displayName, picture);
+            userData = {
+                email: email,
+                displayName: displayName,
+                picture: picture,
+            }
+            user = new User(userData);
             await user.save();
             return {success: true, user: user};
         } catch (error) {

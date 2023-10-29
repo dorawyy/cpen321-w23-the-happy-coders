@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
+const { desiredUserSchema } = require('./desiredUser');
 
 const userSchema = new mongoose.Schema({
     age: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     displayName: {
         type: String,
@@ -11,7 +13,8 @@ const userSchema = new mongoose.Schema({
     },
     registered:{
         type: Boolean,
-        required: true
+        required: true,
+        default: false
     },
     picture: {
         type: String,
@@ -24,149 +27,86 @@ const userSchema = new mongoose.Schema({
     },
     proficientLanguages: {
         type: [String],
-        required: true
+        required: true,
+        default: []
     },
     interestedLanguages: {
         type: [String],
-        required: true
+        required: true,
+        default: []
     },
     learningPreference: {
         type: String,
         enum: ['Expert', 'Partner', 'Both'],
-        required: true
+        required: true,
+        default: 'Both',
     },
     matchedUsers: {
         type: [mongoose.Schema.Types.ObjectId],
-        required: true
+        required: true,
+        default: [],
     },
     blockedUsers: {
         type: [mongoose.Schema.Types.ObjectId],
-        required: true
+        required: true,
+        default: [],
     },
     likedUsers: {
         type: [mongoose.Schema.Types.ObjectId],
-        required: true
+        required: true,
+        default: [],
     },
     chatroomIDs: {
         type: [mongoose.Schema.Types.ObjectId],
-        required: true
+        required: true,
+        default: [],
     },
     badges: {
         type: [mongoose.Schema.Types.ObjectId],
-        required: true
+        required: true,
+        default: [],
     },
     interests: {
         business: {
             type: Boolean,
-            required: true
+            required: true,
+            default: false,
         },
         sports: {
             type: Boolean,
-            required: true
+            required: true,
+            default: false
         },
         cooking: {
             type: Boolean,
-            required: true
+            required: true,
+            default: false
         },
         travel: {
             type: Boolean,
-            required: true
+            required: true,
+            default: false
         },
         movies: {
             type: Boolean,
-            required: true
+            required: true,
+            default: false
         },
         art: {
             type: Boolean,
-            required: true
+            required: true,
+            default: false
         },
         music: {
             type: Boolean,
-            required: true
+            required: true,
+            default: false
         }
     },
-    desiredUser: {
-        age: {
-            type: Number,
-            required: true
-        },
-        interests: {
-            business: {
-                type: Number,
-                required: true
-            },
-            sports: {
-                type: Number,
-                required: true
-            },
-            cooking: {
-                type: Number,
-                required: true
-            },
-            travel: {
-                type: Number,
-                required: true
-            },
-            movies: {
-                type: Number,
-                required: true
-            },
-            art: {
-                type: Number,
-                required: true
-            },
-            music: {
-                type: Number,
-                required: true
-            },
-            reading: {
-                type: Number,
-                required: true
-            },
-            gaming: {
-                type: Number,
-                required: true
-            }
-        },
-        languagePreferences: {
-            expert: {
-                type: Number,
-                required: true
-            },
-            partner: {
-                type: Number,
-                required: true
-            }
-        }
-    }
-});
-
-function getDefaultUser( email, displayName, picture) {
-    return new User({
-        age: 0,
-        displayName: displayName,
-        registered: false,
-        picture: picture,
-        email: email,
-        registered: false,
-        proficientLanguages: [],
-        interestedLanguages: [],
-        learningPreference: 'Both',
-        likedUsers: [],
-        chatroomIDs: [],
-        badges: [],
-        interests: {
-            business: false,
-            sports: false,
-            cooking: false,
-            travel: false,
-            movies: false,
-            art: false,
-            music: false,
-            reading: false,
-            gaming: false,
-        },
-        desiredUser: {
+    desiredUser:{
+        type: desiredUserSchema,
+        required: true,
+        default:  {
             age: 0,
             interests: {
                 business: 0,
@@ -177,17 +117,16 @@ function getDefaultUser( email, displayName, picture) {
                 art: 0,
                 music: 0,
                 reading: 0,
-                gaming: 0,
+                gaming: 0
             },
-            languagePreferences: {
+            learningPreference: {
                 expert: 0,
                 partner: 0
             }
         }
-    });
-}
-
+    }
+});
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = {User, getDefaultUser};
+module.exports = {User};
