@@ -43,6 +43,7 @@ public class FormActivity extends AppCompatActivity {
 
         desiredLanguages = findViewById(R.id.desired_languages);
         proficientLanguages = findViewById(R.id.proficient_languages);
+        learningPreferences = findViewById(R.id.learning_preferences);
 
         ArrayAdapter<String> proficientLangAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, PROFICIENT_LANGUAGES);
         ArrayAdapter<String> desiredLangAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, PROFICIENT_LANGUAGES);

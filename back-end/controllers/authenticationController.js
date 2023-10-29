@@ -1,4 +1,3 @@
-const { captureRejectionSymbol } = require('johnny-five/lib/board');
 const authenticationServices = require('../services/authenticationService');
 const userServices = require('../services/userService');
 
@@ -17,7 +16,6 @@ exports.handleLogin = async (req, res) => {
             res.status(200).json({ success: true, user: result.user });
         }else{
             console.log("User not found");
-            console.log(result);
             res.status(401).json(result);
         }
     } else {
