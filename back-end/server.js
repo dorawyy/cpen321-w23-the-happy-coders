@@ -1,8 +1,13 @@
 var express = require("express");
 require('dotenv').config()
 const { default: mongoose } = require("mongoose");
-
 var app = express();
+
+// Reference: https://socket.io/get-started/chat
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
 
 
@@ -20,11 +25,33 @@ app.get("/", (req, res) => {
     res.send("LangSync");
 })
 
+io.on('connection', (socket) => {
+    console.log('a user connected');
+
+    socket.on('joinChatroom', (roomId, userId) => {
+        socket.userId = userId
+        socket.join(roomId);
+    });
+
+    socket.on('leaveChatroom', (roomId) => {
+        socket.leave(roomId);
+    })
+
+    socket.on('sendMessage', (roomId, message) => {
+        const userId = socket.userId
+        io.to(roomId).emit('message', {userId ,message});
+    });
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected.');
+      });
+});
+
 //Routes
 app.use('/agoraToken', agoraTokenRoutes);
 app.use("/users", usersRoutes);
 app.use("/authentication", authenticationRoutes)
-app.use("/googleCalendar", googleCalendarRoutes);
+app.use("/events", googleCalendarRoutes);
 app.use("/matches", matchingRoutes)
 app.use("/chatrooms", communicationRoutes)
 
