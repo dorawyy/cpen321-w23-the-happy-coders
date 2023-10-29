@@ -45,12 +45,11 @@
             android:fontFamily="@font/poppins" />
 
         <Spinner
+            android:id="@+id/proficient_languages"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/proficient_languages"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"
-            android:background="@drawable/message_input_styling"/>
+            android:background="@drawable/message_input_styling"
+            android:padding="8dp"/>
 
         <TextView
             android:layout_width="fill_parent"
@@ -84,7 +83,12 @@
             android:padding="8dp"
             android:background="@drawable/message_input_styling"/>
 
-
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:columnCount="2"
+            android:rowCount="1"/>
 
     </LinearLayout>
 

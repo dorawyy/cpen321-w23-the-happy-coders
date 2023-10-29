@@ -8,7 +8,6 @@ async function findUnregistredOrCreateUser(ticket) {
     const displayName = payload.name;
 
     let user = await User.findOne({ email: email });
-    console.log(user);
 
     if (!user){
         try {
@@ -19,7 +18,7 @@ async function findUnregistredOrCreateUser(ticket) {
             return {success: false, error: error};
         }
     }else if (user.registered === false){
-        return {success: false, user: user};
+        return {success: true, user: user};
     }
     else{
         return {success: false, error: "User already registered"};
