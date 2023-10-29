@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const matchingController = require('../controllers/communicationController'); 
+const communicationController = require('../controllers/communicationController'); 
 
-router.post('/chatrooms', matchingController.createMatch); 
-router.get('/chatrooms', matchingController.getAllMatches); 
-router.post('/chatrooms/:id', matchingController.getAllMatches); 
+router.post('', communicationController.createChatroom); 
+router.get('', communicationController.getChatrooms); 
+router.post('/:id', communicationController.sendMessage); 
 
 module.exports = router;
