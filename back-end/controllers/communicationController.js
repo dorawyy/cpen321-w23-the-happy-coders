@@ -17,7 +17,3 @@ exports.getChatrooms = async(req,res) =>{
 
     return res.json({chatroomList: chatrooms});
 }
-
-exports.createChatroom = async(req,res) =>{
-    const user1Id = req.body
-}

@@ -1,13 +1,11 @@
 const { User } = require("../models/user");
 const userService = require("./userService")
+const communicationService = require("./communicationService")
 
 // Check if targetUser likes sourceUser and matches
 async function createMatch(sourceUserId, targetUserId){
     const sourceUser = await userService.findUserByID(sourceUserId)
     const targetUser = await userService.findUserByID(targetUserId)
-
-    console.log(sourceUser)
-    console.log(targetUser)
 
     sourceUser.likedUsers.push(targetUserId);
 
@@ -17,6 +15,7 @@ async function createMatch(sourceUserId, targetUserId){
         targetUser.matchedUsers.push(sourceUserId);
         sourceUser.save();
         targetUser.save();
+        await communicationService.createChatroom(sourceUserId, targetUserId);
         return true;
     }
 

@@ -5,8 +5,7 @@ const { User } = require("../models/user");
 async function sendMessage(chatroomId, content, sourceUserId){
     const chatroom = await Chatroom.findById(chatroomId);
     chatroom.messages.push({sourceUserId, content})
-
-    chatroom.save();
+    await chatroom.save();
     return true;
 }
 
