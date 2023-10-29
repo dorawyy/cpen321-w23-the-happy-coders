@@ -77,8 +77,9 @@ async function updateUser(userID, userData) {
         user.interestedLanguages = userData.interestedLanguages;
         user.learningPreference = userData.learningPreference;
         user.interests = userData.interests;
+        user.age = userData.age;
 
-        if (userData.registered === false) {
+        if (user.registered === false) {
             user.idealMatch = getDefaultInitialIdealMatch(user);
             user.registered = true;
         }

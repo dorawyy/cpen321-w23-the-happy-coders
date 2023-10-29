@@ -85,13 +85,15 @@ public class FormActivity extends AppCompatActivity {
     private String selectedPreference = "";
     private String selectedAge = "";
 
+    private String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
 
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String userId = sharedPreferences.getString("loggedUserId", null); // null is the default value if the key is not found
+        userId = sharedPreferences.getString("loggedUserId", null); // null is the default value if the key is not found
         Log.d(TAG, "Shared Pref User Id: " + userId);
 
         desiredLanguages = findViewById(R.id.desired_languages);
@@ -156,7 +158,7 @@ public class FormActivity extends AppCompatActivity {
                 MediaType JSON = MediaType.parse("application/json; charset=utf-8");
                 RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
                 Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8081/users/653da40b49dc676252d671de/prefs")
+                        .url("http://10.0.2.2:8081/users/" + userId + "/prefs")
                         .put(body)
                         .build();
 

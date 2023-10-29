@@ -101,6 +101,16 @@ const userSchema = new mongoose.Schema({
             type: Boolean,
             required: true,
             default: false
+        }, 
+        reading: {
+            type: Boolean,
+            required: true,
+            default: false
+        },
+        gaming: {
+            type: Boolean,
+            required: true,
+            default: false
         }
     },
     idealMatch:{
