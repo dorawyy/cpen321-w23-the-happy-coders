@@ -1,12 +1,6 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    userID: {
-        type: mongoose.Schema.Types.ObjectId,
-        index: true,
-        required: true,
-        auto: true,
-    },
     age: {
         type: Number,
         required: true
@@ -42,23 +36,23 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     matchedUsers: {
-        type: [Number],
+        type: [mongoose.Schema.Types.ObjectId],
         required: true
     },
     blockedUsers: {
-        type: [Number],
+        type: [mongoose.Schema.Types.ObjectId],
         required: true
     },
     likedUsers: {
-        type: [Number],
+        type: [mongoose.Schema.Types.ObjectId],
         required: true
     },
     chatroomIDs: {
-        type: [Number],
+        type: [mongoose.Schema.Types.ObjectId],
         required: true
     },
     badges: {
-        type: [Number],
+        type: [mongoose.Schema.Types.ObjectId],
         required: true
     },
     interests: {
@@ -146,7 +140,7 @@ function getDefaultUser( email, displayName, picture) {
         registered: false,
         picture: picture,
         email: email,
-        registered: true,
+        registered: false,
         proficientLanguages: [],
         interestedLanguages: [],
         learningPreference: 'Both',

@@ -36,4 +36,27 @@ async function findUserByEmail(email) {
     return {success: true, user: user};
 }
 
-module.exports = { findUnregistredOrCreateUser, findUserByEmail };
+
+async function findUserByID(userID) {
+    let user = await User.findOne({ _id : userID });
+
+    if (!user) {
+        return null;
+    }
+
+    return user;
+}
+
+async function findUsers(filter){
+    let users = await User.find(filter);
+
+    return users;
+}
+
+async function createUser(body) {
+    let user = getDefaultUser(body.email, body.displayName, body.picture);
+    await user.save();
+    return user;
+}
+
+module.exports = { findUnregistredOrCreateUser, findUserByEmail, findUserByID, findUsers, createUser };

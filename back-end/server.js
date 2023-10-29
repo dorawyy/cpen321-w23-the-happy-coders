@@ -1,4 +1,12 @@
 var express = require("express");
+require('dotenv').config()
+const { default: mongoose } = require("mongoose");
+
+const agoraTokenRoutes = require('./routes/agoraTokenRoutes');
+const usersRoutes = require('./routes/usersRoutes');
+const authenticationRoutes = require('./routes/authenticationRoutes');
+const googleCalendarRoutes = require('./routes/googleCalendarRoutes');
+
 var app = express();
 
 require('dotenv').config()
