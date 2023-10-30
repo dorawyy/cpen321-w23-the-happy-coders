@@ -7,6 +7,7 @@ async function createMatch(sourceUserId, targetUserId){
     const sourceUser = await userService.findUserByID(sourceUserId)
     const targetUser = await userService.findUserByID(targetUserId)
 
+    console.log(targetUser)
     sourceUser.likedUsers.push(targetUserId);
 
     // Check if target user likes source user and create match

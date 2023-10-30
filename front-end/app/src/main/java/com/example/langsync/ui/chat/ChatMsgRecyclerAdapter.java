@@ -1,5 +1,6 @@
 package com.example.langsync.ui.chat;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,20 +28,27 @@ import java.util.Objects;
 public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE = 1;
     private final Context context;
-    private final List<Map.Entry<String, String>> messages;
+    private final List<JSONObject> messages;
 
-    public ChatMsgRecyclerAdapter(Context context, List<Map.Entry<String, String>> messages) {
+    private String userId;
+
+    SharedPreferences sharedPreferences;
+
+    public ChatMsgRecyclerAdapter(Context context, List<JSONObject> messages, String userId) {
         this.context = context;
         this.messages = messages;
+        this.userId = userId;
     }
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
-        private TextView sentMsg;
-        private TextView receivedMsg;
+        private TextView sentMsg, receivedMsg;
+        private LinearLayout sentMsgView, receivedMsgView;
         public MessageViewHolder(View itemView) {
             super(itemView);
-            sentMsg = itemView.findViewById(R.id.sent_msg);
-            receivedMsg = itemView.findViewById(R.id.received_msg);
+            sentMsg = itemView.findViewById(R.id.sent_msg_txt);
+            sentMsgView = itemView.findViewById(R.id.sent_msg);
+            receivedMsg = itemView.findViewById(R.id.received_msg_txt);
+            receivedMsgView = itemView.findViewById(R.id.received_msg);
         }
     }
 
@@ -54,15 +63,21 @@ public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
         MessageViewHolder vh = (MessageViewHolder) viewHolder;
-        Map.Entry<String, String> msg = messages.get(i);
-
-        if(Objects.equals(msg.getKey(), "sent")) {
-            vh.sentMsg.setText(msg.getValue());
-            vh.receivedMsg.setVisibility(View.GONE);
-        }
-        else {
-            vh.receivedMsg.setText(msg.getValue());
-            vh.sentMsg.setVisibility(View.GONE);
+        JSONObject msgObj = messages.get(i);
+        Log.d("ChatMsgRecyclerAdapter", "Bind Number: " + i);
+        try {
+            if(Objects.equals(msgObj.getString("sourceUserId"), userId)) {
+                Log.d("ChatMsgRecyclerAdapter", "Sent Message: " + msgObj.getString("content"));
+                vh.sentMsg.setText(msgObj.getString("content"));
+                vh.receivedMsgView.setAlpha(0.0f);
+            }
+            else {
+                Log.d("ChatMsgRecyclerAdapter", "Received Message: " + msgObj.getString("content"));
+                vh.receivedMsg.setText(msgObj.getString("content"));
+                vh.sentMsgView.setAlpha(0.0f);
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
     }
 

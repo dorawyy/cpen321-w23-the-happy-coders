@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,6 +35,9 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+
+import com.example.langsync.util.AuthenticationUtilities;
+
 
 public class FormActivity extends AppCompatActivity {
 
@@ -86,6 +90,8 @@ public class FormActivity extends AppCompatActivity {
     private String selectedAge = "";
 
     private String userId;
+
+    private final AuthenticationUtilities utilities = new AuthenticationUtilities(FormActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,11 +181,9 @@ public class FormActivity extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(serverResponse);
                                 boolean success = jsonObject.getBoolean("success");
                                 if (success) {
-                                    runOnUiThread(() -> {
-                                        Toast.makeText(FormActivity.this, "Form Submitted", Toast.LENGTH_SHORT).show();
-                                    });
+                                    utilities.navigateTo(MainActivity.class, "Form submitted successfully");
                                 } else {
-                                    runOnUiThread(() -> Toast.makeText(FormActivity.this, "Error submitting form", Toast.LENGTH_SHORT).show());
+                                    utilities.showToast("Error submitting form");
                                 }
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);

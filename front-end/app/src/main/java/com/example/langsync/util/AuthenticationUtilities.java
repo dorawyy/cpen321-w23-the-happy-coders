@@ -22,11 +22,6 @@ public class AuthenticationUtilities {
     }
 
     public void showToast(String message){
-        ((Activity) context).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-            }
-        });
+        ((Activity) context).runOnUiThread(() -> Toast.makeText(context, message, Toast.LENGTH_LONG).show());
     }
 }

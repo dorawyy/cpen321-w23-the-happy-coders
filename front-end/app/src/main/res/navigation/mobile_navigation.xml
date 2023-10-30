@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_chat">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_chat"
+        android:name="com.example.langsync.ui.chat.AllChatsFragment"
+        android:label="@string/title_chat"
+        tools:layout="@layout/fragment_all_chats" />
+
+    <fragment
+        android:id="@+id/navigation_matches"
         android:name="com.example.langsync.ui.matches.MatchesFragment"
         android:label="@string/title_matches"
         tools:layout="@layout/fragment_matches" />
-
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.langsync.ui.chat.AllChatsFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_messaging" />
 
     <fragment
         android:id="@+id/navigation_notifications"

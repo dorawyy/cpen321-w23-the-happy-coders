@@ -6,7 +6,7 @@
     <string name="sign_up_text"><u>Don\'t have an account? Sign up</u></string>
     <string name="have_account"><u>Already have an account? Login</u></string>
     <string name="title_matches">Matches</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_chat">Chat</string>
     <string name="title_notifications">Notifications</string>
     <string name="john_doe">John Doe</string>
     <string name="name_placeholder">John Doe</string>
@@ -30,4 +30,6 @@
     <string name="age">Age</string>
     <string name="complete_sign_up">Complete Sign Up</string>
     <string name="preference_file_key">com.example.langsync.preferencefile</string>
+    <string name="no_matches">No Matches</string>
+    <string name="no_messages_text">No messages, send a message to start the conversation!</string>
 </resources>

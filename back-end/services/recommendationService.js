@@ -12,6 +12,8 @@ async function getRecommendedUsers(userId){
     // Filter users that have already been liked by the user
     // Filtereing liked should filter matchs as well
     let users = await User.find({});
+
+    return users;
     const arbitraryTopUsers = [];
     const scoredUsers = [];
     

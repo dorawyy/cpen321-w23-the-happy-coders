@@ -31,13 +31,7 @@ public class NotificationsFragment extends Fragment {
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        videoButton = root.findViewById(R.id.video_button);
-        videoButton.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), VideoCallActivity.class);
-            intent.putExtra("REMOTE_USER", "test");
-            intent.putExtra("LOCAL_USER", "channel");
-            startActivity(intent);
-        });
+
 
         return root;
     }

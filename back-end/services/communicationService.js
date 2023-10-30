@@ -12,13 +12,20 @@ async function sendMessage(chatroomId, content, sourceUserId){
 // Get all chatrooms associated with a user
 async function getChatrooms(userId){
     const user = await User.findById(userId)
-    const chatroomIds = user.chatroomIds
+    const chatroomIds = user.chatroomIDs
 
     let chatrooms = []
 
     for(let chatroomId of chatroomIds){
         const chatroom = await Chatroom.findById(chatroomId)
-        chatrooms.push(chatroom)
+        const chatroomObj = chatroom.toObject()
+
+        const otherUser = (chatroom.user1Id == userId) ? await User.findById(chatroom.user2Id) : await User.findById(chatroom.user1Id)
+        
+        chatroomObj.displayName = user.displayName
+        chatroomObj.otherUserName = otherUser.displayName
+        console.log(chatroomObj)
+        chatrooms.push(chatroomObj)
     }
 
     return chatrooms
