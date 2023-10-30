@@ -25,6 +25,7 @@ async function createEvent(authCode, rawEvent) {
         const response = await calendar.events.insert({
             calendarId: 'primary',
             resource: event,
+            sendNotifications: true,
         });
         console.log(`Event created: ${response.data.htmlLink}`);
         return { success: true, message: `Event created: ${response.data.htmlLink}` };
