@@ -5,7 +5,6 @@ const { findUserByID } = require('./userService');
 
 
 async function createEvent(authCode, rawEvent) {
-    console.log("Creating event");
     const clientResponse = await getGoogleClient(authCode);
 
     if(!clientResponse.success) {
@@ -13,7 +12,13 @@ async function createEvent(authCode, rawEvent) {
     }
 
     const auth = clientResponse.auth;
-    const event = await generateLangSyncEventObject(rawEvent);
+    const eventResponse = await generateLangSyncEventObject(rawEvent);
+
+    if(!eventResponse.success) {
+        return { success: false, error: 'Error creating event' };
+    }
+
+    const event = eventResponse.event;
 
     try {
         const calendar = google.calendar({ version: 'v3', auth });
@@ -30,11 +35,15 @@ async function createEvent(authCode, rawEvent) {
 }
 
 async function generateLangSyncEventObject(rawEvent) {
-    console.log("Generating event object");
     const hostUser = await findUserByID(rawEvent.hostUserId);
     const invitedUser = await findUserByID(rawEvent.invitedUserId);
+
+    if(!hostUser || !invitedUser) {
+        return { success: false, error: 'Error finding host or invited user' };
+    }
+
     const timeZone = rawEvent.timeZone;
-    const startTime = new Date(new Date(rawEvent.startTime).toLocaleString('en-US', { timeZone }));
+    const startTime = new Date(new Date(rawEvent.startTime));
     const durationMinutes = rawEvent.durationMinutes;
     const endTime = await moment(startTime).add(durationMinutes, 'm').toDate();
 
@@ -58,9 +67,7 @@ async function generateLangSyncEventObject(rawEvent) {
         }
     }
 
-    return event;
+    return { success: true, event: event };
 }
-
-
 
 module.exports = { createEvent };

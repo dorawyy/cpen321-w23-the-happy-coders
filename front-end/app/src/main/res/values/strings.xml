@@ -30,4 +30,21 @@
     <string name="age">Age</string>
     <string name="complete_sign_up">Complete Sign Up</string>
     <string name="preference_file_key">com.example.langsync.preferencefile</string>
+    <string name="schedule_meeting">Schedule Meeting</string>
+    <string name="meeting_date">Meeting Date</string>
+    <string name="select_date">Select Date</string>
+    <string name="meeting_time">Meeting Time</string>
+    <string name="select_time">Select Time</string>
+    <string name="meeting_duration">Meeting Duration</string>
+    <string name="create_event">Send Google Calendar Invite</string>
+    <string name="meeting_error">Create Meeting failed. Please try again.</string>
+    <string name="meeting_successful">Meeting created</string>
+    <string name="select_all_meeting_details">Please, select all meeting details</string>
+    <string name="invited_user_id_key">INVITED_USER</string>
+    <string-array name="duration_options">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>45 minutes</item>
+        <item>60 minutes</item>
+    </string-array>
 </resources>
