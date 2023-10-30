@@ -108,7 +108,7 @@ public class VideoCallActivity extends AppCompatActivity {
 
     //Todo: Create real connection with server
     private void startVideoCall() throws IOException{
-        String url = "http://10.0.2.2:8081/agoraToken/" + channelName + "/publisher/uid/" + uid;
+        String url = getString(R.string.base_url) + "agoraToken/" + channelName + "/publisher/uid/" + uid;
         Request request = new Request.Builder()
                 .url(url)
                 .build();

@@ -79,7 +79,7 @@ public class CalendarActivity extends AppCompatActivity {
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(bodyObject.toString(), JSON);
             Request request = new Request.Builder()
-                    .url("http://10.0.2.2:8081/events/")
+                    .url(getString(R.string.base_url) + "events/")
                     .post(body)
                     .build();
 

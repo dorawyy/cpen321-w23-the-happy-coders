@@ -104,7 +104,7 @@ public class SignupActivity extends AppCompatActivity {
                     "\"idToken\": \"" + idToken + "\"" +
                     "}", MediaType.parse("application/json"));
 
-            String url = "http://10.0.2.2:8081/authentication/signup/";
+            String url = getString(R.string.base_url) + "authentication/signup/";
             Request request = new Request.Builder()
                     .url(url)
                     .post(requestBody)

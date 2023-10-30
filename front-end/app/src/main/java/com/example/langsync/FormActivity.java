@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.langsync.util.AuthenticationUtilities;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
@@ -86,6 +87,7 @@ public class FormActivity extends AppCompatActivity {
     private String selectedAge = "";
 
     private String userId;
+    private final AuthenticationUtilities utilities = new AuthenticationUtilities(FormActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +160,7 @@ public class FormActivity extends AppCompatActivity {
                 MediaType JSON = MediaType.parse("application/json; charset=utf-8");
                 RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
                 Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8081/users/" + userId + "/prefs")
+                        .url(getString(R.string.base_url) + "users/" + userId + "/prefs")
                         .put(body)
                         .build();
 
@@ -175,11 +177,9 @@ public class FormActivity extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(serverResponse);
                                 boolean success = jsonObject.getBoolean("success");
                                 if (success) {
-                                    runOnUiThread(() -> {
-                                        Toast.makeText(FormActivity.this, "Form Submitted", Toast.LENGTH_SHORT).show();
-                                    });
+                                    utilities.navigateTo(MainActivity.class,"Form Submitted" );
                                 } else {
-                                    runOnUiThread(() -> Toast.makeText(FormActivity.this, "Error submitting form", Toast.LENGTH_SHORT).show());
+                                    utilities.showToast("Error submitting form");
                                 }
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
