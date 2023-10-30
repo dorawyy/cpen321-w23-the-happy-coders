@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                     "\"idToken\": \"" + idToken + "\"" +
                     "}");
 
-            String url = "http://10.0.2.2:8081/authentication/login/";
+            String url = getString(R.string.base_url) + "authentication/login/";
             Request request = new Request.Builder()
                     .url(url)
                     .post(requestBody)

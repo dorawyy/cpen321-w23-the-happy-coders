@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.langsync.util.AuthenticationUtilities;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
@@ -90,7 +91,6 @@ public class FormActivity extends AppCompatActivity {
     private String selectedAge = "";
 
     private String userId;
-
     private final AuthenticationUtilities utilities = new AuthenticationUtilities(FormActivity.this);
 
     @Override
@@ -164,7 +164,7 @@ public class FormActivity extends AppCompatActivity {
                 MediaType JSON = MediaType.parse("application/json; charset=utf-8");
                 RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
                 Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8081/users/" + userId + "/prefs")
+                        .url(getString(R.string.base_url) + "users/" + userId + "/prefs")
                         .put(body)
                         .build();
 
@@ -181,7 +181,7 @@ public class FormActivity extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(serverResponse);
                                 boolean success = jsonObject.getBoolean("success");
                                 if (success) {
-                                    utilities.navigateTo(MainActivity.class, "Form submitted successfully");
+                                    utilities.navigateTo(MainActivity.class,"Form Submitted" );
                                 } else {
                                     utilities.showToast("Error submitting form");
                                 }

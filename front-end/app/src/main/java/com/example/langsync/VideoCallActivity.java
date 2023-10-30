@@ -76,8 +76,8 @@ public class VideoCallActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         //TODO: get better logic for channel name, probably using ids
-        localUserInfo = intent.getStringExtra("LOCAL_USER");
-        remoteUserInfo = intent.getStringExtra("REMOTE_USER");
+        localUserInfo = intent.getStringExtra(getString(R.string.local_user_key));
+        remoteUserInfo = intent.getStringExtra(getString(R.string.remote_user_key));
         channelName = localUserInfo.compareTo(remoteUserInfo) < 0 ? localUserInfo + remoteUserInfo : remoteUserInfo + localUserInfo;
 
         setupVideoSDKEngine();
@@ -108,7 +108,7 @@ public class VideoCallActivity extends AppCompatActivity {
 
     //Todo: Create real connection with server
     private void startVideoCall() throws IOException{
-        String url = "http://10.0.2.2:8081/agoraToken/" + channelName + "/publisher/uid/" + uid;
+        String url = getString(R.string.base_url) + "agoraToken/" + channelName + "/publisher/uid/" + uid;
         Request request = new Request.Builder()
                 .url(url)
                 .build();
