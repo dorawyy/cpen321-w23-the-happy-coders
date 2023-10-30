@@ -1,7 +1,8 @@
 const communicationService = require('../services/communicationService'); 
 
 exports.sendMessage = async(req,res) =>{
-    const chatroomId = req.body.chatroomId;
+    const chatroomId = req.params.id;
+
     const content = req.body.message.content;
     const sourceUserId = req.body.message.sourceUserId;
 
@@ -11,7 +12,7 @@ exports.sendMessage = async(req,res) =>{
 }
 
 exports.getChatrooms = async(req,res) =>{
-    const sourceUserId = req.body.sourceUserId;
+    const sourceUserId = req.params.userId;
 
     let chatrooms = communicationService.getChatrooms(sourceUserId);
 
