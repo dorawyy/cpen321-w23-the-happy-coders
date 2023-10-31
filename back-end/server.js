@@ -5,19 +5,19 @@ var app = express();
 
 // Reference: https://socket.io/get-started/chat
 const http = require('http');
-const https = require('https'); // Add this line
-const fs = require('fs'); // Add this line
+const https = require('https'); 
+const fs = require('fs'); 
 const server = http.createServer(app);
 
 const options = {
-  key: fs.readFileSync('privkey.pem'), // Replace with your private key file path
-  cert: fs.readFileSync('fullchain.pem'), // Replace with your certificate file path
+  key: fs.readFileSync('privkey.pem'), 
+  cert: fs.readFileSync('fullchain.pem'),
 };
 
 const secureServer = https.createServer(options, app); // Create an HTTPS server
 
 const { Server } = require("socket.io");
-const io = new Server(secureServer); // Use the secure server for Socket.IO
+const io = new Server(secureServer); 
 
 const agoraTokenRoutes = require('./routes/agoraTokenRoutes');
 const usersRoutes = require('./routes/usersRoutes');
@@ -68,7 +68,7 @@ async function run() {
     try {
         await mongoose.connect(process.env.DATABASE_URL);
         console.log("Connected to the database");
-        var server = app.listen(8081, (req, res) => { // Use port 80 for HTTP
+        var server = app.listen(8081, (req, res) => { // Use port 8081 for HTTP
             var host = server.address().address;
             var port = server.address().port;
             console.log("Server successfully running at http://%s:%s", host, port);
