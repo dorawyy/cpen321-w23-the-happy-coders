@@ -50,4 +50,6 @@ dependencies {
     implementation("io.agora.rtc:full-sdk:4.0.1")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
 }

@@ -1,0 +1,122 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CalendarActivity">
+
+    <ImageView
+        android:id="@+id/langsync_form_logo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/langsync_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/logo_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/logo_text"
+        android:textColor="@color/black"
+        android:textSize="27sp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintTop_toBottomOf="@id/langsync_form_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/meeting_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/schedule_meeting"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintTop_toBottomOf="@id/logo_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/meeting_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/date_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/meeting_date"
+            android:textSize="22sp"
+            android:fontFamily="@font/poppins" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/date_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:width="200dp"
+            android:onClick="popDatePicker"
+            android:text="@string/select_date"
+            android:textSize="20sp"
+            android:layout_marginBottom="30sp"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/light_grey"
+            app:cornerRadius="0dp"/>
+
+        <TextView
+            android:id="@+id/time_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/meeting_time"
+            android:textSize="22sp"
+            android:fontFamily="@font/poppins" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/time_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:onClick="popTimePicker"
+            android:text="@string/select_time"
+            android:textSize="20sp"
+            android:layout_marginBottom="30sp"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/light_grey"
+            app:cornerRadius="0dp"/>
+
+        <TextView
+            android:id="@+id/duration_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/meeting_duration"
+            android:textSize="22sp"
+            android:fontFamily="@font/poppins" />
+
+        <Spinner
+            android:id="@+id/duration_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="30sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/create_event_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="@string/create_event"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/light_grey"
+            app:cornerRadius="0dp"/>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

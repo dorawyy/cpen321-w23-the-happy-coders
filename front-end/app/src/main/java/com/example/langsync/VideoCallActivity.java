@@ -45,13 +45,13 @@ public class VideoCallActivity extends AppCompatActivity {
             };
 
     // Fill the App ID of your project generated on Agora Console.
-    private final String appId = "8c6d6c9355eb4aeab83c5798f97d89cc";//TODO: Hide this string
+    private final String appId = "8c6d6c9355eb4aeab83c5798f97d89cc";
     // Fill the channel name.
     private String channelName;
     // Fill the temp token generated on Agora Console.
     private String token;
     // An integer that identifies the local user.
-    private int uid = 0; //TODO: Get proper user id
+    private int uid = 0;
     private boolean isJoined = false;
     private String localUserInfo;
     private String remoteUserInfo;
@@ -75,10 +75,7 @@ public class VideoCallActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        //TODO: get better logic for channel name, probably using ids
-        localUserInfo = intent.getStringExtra("LOCAL_USER");
-        remoteUserInfo = intent.getStringExtra("REMOTE_USER");
-        channelName = localUserInfo.compareTo(remoteUserInfo) < 0 ? localUserInfo + remoteUserInfo : remoteUserInfo + localUserInfo;
+        channelName = intent.getStringExtra(getString(R.string.channel_key));
 
         setupVideoSDKEngine();
 
@@ -108,7 +105,7 @@ public class VideoCallActivity extends AppCompatActivity {
 
     //Todo: Create real connection with server
     private void startVideoCall() throws IOException{
-        String url = "http://10.0.2.2:8081/agoraToken/" + channelName + "/publisher/uid/" + uid;
+        String url = getString(R.string.base_url) + "agoraToken/" + channelName + "/publisher/uid/" + uid;
         Request request = new Request.Builder()
                 .url(url)
                 .build();

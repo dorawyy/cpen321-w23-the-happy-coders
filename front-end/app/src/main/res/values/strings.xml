@@ -1,13 +1,56 @@
 <resources>
     <string name="app_name">LangSync</string>
+    <string name="base_url">http://10.0.2.2:8081/</string>
     <string name="login_with_google">Login with Google</string>
-    <string name="signup_with_google">Signup with Google</string>
+    <string name="signup_with_google">Sign Up with Google</string>
     <string name="logo_text">LangSync</string>
     <string name="sign_up_text"><u>Don\'t have an account? Sign up</u></string>
     <string name="have_account"><u>Already have an account? Login</u></string>
     <string name="title_matches">Matches</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_chat">Chat</string>
     <string name="title_notifications">Notifications</string>
     <string name="john_doe">John Doe</string>
     <string name="name_placeholder">John Doe</string>
+    <string name="server_client_id">439657244083-4ecuib7ub8dpn8aar11gqjkcvem1tnun.apps.googleusercontent.com</string>
+    <string name="chat_name_placeholder">John Doe</string>
+    <string name="recent_message">Recent Message</string>
+    <string name="text_placeholder">Text Placeholder!</string>
+    <string name="message_hint">Message...</string>
+    <string name="desired_lang_text">Languages you want to learn...</string>
+    <string name="proficient_lang_text">Languages you are proficient in...</string>
+    <string name="learn_pref_text">How do you want to learn?</string>
+    <string name="login_error">Login failed. Please try again.</string>
+    <string name="login_granted">Login granted.</string>
+    <string name="sign_up_error">Sign Up failed. Please try again.</string>
+    <string name="sign_up_granted">Sign Up granted.</string>
+    <string name="select_languages">Select Languages</string>
+    <string name="select_learning_preference">Select a Learning Preference</string>
+    <string name="interests_text">What are your interests?</string>
+    <string name="select_interests_text">Select your interests</string>
+    <string name="how_old_are_you">How old are you?</string>
+    <string name="age">Age</string>
+    <string name="complete_sign_up">Complete Sign Up</string>
+    <string name="preference_file_key">com.example.langsync.preferencefile</string>
+    <string name="no_matches">No Matches</string>
+    <string name="no_messages_text">No messages, send a message to start the conversation!</string>
+    <string name="schedule_meeting">Schedule Meeting</string>
+    <string name="meeting_date">Meeting Date</string>
+    <string name="select_date">Select Date</string>
+    <string name="meeting_time">Meeting Time</string>
+    <string name="select_time">Select Time</string>
+    <string name="meeting_duration">Meeting Duration</string>
+    <string name="create_event">Send Google Calendar Invite</string>
+    <string name="meeting_error">Create Meeting failed. Please try again.</string>
+    <string name="meeting_successful">Meeting created</string>
+    <string name="select_all_meeting_details">Please, select all meeting details</string>
+    <string name="invited_user_id_key">INVITED_USER</string>
+    <string name="channel_key">CHANNEL_KEY</string>
+    <string name="video_call_text">Video Call</string>
+    <string name="video_call_leave">Leave Video Call</string>
+    <string-array name="duration_options">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>45 minutes</item>
+        <item>60 minutes</item>
+    </string-array>
 </resources>
