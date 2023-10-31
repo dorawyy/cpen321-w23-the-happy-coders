@@ -23,11 +23,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.socket.client.IO;
+import io.socket.client.Socket;
+
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import io.socket.emitter.Emitter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -45,6 +51,33 @@ public class ChatActivity extends AppCompatActivity {
     private CardView noMessageView;
     private EditText msgInput;
     private TextView chatHeaderName;
+    private Socket socket;
+    {
+        try {
+            socket = IO.socket("http://20.63.119.166:8081");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        socket.connect();
+        socket.emit("joinChatroom", chatroomId, userId);
+
+        socket.on("message", args -> runOnUiThread(() -> {
+            Log.d(TAG, Arrays.toString(args));
+
+        }));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        socket.disconnect();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,8 +139,10 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         sendMsg.setOnClickListener(v -> {
-            if(!msgInput.getText().toString().isEmpty())
+            if(!msgInput.getText().toString().isEmpty()) {
+                socket.emit("sendMessage", chatroomId, msgInput.getText().toString());
                 sendMessage();
+            }
             else
                 Toast.makeText(this, "Add text to send a message!", Toast.LENGTH_SHORT).show();
         });
@@ -150,6 +185,14 @@ public class ChatActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     Log.d(TAG, "Message sent");
                     runOnUiThread(() -> {
+                        JSONObject message = new JSONObject();
+                        try {
+                            message.put("sourceUserId", userId);
+                            message.put("content", msgInput.getText().toString());
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                        messages.add(message);
                         msgInput.setText("");
                         Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
                     });
