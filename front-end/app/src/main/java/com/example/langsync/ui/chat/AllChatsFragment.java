@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,7 +39,9 @@ public class AllChatsFragment extends Fragment {
     private static final String TAG = "AllChatsFragment";
     private FragmentAllChatsBinding binding;
 
-    private List<JSONObject> chats = new ArrayList<>();
+//    private List<JSONObject> chats = new ArrayList<>();
+    private HashMap<String, JSONObject> chats = new HashMap<>();
+    private RecyclerView recyclerView;
 
     public static String currentChatroom;
     private String userId;
@@ -78,14 +81,15 @@ public class AllChatsFragment extends Fragment {
                     try {
                         JSONObject responseBody = new JSONObject(response.body().string());
                         JSONArray chatroomsList = new JSONArray(responseBody.getString("chatroomList"));
-                        for(int i = 0; i < chatroomsList.length(); i++){
-                            chats.add(chatroomsList.getJSONObject(i));
+
+                        for(int i = 0; i < chatroomsList.length(); i++) {
+                            chats.put(chatroomsList.getJSONObject(i).getString("_id"), chatroomsList.getJSONObject(i));
                         }
                         requireActivity().runOnUiThread(() -> {
                             if(!chats.isEmpty()) {
 
                                 noChats.setVisibility(View.GONE);
-                                RecyclerView recyclerView = root.findViewById(R.id.chat_recycler_view);
+                                recyclerView = root.findViewById(R.id.chat_recycler_view);
 
                                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
                                 recyclerView.setLayoutManager(layoutManager);

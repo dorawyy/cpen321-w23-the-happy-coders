@@ -104,7 +104,6 @@ public class MatchesFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.isSuccessful()){
-                    requireActivity().runOnUiThread(() -> {
                         try {
                             JSONObject responseBody = new JSONObject(response.body().string());
                             JSONArray recommendedUsersList = responseBody.getJSONArray("recommendedUsersList");
@@ -112,19 +111,24 @@ public class MatchesFragment extends Fragment {
                                 Log.d(TAG, recommendedUsersList.getJSONObject(i).toString());
                                 matches.add(recommendedUsersList.getJSONObject(i));
                             }
-                            matchName = matchCard.findViewById(R.id.match_name);
-                            if (!matches.isEmpty()) {
-                                matchName.setText(Objects.requireNonNull(matches.get(0)).getString("displayName"));
-                            }
-                            langsyncSpinner.clearAnimation();
-                            loadingView.setVisibility(View.GONE);
-                            langsyncSpinner.setVisibility(View.GONE);
+                            requireActivity().runOnUiThread(() -> {
+                                matchName = matchCard.findViewById(R.id.match_name);
+                                if (!matches.isEmpty()) {
+                                    try {
+                                        matchName.setText(Objects.requireNonNull(matches.get(0)).getString("displayName"));
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                                langsyncSpinner.clearAnimation();
+                                loadingView.setVisibility(View.GONE);
+                                langsyncSpinner.setVisibility(View.GONE);
+                            });
                         } catch (JSONException | IOException e) {
                             Log.d(TAG, "Error getting recommendations");
                             Log.d(TAG, e.toString());
                             e.printStackTrace();
                         }
-                    });
                 }
             }
         });
