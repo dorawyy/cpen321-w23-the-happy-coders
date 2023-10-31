@@ -31,6 +31,13 @@ async function getChatrooms(userId){
     return chatrooms
 }
 
+// Get all chatrooms associated with a user
+async function getMessages(chatroomId){
+    const chatroom = await Chatroom.findById(chatroomId)
+
+    return chatroom.messages;
+}
+
 // Create a new chatroom
 async function createChatroom(user1Id, user2Id){
     const user1 = await User.findById(user1Id)
@@ -51,4 +58,4 @@ async function createChatroom(user1Id, user2Id){
     return chatroom._id
 }
 
-module.exports = {sendMessage, getChatrooms, createChatroom};
+module.exports = {sendMessage, getChatrooms, createChatroom, getMessages};
