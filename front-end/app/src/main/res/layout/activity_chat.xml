@@ -12,6 +12,7 @@
         android:orientation="horizontal"
         android:background="@drawable/layout_shadow"
         app:layout_constraintTop_toTopOf="parent"
+        android:elevation="4dp"
         android:id="@+id/chat_header">
         <ImageView
             android:layout_width="36dp"

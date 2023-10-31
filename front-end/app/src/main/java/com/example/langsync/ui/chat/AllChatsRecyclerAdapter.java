@@ -20,18 +20,22 @@ import com.example.langsync.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE = 1;
     private final Context context;
+    private final HashMap<String, JSONObject> chatrooms;
     private final List<JSONObject> chats;
     private String userID;
 
-    public AllChatsRecyclerAdapter(Context context, List<JSONObject> chats, String userId) {
+    public AllChatsRecyclerAdapter(Context context, HashMap<String, JSONObject> chatrooms, String userId) {
         this.context = context;
-        this.chats = chats;
+        this.chatrooms = chatrooms;
+        this.chats = new ArrayList<>(chatrooms.values());
         this.userID = userID;
     }
 

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,10 +39,13 @@ public class AllChatsFragment extends Fragment {
     private static final String TAG = "AllChatsFragment";
     private FragmentAllChatsBinding binding;
 
-    private List<JSONObject> chats = new ArrayList<>();
+//    private List<JSONObject> chats = new ArrayList<>();
+    private HashMap<String, JSONObject> chats = new HashMap<>();
+    private RecyclerView recyclerView;
 
     public static String currentChatroom;
     private String userId;
+    private CardView noChats;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -54,10 +59,11 @@ public class AllChatsFragment extends Fragment {
 
         binding = FragmentAllChatsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        noChats = root.findViewById(R.id.no_chats);
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:8081/chatrooms/" + userId)
+                .url(getString(R.string.base_url) + "chatrooms/" + userId)
                 .get()
                 .build();
 
@@ -75,17 +81,26 @@ public class AllChatsFragment extends Fragment {
                     try {
                         JSONObject responseBody = new JSONObject(response.body().string());
                         JSONArray chatroomsList = new JSONArray(responseBody.getString("chatroomList"));
-                        for(int i = 0; i < chatroomsList.length(); i++){
-                            chats.add(chatroomsList.getJSONObject(i));
+
+                        for(int i = 0; i < chatroomsList.length(); i++) {
+                            chats.put(chatroomsList.getJSONObject(i).getString("_id"), chatroomsList.getJSONObject(i));
                         }
-                        RecyclerView recyclerView = root.findViewById(R.id.chat_recycler_view);
+                        requireActivity().runOnUiThread(() -> {
+                            if(!chats.isEmpty()) {
 
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-                        recyclerView.setLayoutManager(layoutManager);
+                                noChats.setVisibility(View.GONE);
+                                recyclerView = root.findViewById(R.id.chat_recycler_view);
 
-                        RecyclerView.Adapter chatRecyclerAdapter = new AllChatsRecyclerAdapter(getContext(), chats, userId);
+                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+                                recyclerView.setLayoutManager(layoutManager);
 
-                        recyclerView.setAdapter(chatRecyclerAdapter);
+                                RecyclerView.Adapter chatRecyclerAdapter = new AllChatsRecyclerAdapter(getContext(), chats, userId);
+
+                                recyclerView.setAdapter(chatRecyclerAdapter);
+                            } else {
+                                noChats.setVisibility(View.VISIBLE);
+                            }
+                        });
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
