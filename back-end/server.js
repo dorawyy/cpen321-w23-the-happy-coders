@@ -26,6 +26,7 @@ const googleCalendarRoutes = require('./routes/googleCalendarRoutes');
 const matchingRoutes = require('./routes/matchingRoutes');
 const communicationRoutes = require('./routes/communicationRoutes');
 const recommendationRoutes = require('./routes/recommendationRoutes');
+const moderationRoutes = require('./routes/moderationRoutes');
 
 app.use(express.json());
 
@@ -59,11 +60,12 @@ io.on('connection', (socket) => {
 // Routes
 app.use('/agoraToken', agoraTokenRoutes);
 app.use("/users", usersRoutes);
-app.use("/authentication", authenticationRoutes)
+app.use("/authentication", authenticationRoutes);
 app.use("/events", googleCalendarRoutes);
-app.use("/matches", matchingRoutes)
-app.use("/chatrooms", communicationRoutes)
-app.use("/recommendations", recommendationRoutes)
+app.use("/matches", matchingRoutes);
+app.use("/chatrooms", communicationRoutes);
+app.use("/recommendations", recommendationRoutes);
+app.use("/moderation", moderationRoutes);
 
 async function run() {
     try {

@@ -113,6 +113,16 @@ const userSchema = new mongoose.Schema({
             default: false
         }
     },
+    admin: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    banned: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     idealMatch:{
         type: idealMatchSchema,
         required: true,

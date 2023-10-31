@@ -65,8 +65,26 @@ async function createUser(email, displayName, picture) {
     return user; 
 }
 
+async function createAdmin(email) {
+    let result = await User.findUserByEmail(email);
+
+    if (!result.success) {
+        return {success: false, error: result.error};
+    }
+
+    try {
+        let user = result.user;
+        user.admin = true;
+        user.save();
+
+        return {success: true, message: "Admin created successfully"};
+    } catch (error) {
+        return {success: false, error: error};
+    }
+}
+
 async function updateUser(userID, userData) {
-    user = await User.findById(userID);
+    let user = await User.findById(userID);
 
     if (!user) {
         return {success: false, error: "User not found"};
@@ -92,4 +110,22 @@ async function updateUser(userID, userData) {
     }
 }
 
-module.exports = { findUnregistredOrCreateUser, findUserByEmail, findUserByID, findUsers, createUser, updateUser };
+async function banUser(userID) {
+    let user = await User.findById(userID);
+
+    if (!user) {
+        return {success: false, error: "User not found"};
+    }
+
+    try {
+        user.banned = true;
+        user.save();
+
+        return {success: true, message: "User banned successfully"};
+    } catch (error) {
+        return {success: false, error: error};
+    }
+}
+
+
+module.exports = { findUnregistredOrCreateUser, findUserByEmail, findUserByID, findUsers, createUser, updateUser, banUser, createAdmin };
