@@ -17,13 +17,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.langsync.ChatActivity;
 import com.example.langsync.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE = 1;
@@ -31,6 +39,8 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final HashMap<String, JSONObject> chatrooms;
     private final List<JSONObject> chats;
     private String userID;
+
+    public ArrayList<JSONObject> messages = new ArrayList<>();
 
     public AllChatsRecyclerAdapter(Context context, HashMap<String, JSONObject> chatrooms, String userId) {
         this.context = context;
@@ -82,7 +92,7 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                         intent.putExtra("otherUserId", chatObj.getString("user2Id"));
 
                     intent.putExtra("otherUserName", chatObj.getString("otherUserName"));
-                    intent.putExtra("messages", chatObj.getString("messages"));
+                    intent.putExtra("messages", getMessages(chatObj.getString("_id")).toString());
                     intent.putExtra("chatroomId", chatObj.getString("_id"));
 
                     context.startActivity(intent);
@@ -93,6 +103,39 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         } catch (JSONException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    private ArrayList<JSONObject> getMessages(String chatroomId) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(context.getString(R.string.base_url) + "chatrooms/" + chatroomId + "/messages")
+                .get()
+                .build();
+        ArrayList<JSONObject> messages = new ArrayList<>();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.d("ChatActivity", Objects.requireNonNull(e.getMessage()));
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
+                if(response.isSuccessful()){
+                    try {
+                        JSONArray responseBody = new JSONArray(response.body().string());
+
+                        for(int i = 0; i < responseBody.length(); i++) {
+                            messages.add(responseBody.getJSONObject(i));
+                        }
+
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+        return messages;
     }
 
     @Override

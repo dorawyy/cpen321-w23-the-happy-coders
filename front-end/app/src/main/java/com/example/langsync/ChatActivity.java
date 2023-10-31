@@ -29,7 +29,6 @@ import io.socket.client.Socket;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -52,6 +51,10 @@ public class ChatActivity extends AppCompatActivity {
     private EditText msgInput;
     private TextView chatHeaderName;
     private Socket socket;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter msgRecyclerAdapter;
+
     {
         try {
             socket = IO.socket("http://20.63.119.166:8081");
@@ -67,8 +70,18 @@ public class ChatActivity extends AppCompatActivity {
         socket.emit("joinChatroom", chatroomId, userId);
 
         socket.on("message", args -> runOnUiThread(() -> {
-            Log.d(TAG, Arrays.toString(args));
-
+            JSONObject data = (JSONObject) args[0];
+            String userId = data.optString("userId");
+            String message = data.optString("message");
+            JSONObject messageObj = new JSONObject();
+            try {
+                messageObj.put("sourceUserId", userId);
+                messageObj.put("content", message);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            messages.add(messageObj);
+            recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
         }));
     }
 
@@ -109,12 +122,12 @@ public class ChatActivity extends AppCompatActivity {
         }
         if(messages.size() > 0) {
             noMessageView.setVisibility(CardView.GONE);
-            RecyclerView recyclerView = findViewById(R.id.msg_recycler_view);
+            recyclerView = findViewById(R.id.msg_recycler_view);
 
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
             recyclerView.setLayoutManager(layoutManager);
 
-            RecyclerView.Adapter msgRecyclerAdapter = new ChatMsgRecyclerAdapter(getApplicationContext(), messages, userId);
+            msgRecyclerAdapter = new ChatMsgRecyclerAdapter(getApplicationContext(), messages, userId);
 
             recyclerView.setAdapter(msgRecyclerAdapter);
             recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
