@@ -90,7 +90,7 @@ public class MatchesFragment extends Fragment {
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:8081/recommendations/" + userId)
+                .url(getString(R.string.base_url) + "recommendations/" + userId)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -104,25 +104,27 @@ public class MatchesFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.isSuccessful()){
-                    try {
-                        JSONObject responseBody = new JSONObject(response.body().string());
-                        JSONArray recommendedUsersList = responseBody.getJSONArray("recommendedUsersList");
-                        for (int i = 0; i < recommendedUsersList.length(); i++) {
-                            Log.d(TAG, recommendedUsersList.getJSONObject(i).toString());
-                            matches.add(recommendedUsersList.getJSONObject(i));
+                    requireActivity().runOnUiThread(() -> {
+                        try {
+                            JSONObject responseBody = new JSONObject(response.body().string());
+                            JSONArray recommendedUsersList = responseBody.getJSONArray("recommendedUsersList");
+                            for (int i = 0; i < recommendedUsersList.length(); i++) {
+                                Log.d(TAG, recommendedUsersList.getJSONObject(i).toString());
+                                matches.add(recommendedUsersList.getJSONObject(i));
+                            }
+                            matchName = matchCard.findViewById(R.id.match_name);
+                            if (!matches.isEmpty()) {
+                                matchName.setText(Objects.requireNonNull(matches.get(0)).getString("displayName"));
+                            }
+                            langsyncSpinner.clearAnimation();
+                            loadingView.setVisibility(View.GONE);
+                            langsyncSpinner.setVisibility(View.GONE);
+                        } catch (JSONException | IOException e) {
+                            Log.d(TAG, "Error getting recommendations");
+                            Log.d(TAG, e.toString());
+                            e.printStackTrace();
                         }
-                        matchName = matchCard.findViewById(R.id.match_name);
-                        if (!matches.isEmpty()) {
-                            matchName.setText(Objects.requireNonNull(matches.get(0)).getString("displayName"));
-                        }
-                        langsyncSpinner.clearAnimation();
-                        loadingView.setVisibility(View.GONE);
-                        langsyncSpinner.setVisibility(View.GONE);
-                    } catch (JSONException e) {
-                        Log.d(TAG, "Error getting recommendations");
-                        Log.d(TAG, e.toString());
-                        e.printStackTrace();
-                    }
+                    });
                 }
             }
         });
@@ -130,27 +132,24 @@ public class MatchesFragment extends Fragment {
     }
 
     private void matchCardAnim(int direction) {
-        matchCard.animate().translationXBy(direction * 500.0f).alpha(0.0f).setDuration(500).withEndAction(new Runnable() {
-            @Override
-            public void run() {
-                matchName = matchCard.findViewById(R.id.match_name);
-                matchCard.animate().translationX(0.0f).alpha(1.0f).setDuration(300);
-                if (direction == 1) {
-                    createMatch();
+        matchCard.animate().translationXBy(direction * 500.0f).alpha(0.0f).setDuration(500).withEndAction(() -> {
+            matchName = matchCard.findViewById(R.id.match_name);
+            matchCard.animate().translationX(0.0f).alpha(1.0f).setDuration(300);
+            if (direction == 1) {
+                createMatch();
+            }
+            try {
+                if (!matches.isEmpty()) {
+                    matches.remove(0);
+                    matchName.setText(Objects.requireNonNull(matches.get(0)).getString("displayName"));
+                } else {
+                    matchName.setText("");
+                    noMatchesText.setVisibility(View.VISIBLE);
+                    loadingView.setVisibility(View.VISIBLE);
+                    langsyncSpinner.setVisibility(View.VISIBLE);
                 }
-                try {
-                    if (!matches.isEmpty()) {
-                        matches.remove(0);
-                        matchName.setText(Objects.requireNonNull(matches.get(0)).getString("displayName"));
-                    } else {
-                        matchName.setText("");
-                        noMatchesText.setVisibility(View.VISIBLE);
-                        loadingView.setVisibility(View.VISIBLE);
-                        langsyncSpinner.setVisibility(View.VISIBLE);
-                    }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
         });
     }
@@ -169,7 +168,7 @@ public class MatchesFragment extends Fragment {
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:8081/matches")
+                .url(getString(R.string.base_url) + "matches")
                 .post(body)
                 .build();
 

@@ -131,7 +131,7 @@ public class ChatActivity extends AppCompatActivity {
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:8081/chatrooms/" + chatroomId + "/messages")
+                .url(getString(R.string.base_url) + "chatrooms/" + chatroomId + "/messages")
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {
