@@ -17,7 +17,7 @@ const options = {
 const secureServer = https.createServer(options, app); // Create an HTTPS server
 
 const { Server } = require("socket.io");
-const io = new Server(secureServer); 
+const io = new Server(server); 
 
 const agoraTokenRoutes = require('./routes/agoraTokenRoutes');
 const usersRoutes = require('./routes/usersRoutes');
@@ -46,7 +46,8 @@ io.on('connection', (socket) => {
     })
 
     socket.on('sendMessage', (roomId, message) => {
-        const userId = socket.userId
+        console.log("sending message");
+	    const userId = socket.userId
         io.to(roomId).emit('message', { userId, message });
     });
 
@@ -68,7 +69,7 @@ async function run() {
     try {
         await mongoose.connect(process.env.DATABASE_URL);
         console.log("Connected to the database");
-        var server = app.listen(8081, (req, res) => { // Use port 8081 for HTTP
+        server.listen(8081, (req, res) => { // Use port 8081 for HTTP
             var host = server.address().address;
             var port = server.address().port;
             console.log("Server successfully running at http://%s:%s", host, port);
