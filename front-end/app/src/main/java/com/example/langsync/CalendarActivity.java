@@ -53,9 +53,10 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        Intent intent = getIntent();
-        invitedUserId = intent.getStringExtra(getString(R.string.invited_user_id_key));
-
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            invitedUserId = extras.getString("otherUserId");
+        }
         timeButton = findViewById(R.id.time_button);
         dateButton = findViewById(R.id.date_button);
         durationSpinner = findViewById(R.id.duration_spinner);

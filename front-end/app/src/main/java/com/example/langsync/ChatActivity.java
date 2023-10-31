@@ -40,7 +40,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
     private List<JSONObject> messages = new ArrayList<>();
-    private ImageView goBack, videoCall, sendMsg;
+    private ImageView goBack, videoCall, sendMsg, calendarInvite;
     private String otherUserName, otherUserId, userId, chatroomId;
     private CardView noMessageView;
     private EditText msgInput;
@@ -93,21 +93,30 @@ public class ChatActivity extends AppCompatActivity {
         goBack = findViewById(R.id.back_btn);
         videoCall = findViewById(R.id.video_call);
         sendMsg = findViewById(R.id.send_msg);
+        calendarInvite = findViewById(R.id.calendar_invite);
 
         goBack.setOnClickListener(v -> {
             finish();
         });
+
         videoCall.setOnClickListener(view -> {
             Intent intent = new Intent(ChatActivity.this, VideoCallActivity.class);
             intent.putExtra("REMOTE_USER", "test");
             intent.putExtra("LOCAL_USER", "channel");
             startActivity(intent);
         });
+
         sendMsg.setOnClickListener(v -> {
             if(!msgInput.getText().toString().isEmpty())
                 sendMessage();
             else
                 Toast.makeText(this, "Add text to send a message!", Toast.LENGTH_SHORT).show();
+        });
+
+        calendarInvite.setOnClickListener(v -> {
+            Intent intent = new Intent(ChatActivity.this, CalendarActivity.class);
+            intent.putExtra("otherUserId", otherUserId);
+            startActivity(intent);
         });
     }
 
