@@ -26,11 +26,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.HashSet;
+import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -142,12 +145,31 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             JSONObject responseBody = new JSONObject(response.body().string());
                             String userId = responseBody.getString("userId");
+//                            String age = responseBody.getString("age");
+//
+//                            Set<String> proficientLanguages = new HashSet<>();
+//                            Set<String> learningLanguages = new HashSet<>();
+//                            Set<String> interests = new HashSet<>();
+//
+//                            JSONArray prof = responseBody.getJSONArray("proficientLanguages");
+//                            for (int i = 0; i < prof.length(); i++) {
+//                                proficientLanguages.add(prof.getString(i));
+//                            }
+//
+//                            JSONArray learn = responseBody.getJSONArray("learningLanguages");
+//                            for (int i = 0; i < learn.length(); i++) {
+//                                learningLanguages.add(learn.getString(i));
+//                            }
+
 
                             // Get a reference to SharedPreferences
                             SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("loggedUserId", userId);
+//                            editor.putString("age", age);
+//                            editor.putStringSet("proficientLanguages", proficientLanguages);
+//                            editor.putStringSet("learningLanguages", learningLanguages);
                             editor.apply();
 
                             utilities.navigateTo(MainActivity.class, getString(R.string.login_granted));
