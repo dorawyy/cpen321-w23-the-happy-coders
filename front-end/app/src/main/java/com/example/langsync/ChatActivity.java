@@ -143,6 +143,7 @@ public class ChatActivity extends AppCompatActivity {
             msgRecyclerAdapter = new ChatMsgRecyclerAdapter(getApplicationContext(), messages, userId);
 
             recyclerView.setAdapter(msgRecyclerAdapter);
+            recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);
             recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
         } else {
             Log.d(TAG, "No messages");
@@ -222,23 +223,18 @@ public class ChatActivity extends AppCompatActivity {
                         message.put("sourceUserId", userId);
                         message.put("content", msgText);
                         messages.add(message);
-                        runOnUiThread(() -> {
-                            msgRecyclerAdapter.notifyItemInserted(messages.size() - 1);
-                            recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
-                            Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
-                        });
                         if(isAiOn) {
                             Log.d(TAG, "Sending message to AI");
                             messages.add(messageObj);
                             socket.emit("sendMessage", chatroomId, "6541a9947cce981c74b03ecb", messageObj.getString("content"));
-                            runOnUiThread(() -> {
-                                msgRecyclerAdapter.notifyItemInserted(messages.size() - 1);
-                                recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
-                            });
                         } else {
                             Log.d(TAG, "Not sending message to AI");
                         }
-
+                        runOnUiThread(() -> {
+                            msgRecyclerAdapter.notifyDataSetChanged();
+                            recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
+                            Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
+                        });
                     } catch (JSONException | IOException e) {
                         throw new RuntimeException(e);
                     }

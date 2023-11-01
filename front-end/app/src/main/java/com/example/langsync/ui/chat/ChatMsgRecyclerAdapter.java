@@ -68,7 +68,7 @@ public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         Log.d("ChatMsgRecyclerAdapter", "Bind Number: " + i);
         try {
             if(Objects.equals(msgObj.getString("sourceUserId"), "6541a9947cce981c74b03ecb")){
-                vh.receivedMsgView.setAlpha(0.9f);
+                vh.receivedMsgView.setAlpha(0.8f);
             }
             if(Objects.equals(msgObj.getString("sourceUserId"), userId)) {
                 Log.d("ChatMsgRecyclerAdapter", "Sent Message: " + msgObj.getString("content"));
