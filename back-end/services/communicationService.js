@@ -7,16 +7,19 @@ const OpenAI = require('openai');
 async function sendMessage(chatroomId, content, sourceUserId, learningSession){
     const chatroom = await Chatroom.findById(chatroomId);
     chatroom.messages.push({sourceUserId, content})
-    
+     
     if(learningSession){
         let openAIResponse = await openAIMessage(content)
-        let id = "Assistant"
+        openAIResponse = "AI Assistant: " + openAIResponse;
+	let id = "6541a9947cce981c74b03ecb";
         chatroom.messages.push({id,openAIResponse})
+await chatroom.save();
+	    return { sourceUserId: id, content: openAIResponse };
     }
 
     await chatroom.save();
 
-    return true;
+    return { sourceUserId: sourceUserId, content: content};;
 }
 
 // Get all chatrooms associated with a user
@@ -92,22 +95,17 @@ async function startLearningSession(){
 
 // ChatGPT: Partial
 async function openAIMessage(message) {
+	console.log("Open ai message")
     const openai = new OpenAI({
         apiKey: process.env.OPENAIKEY
     })
     const completion = await openai.chat.completions.create({
         messages: [
-            { role: "system", content: "You are a helpful assistant that helps people learn languages. Your goal is to correct grammar mistakes and provide helpful tips. If the structure is correct, you should say always say 'No comment'" },
+            { role: "system", content: "You are a helpful assistant that helps people learn languages. Your goal is to correct grammar mistakes and provide helpful tips. If the structure is correct, you should say always say 'No comment'. Whenever I send a message, you should only correct it and give tips OR say no comment." },
             { role: "user", content: "I like you to." },
             { role: "assistant", content: "The correct sentence structure in this sentence is 'I like you too'." },
-            { role: "user", content: "I like you too." },
-            { role: "assistant", content: "No comment." },
-            { role: "user", content: "She don't like ice cream." },
-            { role: "assistant", content: "The correct sentence structure is 'She doesn't like ice cream'." },
             { role: "user", content: "There are a lot of people here." },
             { role: "assistant", content: "No comment." },
-            { role: "user", content: "He go to school everyday." },
-            { role: "assistant", content: "The correct sentence structure is 'He goes to school every day'." },
             { role: "user", content: "If I was there, I would have helped." },
             { role: "assistant", content: "The correct sentence structure is 'If I were there, I would have helped'." },
             { role: "user", content: message },
@@ -115,7 +113,7 @@ async function openAIMessage(message) {
         model: "gpt-3.5-turbo",
     });
 
-    return completion.choices[0];
+    return completion.choices[0].message.content;
 }
 
 module.exports = {sendMessage, getChatrooms, createChatroom, getMessages, openAIMessage, startLearningSession};

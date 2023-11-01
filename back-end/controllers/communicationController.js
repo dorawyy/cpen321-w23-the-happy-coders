@@ -7,9 +7,9 @@ exports.sendMessage = async(req,res) =>{
     const sourceUserId = req.body.sourceUserId;
     const learningSession = req.body.learningSession;
 
-    let messageStatus = await communicationService.sendMessage(chatroomId, content, sourceUserId);
+    let message = await communicationService.sendMessage(chatroomId, content, sourceUserId, learningSession);
 
-    return res.json({status: messageStatus});
+    return res.json({message});
 }
 
 exports.startLearningSession = async(req,res) =>{
