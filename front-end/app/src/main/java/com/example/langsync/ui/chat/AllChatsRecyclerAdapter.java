@@ -72,7 +72,7 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         try {
             vh.chat_name.setText(chat.getString("otherUserName"));
-//            vh.chat_last_message.setText(chat.getString(""));
+//            vh.chat_last_message.setText(chat.getJSONObject("messages").);
 //            vh.chat_profile_pic.setImageBitmap((Bitmap) chat.get("profilePic"));
 
             vh.itemView.setOnClickListener(v -> {

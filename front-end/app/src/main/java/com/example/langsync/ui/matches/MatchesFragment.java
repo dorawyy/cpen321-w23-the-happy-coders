@@ -11,17 +11,13 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.langsync.LoginActivity;
 import com.example.langsync.R;
-import com.example.langsync.databinding.ActivityMainBinding;
 import com.example.langsync.databinding.FragmentMatchesBinding;
 import com.example.langsync.util.AuthenticationUtilities;
 
@@ -31,11 +27,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Objects;
-import java.util.PriorityQueue;
-import java.util.Queue;
 
 import okhttp3.Call;
 import okhttp3.Callback;

@@ -2,6 +2,7 @@ package com.example.langsync;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.navigation.Navigator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,6 +54,9 @@ public class ChatActivity extends AppCompatActivity {
     private TextView chatHeaderName;
     private Socket socket;
 
+    private SwitchCompat toggleAi;
+    boolean isAiOn = false;
+
     private RecyclerView recyclerView;
     private RecyclerView.Adapter msgRecyclerAdapter;
 
@@ -72,15 +77,18 @@ public class ChatActivity extends AppCompatActivity {
         socket.on("message", args -> runOnUiThread(() -> {
             JSONObject data = (JSONObject) args[0];
             String userId = data.optString("userId");
-            String message = data.optString("message");
-            JSONObject messageObj = new JSONObject();
-            try {
-                messageObj.put("sourceUserId", userId);
-                messageObj.put("content", message);
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
+            if(!userId.equals(this.userId)) {
+                String message = data.optString("message");
+                Log.d(TAG, "Message received: " + message + " from " + userId);
+                JSONObject messageObj = new JSONObject();
+                try {
+                    messageObj.put("sourceUserId", userId);
+                    messageObj.put("content", message);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                messages.add(messageObj);
             }
-            messages.add(messageObj);
             recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
         }));
     }
@@ -102,6 +110,11 @@ public class ChatActivity extends AppCompatActivity {
         noMessageView = findViewById(R.id.no_messages);
         msgInput = findViewById(R.id.msg_input);
         chatHeaderName = findViewById(R.id.chat_header_name);
+        toggleAi = findViewById(R.id.ai_switch);
+
+        toggleAi.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isAiOn = isChecked;
+        });
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
@@ -154,6 +167,9 @@ public class ChatActivity extends AppCompatActivity {
         sendMsg.setOnClickListener(v -> {
             if(!msgInput.getText().toString().isEmpty()) {
                 socket.emit("sendMessage", chatroomId, msgInput.getText().toString());
+                //hide keyboard if open
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(msgInput.getWindowToken(), 0);
                 sendMessage();
             }
             else
@@ -173,6 +189,7 @@ public class ChatActivity extends AppCompatActivity {
         try {
             jsonObject.put("sourceUserId", userId);
             jsonObject.put("content", msgInput.getText().toString());
+            jsonObject.put("learningSession", isAiOn);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -182,13 +199,14 @@ public class ChatActivity extends AppCompatActivity {
                 .url(getString(R.string.base_url) + "chatrooms/" + chatroomId + "/messages")
                 .post(body)
                 .build();
+        String msgText = msgInput.getText().toString();
+        msgInput.setText("");
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.d(TAG, Objects.requireNonNull(e.getMessage()));
                 e.printStackTrace();
                 runOnUiThread(() -> {
-                    msgInput.setText("");
                     Toast.makeText(ChatActivity.this, "Error sending message", Toast.LENGTH_SHORT).show();
                 });
             }
@@ -201,12 +219,12 @@ public class ChatActivity extends AppCompatActivity {
                         JSONObject message = new JSONObject();
                         try {
                             message.put("sourceUserId", userId);
-                            message.put("content", msgInput.getText().toString());
+                            message.put("content", msgText);
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
                         messages.add(message);
-                        msgInput.setText("");
+                        recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
                         Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
                     });
                 }
