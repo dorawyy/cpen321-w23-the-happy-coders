@@ -7,17 +7,17 @@ const OpenAI = require('openai');
 async function sendMessage(chatroomId, content, sourceUserId, learningSession){
     const chatroom = await Chatroom.findById(chatroomId);
     chatroom.messages.push({sourceUserId, content})
-    
+     
     if(learningSession){
         let openAIResponse = await openAIMessage(content)
         let id = "6541a9947cce981c74b03ecb";
         chatroom.messages.push({id,openAIResponse})
-console.log(openAIResponse)
+        return openAIResponse
     }
 
     await chatroom.save();
 
-    return true;
+    return content;
 }
 
 // Get all chatrooms associated with a user
@@ -110,7 +110,7 @@ async function openAIMessage(message) {
         model: "gpt-3.5-turbo",
     });
 
-    return completion.choices[0];
+    return completion.choices[0].message.content;
 }
 
 module.exports = {sendMessage, getChatrooms, createChatroom, getMessages, openAIMessage, startLearningSession};
