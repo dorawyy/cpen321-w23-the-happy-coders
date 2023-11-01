@@ -2,6 +2,7 @@ package com.example.langsync.ui.chat;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,6 +67,9 @@ public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         JSONObject msgObj = messages.get(i);
         Log.d("ChatMsgRecyclerAdapter", "Bind Number: " + i);
         try {
+            if(Objects.equals(msgObj.getString("sourceUserId"), "6541a9947cce981c74b03ecb")){
+                vh.receivedMsgView.setAlpha(0.9f);
+            }
             if(Objects.equals(msgObj.getString("sourceUserId"), userId)) {
                 Log.d("ChatMsgRecyclerAdapter", "Sent Message: " + msgObj.getString("content"));
                 vh.sentMsg.setText(msgObj.getString("content"));

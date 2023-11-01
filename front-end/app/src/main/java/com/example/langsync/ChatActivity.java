@@ -88,8 +88,8 @@ public class ChatActivity extends AppCompatActivity {
                     throw new RuntimeException(e);
                 }
                 messages.add(messageObj);
+                recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
             }
-            recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
         }));
     }
 
@@ -166,7 +166,7 @@ public class ChatActivity extends AppCompatActivity {
 
         sendMsg.setOnClickListener(v -> {
             if(!msgInput.getText().toString().isEmpty()) {
-                socket.emit("sendMessage", chatroomId, msgInput.getText().toString());
+                socket.emit("sendMessage", chatroomId, userId, msgInput.getText().toString());
                 //hide keyboard if open
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(msgInput.getWindowToken(), 0);
@@ -212,21 +212,37 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if(response.isSuccessful()){
-                    Log.d(TAG, "Message sent");
-                    runOnUiThread(() -> {
+                    try {
                         JSONObject message = new JSONObject();
-                        try {
-                            message.put("sourceUserId", userId);
-                            message.put("content", msgText);
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
+                        JSONObject responseBody = new JSONObject(response.body().string());
+                        JSONObject messageObj = new JSONObject(responseBody.getJSONObject("message").toString());
+                        Log.d(TAG, "Message sent: " + responseBody);
+                        message.put("sourceUserId", userId);
+                        message.put("content", msgText);
                         messages.add(message);
-                        recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
-                        Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
-                    });
+                        runOnUiThread(() -> {
+                            msgRecyclerAdapter.notifyItemInserted(messages.size() - 1);
+                            recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
+                            Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
+                        });
+                        if(isAiOn) {
+                            Log.d(TAG, "Sending message to AI");
+                            messages.add(messageObj);
+                            socket.emit("sendMessage", chatroomId, "6541a9947cce981c74b03ecb", messageObj.getString("content"));
+                            runOnUiThread(() -> {
+                                msgRecyclerAdapter.notifyItemInserted(messages.size() - 1);
+                                recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
+                            });
+                        } else {
+                            Log.d(TAG, "Not sending message to AI");
+                        }
+
+                    } catch (JSONException | IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
                 }
             }
         });
