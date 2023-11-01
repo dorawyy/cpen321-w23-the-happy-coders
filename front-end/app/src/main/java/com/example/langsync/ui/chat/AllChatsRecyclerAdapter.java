@@ -41,7 +41,7 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.context = context;
         this.chatrooms = chatrooms;
         this.chats = new ArrayList<>(chatrooms.values());
-        this.userID = userID;
+        this.userID = userId;
     }
 
     public class ChatViewHolder extends RecyclerView.ViewHolder {

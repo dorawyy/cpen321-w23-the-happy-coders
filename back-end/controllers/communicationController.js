@@ -5,10 +5,17 @@ exports.sendMessage = async(req,res) =>{
 
     const content = req.body.content;
     const sourceUserId = req.body.sourceUserId;
+    const learningSession = req.body.learningSession;
 
-    let messageStatus = communicationService.sendMessage(chatroomId, content, sourceUserId);
+    let messageStatus = await communicationService.sendMessage(chatroomId, content, sourceUserId);
 
     return res.json({status: messageStatus});
+}
+
+exports.startLearningSession = async(req,res) =>{
+    let conversationPrompts = await communicationService.startLearningSession();
+
+    return res.json({conversationPrompts});
 }
 
 exports.getChatrooms = async(req,res) =>{
@@ -18,3 +25,4 @@ exports.getChatrooms = async(req,res) =>{
 
     return res.json({chatroomList: chatrooms});
 }
+
