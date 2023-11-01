@@ -2,23 +2,28 @@ const { User } = require("../models/user");
 const { getDefaultInitialIdealMatch } = require("../models/idealMatch");
 
 
-// Check if targetUser likes sourceUser and matches
 //ChatGPT Usage: No
 async function getRecommendedUsers(userId){
     let user = await User.findById(userId);
-    // TODO: Add a filter to the find function to 
-    // Filter users with  valid learning preferences/languages
-    // Filter not registered users
-    // Filter users that have been blocked by the user
-    // Filter users that have already been liked by the user
-    // Filtereing liked should filter matchs as well
-    let users = await User.find({});
+    let users = [];
+    
+    if(user.learningPreference === "Expert"){
+        const expertQuery = await getExpertQuery(user);
+        users = await expertQuery;
+    } else if(user.learningPreference  === "Partner"){
+        const partnerQuery = await getPartnerQuery(user);
+        users = await partnerQuery;
+    }else{
+        const expertQuery = await getExpertQuery(user);
+        const partnerQuery = await getPartnerQuery(user);
+        const expertUsers = await expertQuery;
+        const partnerUsers = await partnerQuery;
+        users = mergeArraysNoDuplicatesId(expertUsers, partnerUsers);
+    }
 
-    return users;
     const arbitraryTopUsers = [];
     const scoredUsers = [];
     
-
     for (let i = 0; i < users.length; i++) {
         let targetUser = users[i];
         if (targetUser._id == userId ) {
@@ -36,6 +41,29 @@ async function getRecommendedUsers(userId){
 
     return recommendedUsers;
 }
+
+//ChatGPT Usage: No
+function getPartnerQuery(user){
+    return User.find({
+        _id: { $ne: user._id }, // Exclude User
+        _id: { $nin: [...user.likedUsers, ...user.matchedUsers] }, // Exclude users that user already liked or matched
+        learningPreference: { $in: ["Partner", "Both"] },
+        interestedLanguages: { $in: user.interestedLanguages },
+        proficientLanguages: { $in: user.proficientLanguages },
+    }).exec();
+}
+
+// CHatGPT Usage: No
+function getExpertQuery(user){
+    return User.find({
+        _id: { $ne: user._id }, // Exclude user
+        _id: { $nin: [...user.likedUsers, ...user.matchedUsers] }, // Exclude users that user already liked or matched
+        learningPreference: { $in: ["Expert", "Both"] },
+        proficientLanguages: { $in: user.interestedLanguages },
+        interestedLanguages: { $in: user.proficientLanguages },
+    }).exec();
+}
+
 //ChatGPT Usage: No
 function sortUsersOnScore (users, idealMatch) {
     const usersWithScore = users.map((user) => {
@@ -87,6 +115,27 @@ function calculateScore(user, targetUser) {
     );
 
     return similarityScore;
+}
+
+// ChatGPT usage: No
+function mergeArraysNoDuplicatesId(arr1, arr2){
+    const idSet = new Set();
+    const mergedArray = [];
+
+    for (const obj of arr1) {
+        if (!idSet.has(obj._id.toString())) {
+          mergedArray.push(obj);
+          idSet.add(obj._id.toString());
+        }
+    }
+
+    for (const obj of arr2) {
+        if (!idSet.has(obj._id.toString()  )) {
+          mergedArray.push(obj);
+          idSet.add(obj._id.toString());
+        }
+    }
+    return mergedArray;
 }
 
 module.exports = {getRecommendedUsers};
