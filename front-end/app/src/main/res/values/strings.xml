@@ -49,6 +49,8 @@
     <string name="video_call_text">Video Call</string>
     <string name="video_call_leave">Leave Video Call</string>
     <string name="admin_login_text">Have an admin access code? Login here</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="toggle_ai">Toggle Ai</string>
     <string-array name="duration_options">
         <item>15 minutes</item>
         <item>30 minutes</item>

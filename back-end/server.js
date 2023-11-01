@@ -46,9 +46,8 @@ io.on('connection', (socket) => {
         socket.leave(roomId);
     })
 
-    socket.on('sendMessage', (roomId, message) => {
+    socket.on('sendMessage', (roomId, userId ,message) => {
         console.log("sending message");
-	    const userId = socket.userId
         io.to(roomId).emit('message', { userId, message });
     });
 

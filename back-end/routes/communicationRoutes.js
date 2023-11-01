@@ -4,5 +4,6 @@ const communicationController = require('../controllers/communicationController'
 
 router.get('/:userId', communicationController.getChatrooms); 
 router.post('/:id/messages', communicationController.sendMessage); 
+router.get('/', communicationController.startLearningSession); 
 
 module.exports = router;
