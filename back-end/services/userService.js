@@ -127,5 +127,31 @@ async function banUser(userID) {
     }
 }
 
+async function findAdminOrCreate(email) {
 
-module.exports = { findUnregistredOrCreateUser, findUserByEmail, findUserByID, findUsers, createUser, updateUser, banUser, createAdmin };
+    let admin = await User.findOne({ email: email });
+
+    if (!admin){
+        try {
+            admin = await createAdmin(email);
+        } catch (error) {
+            return {success: false, error: error};
+        }
+    }
+
+    return {success: true, user: admin};
+}
+
+async function createAdmin(email) {
+    adminData = {
+        email: email,
+        admin: true,
+        registered: true,
+    }
+
+    let admin = new User(adminData);
+    await admin.save();
+    return admin;
+}
+
+module.exports = { findUnregistredOrCreateUser, findUserByEmail, findUserByID, findUsers, createUser, updateUser, banUser, findAdminOrCreate, createAdmin };

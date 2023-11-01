@@ -9,9 +9,6 @@ router.get("/:adminId", moderationController.getReports);
 // Adds a new report
 router.post("/", moderationController.addReport);
 
-// Creates a new admin user (body contains the email of the user to be made an admin)
-router.post("/:adminId/make-admin", moderationController.makeAdmin);
-
 // Bans a given user
 router.put("/:adminId/:userId/ban", moderationController.banUser);
 

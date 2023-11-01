@@ -43,7 +43,7 @@ exports.updateBlockedUsers = async (req, resp) => {
 
         return resp.status(200).json({ success: true });
     } catch (error) {
-        return resp.status(500).json({ success: false, mesage: "Error adding a blocked user"});
+        return resp.status(500).json({ success: false, message: "Error adding a blocked user"});
     }
 }
 
@@ -62,7 +62,7 @@ exports.updateBadges = async (req, resp) => {
 
         return resp.status(200).json({ success: true });
     } catch (error) {
-        return resp.status(500).json({ success: false, mesage: "Error adding a new badge"});
+        return resp.status(500).json({ success: false, message: "Error adding a new badge"});
     }
 }
 

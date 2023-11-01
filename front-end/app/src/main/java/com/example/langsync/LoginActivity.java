@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private MaterialButton loginButton;
     private TextView signUpLink;
+    private TextView adminLoginLink;
     private GoogleSignInClient mGoogleSignInClient;
     private final OkHttpClient client = new OkHttpClient();
     private static String TAG = "LoginActivity";
@@ -80,6 +81,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        adminLoginLink = findViewById(R.id.admin_login);
+        adminLoginLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, AdminLoginActivity.class);
                 startActivity(intent);
             }
         });

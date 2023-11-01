@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
     },
     displayName: {
         type: String,
-        required: true
+        required: true,
+        default: ''
     },
     registered:{
         type: Boolean,
@@ -18,7 +19,8 @@ const userSchema = new mongoose.Schema({
     },
     picture: {
         type: String,
-        required: true
+        required: true,
+        default: ''
     },
     email: {
         type: String,

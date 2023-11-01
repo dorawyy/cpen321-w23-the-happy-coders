@@ -25,6 +25,23 @@ exports.handleLogin = async (req, res) => {
     }
 };
 
+exports.handleAdminLogin = async (req, res) => {
+    const accessCode = req.body.accessCode;
+    const email = req.body.email;
+
+    if (accessCode === process.env.ADMIN_ACCESS_CODE) {
+        const result = await userServices.findAdminOrCreate(email);
+        if (result.success) {
+            res.status(200).json({ success: true, userId: result.user._id });
+        } else {
+            res.status(401).json({ success: false, error: result.error });
+        }
+    } else {
+        res.status(401).json({ success: false, error: "Invalid access code" });
+    }
+}
+
+
 //ChatGPT Usage: No
 exports.handleSignup = async (req, res) => {
     const idToken = req.body.idToken;

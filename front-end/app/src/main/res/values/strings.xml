@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">LangSync</string>
     <string name="base_url">http://20.63.119.166:8081/</string>
+<!--    <string name="base_url">http://127.0.0.1:8081/</string>-->
     <string name="login_with_google">Login with Google</string>
     <string name="signup_with_google">Sign Up with Google</string>
     <string name="logo_text">LangSync</string>
@@ -47,6 +48,7 @@
     <string name="channel_key">CHANNEL_KEY</string>
     <string name="video_call_text">Video Call</string>
     <string name="video_call_leave">Leave Video Call</string>
+    <string name="admin_login_text">Have an admin access code? Login here</string>
     <string-array name="duration_options">
         <item>15 minutes</item>
         <item>30 minutes</item>
