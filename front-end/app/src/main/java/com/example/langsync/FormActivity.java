@@ -50,19 +50,15 @@ public class FormActivity extends AppCompatActivity {
     private static final String TAG = "FormActivity";
     private static final String[] PROFICIENT_LANGUAGES = new String[]{
             "English",
-            "Spanish",
             "French",
             "Arabic",
-            "Hindi",
             "Portuguese",
             "Punjabi"
     };
     private static final String[] DESIRED_LANGUAGES = new String[]{
             "English",
-            "Spanish",
             "French",
             "Arabic",
-            "Hindi",
             "Portuguese",
             "Punjabi"
     };

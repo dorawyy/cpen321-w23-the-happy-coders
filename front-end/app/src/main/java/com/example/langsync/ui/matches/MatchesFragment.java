@@ -45,7 +45,7 @@ public class MatchesFragment extends Fragment {
     private ImageView dislikeMatch, likeMatch, langsyncSpinner;
 
     ArrayList<JSONObject> matches = new ArrayList<>();
-    private TextView matchName, noMatchesText;
+    private TextView matchName, noMatchesText, interestedLanguages, proficientLanguages, interests;
 
     private String userId;
     private final AuthenticationUtilities  utilities = new AuthenticationUtilities(getContext());
@@ -68,6 +68,9 @@ public class MatchesFragment extends Fragment {
         langsyncSpinner = root.findViewById(R.id.langsync_spinner);
         loadingView = root.findViewById(R.id.loading_view);
         noMatchesText = root.findViewById(R.id.no_matches_text);
+        interestedLanguages = root.findViewById(R.id.match_interested);
+        proficientLanguages = root.findViewById(R.id.match_proficiencies);
+        interests = root.findViewById(R.id.match_interests);
 
         dislikeMatch = root.findViewById(R.id.dislike_match);
         dislikeMatch.setOnClickListener(v ->  matchCardAnim(-1));
@@ -107,7 +110,10 @@ public class MatchesFragment extends Fragment {
                                 matchName = matchCard.findViewById(R.id.match_name);
                                 if (!matches.isEmpty()) {
                                     try {
-                                        matchName.setText(Objects.requireNonNull(matches.get(0)).getString("displayName"));
+                                        JSONObject match = matches.get(0);
+                                        matchName.setText(match.getString("displayName"));
+                                        interestedLanguages.setText(match.getJSONArray("interestedLanguages").toString());
+                                        proficientLanguages.setText(match.getJSONArray("proficientLanguages").toString());
                                     } catch (JSONException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -137,9 +143,31 @@ public class MatchesFragment extends Fragment {
             try {
                 if (!matches.isEmpty()) {
                     matches.remove(0);
-                    matchName.setText(Objects.requireNonNull(matches.get(0)).getString("displayName"));
-                } else {
+                    if (!matches.isEmpty()) {
+                        matchName.setText(Objects.requireNonNull(matches.get(0)).getString("displayName"));
+//                        interests.setText(matches.get(0)
+//                                .getJSONArray("interests")
+//                                .toString());
+                        interestedLanguages.setText(matches.get(0)
+                                .getJSONArray("interestedLanguages")
+                                .toString()
+                                .replace(",", ", ")
+                                .replace("[", "")
+                                .replace("]", "")
+                                .replace("\"", ""));
+                        proficientLanguages.setText(matches.get(0)
+                                .getJSONArray("proficientLanguages")
+                                .toString()
+                                .replace(",", ", ")
+                                .replace("[", "")
+                                .replace("]", "")
+                                .replace("\"", ""));
+                    }
+                }
+                if(matches.isEmpty()) {
                     matchName.setText("");
+                    interestedLanguages.setText("");
+                    proficientLanguages.setText("");
                     noMatchesText.setVisibility(View.VISIBLE);
                     loadingView.setVisibility(View.VISIBLE);
                     langsyncSpinner.setVisibility(View.VISIBLE);

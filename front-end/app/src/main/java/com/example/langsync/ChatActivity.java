@@ -74,23 +74,26 @@ public class ChatActivity extends AppCompatActivity {
         socket.connect();
         socket.emit("joinChatroom", chatroomId, userId);
 
-        socket.on("message", args -> runOnUiThread(() -> {
-            JSONObject data = (JSONObject) args[0];
-            String userId = data.optString("userId");
-            if(!userId.equals(this.userId)) {
-                String message = data.optString("message");
-                Log.d(TAG, "Message received: " + message + " from " + userId);
-                JSONObject messageObj = new JSONObject();
-                try {
-                    messageObj.put("sourceUserId", userId);
-                    messageObj.put("content", message);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
+        socket.on("message", args -> {
+                JSONObject data = (JSONObject) args[0];
+                String userId = data.optString("userId");
+                if (!userId.equals(this.userId)) {
+                    String message = data.optString("message");
+                    Log.d(TAG, "Message received: " + message + " from " + userId);
+                    JSONObject messageObj = new JSONObject();
+                    try {
+                        messageObj.put("sourceUserId", userId);
+                        messageObj.put("content", message);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    runOnUiThread(() -> {
+                        messages.add(messageObj);
+                        recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
+                        msgRecyclerAdapter.notifyDataSetChanged();
+                    });
                 }
-                messages.add(messageObj);
-                recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
-            }
-        }));
+        });
     }
 
     @Override
