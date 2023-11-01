@@ -9,7 +9,7 @@ async function sendMessage(chatroomId, content, sourceUserId, learningSession){
     chatroom.messages.push({sourceUserId, content})
     
     if(learningSession){
-        let openAIResponse = openAIMessage(content)
+        let openAIResponse = await openAIMessage(content)
         let id = "Assistant"
         chatroom.messages.push({id,openAIResponse})
     }
