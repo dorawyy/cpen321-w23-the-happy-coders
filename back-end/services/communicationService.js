@@ -1,6 +1,6 @@
 const { Chatroom } = require("../models/chatroom");
 const { User } = require("../models/user");
-const {OpenAIAPI} = require("openai")
+const OpenAI = require('openai');
 
 
 // Add message to database
@@ -70,7 +70,9 @@ async function createChatroom(user1Id, user2Id){
 
 // ChatGPT: Partial
 async function startLearningSession(){
-    const openai = new OpenAIAPI({ key: process.env.OPENAI});
+    const openai = new OpenAI({
+        apiKey: process.env.OPENAIKEY
+    })
     const completion = await openai.chat.completions.create({
         messages: [
             { role: "system", content: `You are a helpful assistant that helps people learn languages. Your goal is to provide speaking prompts for a given proficiency level in a given language. The only text in your output should be in this format ["" , "" ...] The list should be of length 5.`},
@@ -90,7 +92,9 @@ async function startLearningSession(){
 
 // ChatGPT: Partial
 async function openAIMessage(message) {
-    const openai = new OpenAIAPI({ key: process.env.OPENAI});
+    const openai = new OpenAI({
+        apiKey: process.env.OPENAIKEY
+    })
     const completion = await openai.chat.completions.create({
         messages: [
             { role: "system", content: "You are a helpful assistant that helps people learn languages. Your goal is to correct grammar mistakes and provide helpful tips. If the structure is correct, you should say always say 'No comment'" },
