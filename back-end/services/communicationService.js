@@ -10,8 +10,9 @@ async function sendMessage(chatroomId, content, sourceUserId, learningSession){
     
     if(learningSession){
         let openAIResponse = await openAIMessage(content)
-        let id = "Assistant"
+        let id = "6541a9947cce981c74b03ecb";
         chatroom.messages.push({id,openAIResponse})
+console.log(openAIResponse)
     }
 
     await chatroom.save();
@@ -97,17 +98,11 @@ async function openAIMessage(message) {
     })
     const completion = await openai.chat.completions.create({
         messages: [
-            { role: "system", content: "You are a helpful assistant that helps people learn languages. Your goal is to correct grammar mistakes and provide helpful tips. If the structure is correct, you should say always say 'No comment'" },
+            { role: "system", content: "You are a helpful assistant that helps people learn languages. Your goal is to correct grammar mistakes and provide helpful tips. If the structure is correct, you should say always say 'No comment'. Whenever I send a message, you should only correct it and give tips OR say no comment." },
             { role: "user", content: "I like you to." },
             { role: "assistant", content: "The correct sentence structure in this sentence is 'I like you too'." },
-            { role: "user", content: "I like you too." },
-            { role: "assistant", content: "No comment." },
-            { role: "user", content: "She don't like ice cream." },
-            { role: "assistant", content: "The correct sentence structure is 'She doesn't like ice cream'." },
             { role: "user", content: "There are a lot of people here." },
             { role: "assistant", content: "No comment." },
-            { role: "user", content: "He go to school everyday." },
-            { role: "assistant", content: "The correct sentence structure is 'He goes to school every day'." },
             { role: "user", content: "If I was there, I would have helped." },
             { role: "assistant", content: "The correct sentence structure is 'If I were there, I would have helped'." },
             { role: "user", content: message },
