@@ -51,7 +51,7 @@ public class AdminLoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String accessCode = accessCodeValue.getText().toString();
                 String email = emailValue.getText().toString();
-
+                Log.d(TAG, "access code: " + accessCode + ", email: " + email);
                 if (!accessCode.isEmpty() && !email.isEmpty()) {
                     JSONObject jsonObject = new JSONObject();
                     try {
@@ -63,9 +63,11 @@ public class AdminLoginActivity extends AppCompatActivity {
                     MediaType JSON = MediaType.parse("application/json; charset=utf-8");
                     RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
                     Request request = new Request.Builder()
-                            .url(getString(R.string.base_url) + "authentication/admin-login")
+                            .url(getString(R.string.base_url) + "authentication/admin-login/")
                             .post(body)
                             .build();
+
+                    Log.d(TAG, body.toString());
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -77,6 +79,7 @@ public class AdminLoginActivity extends AppCompatActivity {
                         public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
                             Log.d(TAG, response.toString());
                             if (!response.isSuccessful()) {
+                                Log.d(TAG, "here");
                                 try {
                                     JSONObject responseBody = new JSONObject(response.body().string());
                                     Log.d(TAG, responseBody.toString());

@@ -28,6 +28,7 @@ exports.handleLogin = async (req, res) => {
 exports.handleAdminLogin = async (req, res) => {
     const accessCode = req.body.accessCode;
     const email = req.body.email;
+    console.log("Admin login with access code " + accessCode + " and email " + email);
 
     if (accessCode === process.env.ADMIN_ACCESS_CODE) {
         const result = await userServices.findAdminOrCreate(email);
