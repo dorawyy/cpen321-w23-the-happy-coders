@@ -5,6 +5,7 @@ exports.sendMessage = async(req,res) =>{
 
     const content = req.body.content;
     const sourceUserId = req.body.sourceUserId;
+    const learningSession = req.body.learningSession;
 
     let messageStatus = await communicationService.sendMessage(chatroomId, content, sourceUserId);
 
