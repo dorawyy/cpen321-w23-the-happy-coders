@@ -10,14 +10,16 @@ async function sendMessage(chatroomId, content, sourceUserId, learningSession){
      
     if(learningSession){
         let openAIResponse = await openAIMessage(content)
-        let id = "6541a9947cce981c74b03ecb";
+        openAIResponse = "AI Assistant: " + openAIResponse;
+	let id = "6541a9947cce981c74b03ecb";
         chatroom.messages.push({id,openAIResponse})
-        return openAIResponse
+await chatroom.save();
+	    return { sourceUserId: id, content: openAIResponse };
     }
 
     await chatroom.save();
 
-    return content;
+    return { sourceUserId: sourceUserId, content: content};;
 }
 
 // Get all chatrooms associated with a user
@@ -93,6 +95,7 @@ async function startLearningSession(){
 
 // ChatGPT: Partial
 async function openAIMessage(message) {
+	console.log("Open ai message")
     const openai = new OpenAI({
         apiKey: process.env.OPENAIKEY
     })
