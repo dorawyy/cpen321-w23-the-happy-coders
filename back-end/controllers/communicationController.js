@@ -26,3 +26,11 @@ exports.getChatrooms = async(req,res) =>{
     return res.json({chatroomList: chatrooms});
 }
 
+exports.getMessages = async(req,res) =>{
+    const chatroomId = req.params.cId;
+
+    let messagesList = await communicationService.getMessages(chatroomId);
+
+    return res.json({messages: messagesList});
+}
+
