@@ -168,6 +168,7 @@ public class MatchesFragment extends Fragment {
                     matchName.setText("");
                     interestedLanguages.setText("");
                     proficientLanguages.setText("");
+                    matchCard.setVisibility(View.GONE);
                     noMatchesText.setVisibility(View.VISIBLE);
                     loadingView.setVisibility(View.VISIBLE);
                     langsyncSpinner.setVisibility(View.VISIBLE);
