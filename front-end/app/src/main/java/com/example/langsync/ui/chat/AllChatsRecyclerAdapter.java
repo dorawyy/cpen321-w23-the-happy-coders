@@ -91,8 +91,6 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                     else if(Objects.equals(userID, chatObj.getString("user1Id")))
                         intent.putExtra("otherUserId", chatObj.getString("user2Id"));
 
-                    getMessages(chatObj.getString("_id"), intent);
-
                     intent.putExtra("otherUserName", chatObj.getString("otherUserName"));
                     intent.putExtra("chatroomId", chatObj.getString("_id"));
 
@@ -106,32 +104,6 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    private void getMessages(String chatroomId, Intent intent) {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url("http://20.63.119.166:8081/chatroom/" + chatroomId + "/messages")
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.d("AllChatsRecyclerAdapter", "Failed to get messages");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    try {
-                        JSONObject json = new JSONObject(response.body().string());
-                        JSONArray msgArr = json.getJSONArray("messages");
-                        intent.putExtra("messages", msgArr.toString());
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
     @Override
     public int getItemCount() {
         if(chats.size() == 0)
