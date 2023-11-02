@@ -128,7 +128,7 @@ public class FormActivity extends AppCompatActivity {
 
         age.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(FormActivity.this);
-            builder.setTitle("Select Learning Preferences");
+            builder.setTitle("Select Age");
             builder.setCancelable(false);
 
             final EditText input = new EditText(this);
