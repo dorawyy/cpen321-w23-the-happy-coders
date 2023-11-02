@@ -65,7 +65,7 @@ public class ChatActivity extends AppCompatActivity {
 
     {
         try {
-            socket = IO.socket("http://20.63.119.166:8081");
+            socket = IO.socket("http://4.204.191.217:8081/");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -80,7 +80,7 @@ public class ChatActivity extends AppCompatActivity {
         socket.on("message", args -> {
                 JSONObject data = (JSONObject) args[0];
                 String userId = data.optString("userId");
-                if (!userId.equals(this.userId)) {
+                if (!userId.equals(this.userId) || !userId.equals("6541a9947cce981c74b03ecb")) {
                     String message = data.optString("message");
                     Log.d(TAG, "Message received: " + message + " from " + userId);
                     JSONObject messageObj = new JSONObject();
@@ -269,7 +269,8 @@ public class ChatActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "Not sending message to AI");
                         }
-                        createRecyclerView();
+                        if(messages.size() == 0)
+                            createRecyclerView();
                         runOnUiThread(() -> {
                             msgRecyclerAdapter.notifyDataSetChanged();
                             recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
