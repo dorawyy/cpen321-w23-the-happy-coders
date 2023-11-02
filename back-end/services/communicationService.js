@@ -11,9 +11,9 @@ async function sendMessage(chatroomId, content, sourceUserId, learningSession){
     if(learningSession){
         let openAIResponse = await openAIMessage(content)
         openAIResponse = "AI Assistant: " + openAIResponse;
-	let id = "6541a9947cce981c74b03ecb";
-        chatroom.messages.push({id,openAIResponse})
-await chatroom.save();
+	    let id = "6541a9947cce981c74b03ecb";
+        chatroom.messages.push({sourceUserId: id, content: openAIResponse})
+        await chatroom.save();
 	    return { sourceUserId: id, content: openAIResponse };
     }
 
