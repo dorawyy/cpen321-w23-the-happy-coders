@@ -1,5 +1,6 @@
 const communicationService = require('../services/communicationService'); 
 
+// ChatGPT Usage: No
 exports.sendMessage = async(req,res) =>{
     const chatroomId = req.params.id;
 
@@ -12,17 +13,28 @@ exports.sendMessage = async(req,res) =>{
     return res.json({message});
 }
 
+// ChatGPT Usage: No
 exports.startLearningSession = async(req,res) =>{
     let conversationPrompts = await communicationService.startLearningSession();
 
     return res.json({conversationPrompts});
 }
 
+// ChatGPT Usage: No
 exports.getChatrooms = async(req,res) =>{
     const sourceUserId = req.params.userId;
 
     let chatrooms = await communicationService.getChatrooms(sourceUserId);
 
     return res.json({chatroomList: chatrooms});
+}
+
+// ChatGPT Usage: No
+exports.getMessages = async(req,res) =>{
+    const chatroomId = req.params.cid;
+
+    let messagesList = await communicationService.getMessages(chatroomId);
+
+    return res.json({messages: messagesList});
 }
 

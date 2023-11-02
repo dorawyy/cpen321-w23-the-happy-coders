@@ -84,9 +84,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/no_messages"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/chat_header"
-        android:alpha="0.9">
+        android:elevation="1dp"
+        android:alpha="1">
         <ImageView
             android:id="@+id/langsync_spinner"
             android:layout_width="100dp"

@@ -12,6 +12,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -47,9 +50,9 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
     private List<JSONObject> messages = new ArrayList<>();
-    private ImageView goBack, videoCall, sendMsg, calendarInvite;
+    private ImageView goBack, videoCall, sendMsg, calendarInvite, langsyncSpinner;
     private String otherUserName, otherUserId, userId, chatroomId;
-    private CardView noMessageView;
+    private CardView noMessageView, loadingMessages;
     private EditText msgInput;
     private TextView chatHeaderName;
     private Socket socket;
@@ -62,7 +65,7 @@ public class ChatActivity extends AppCompatActivity {
 
     {
         try {
-            socket = IO.socket("http://20.63.119.166:8081");
+            socket = IO.socket("http://4.204.191.217:8081/");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -74,23 +77,26 @@ public class ChatActivity extends AppCompatActivity {
         socket.connect();
         socket.emit("joinChatroom", chatroomId, userId);
 
-        socket.on("message", args -> runOnUiThread(() -> {
-            JSONObject data = (JSONObject) args[0];
-            String userId = data.optString("userId");
-            if(!userId.equals(this.userId)) {
-                String message = data.optString("message");
-                Log.d(TAG, "Message received: " + message + " from " + userId);
-                JSONObject messageObj = new JSONObject();
-                try {
-                    messageObj.put("sourceUserId", userId);
-                    messageObj.put("content", message);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
+        socket.on("message", args -> {
+                JSONObject data = (JSONObject) args[0];
+                String userId = data.optString("userId");
+                if (!userId.equals(this.userId) || !userId.equals("6541a9947cce981c74b03ecb")) {
+                    String message = data.optString("message");
+                    Log.d(TAG, "Message received: " + message + " from " + userId);
+                    JSONObject messageObj = new JSONObject();
+                    try {
+                        messageObj.put("sourceUserId", userId);
+                        messageObj.put("content", message);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    runOnUiThread(() -> {
+                        messages.add(messageObj);
+                        recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
+                        msgRecyclerAdapter.notifyDataSetChanged();
+                    });
                 }
-                messages.add(messageObj);
-                recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
-            }
-        }));
+        });
     }
 
     @Override
@@ -122,32 +128,8 @@ public class ChatActivity extends AppCompatActivity {
             otherUserId = extras.getString("otherUserId");
             chatroomId = extras.getString("chatroomId");
             chatHeaderName.setText(otherUserName);
-            try {
-                JSONArray jsonArray = new JSONArray(extras.getString("messages"));
-                for(int i = 0; i < jsonArray.length(); i++){
-                    messages.add(jsonArray.getJSONObject(i));
-                }
-                Log.d(TAG, messages.toString());
 
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        if(messages.size() > 0) {
-            noMessageView.setVisibility(CardView.GONE);
-            recyclerView = findViewById(R.id.msg_recycler_view);
-
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-            recyclerView.setLayoutManager(layoutManager);
-
-            msgRecyclerAdapter = new ChatMsgRecyclerAdapter(getApplicationContext(), messages, userId);
-
-            recyclerView.setAdapter(msgRecyclerAdapter);
-            recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);
-            recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
-        } else {
-            Log.d(TAG, "No messages");
-            noMessageView.setVisibility(CardView.VISIBLE);
+            getMessages(chatroomId);
         }
 
         goBack = findViewById(R.id.back_btn);
@@ -168,7 +150,6 @@ public class ChatActivity extends AppCompatActivity {
         sendMsg.setOnClickListener(v -> {
             if(!msgInput.getText().toString().isEmpty()) {
                 socket.emit("sendMessage", chatroomId, userId, msgInput.getText().toString());
-                //hide keyboard if open
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(msgInput.getWindowToken(), 0);
                 sendMessage();
@@ -181,6 +162,59 @@ public class ChatActivity extends AppCompatActivity {
             Intent intent = new Intent(ChatActivity.this, CalendarActivity.class);
             intent.putExtra("otherUserId", otherUserId);
             startActivity(intent);
+        });
+    }
+
+
+    private void getMessages(String chatroomId) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(getString(R.string.base_url) + "chatrooms/" + chatroomId + "/messages")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.d("AllChatsRecyclerAdapter", "Failed to get messages");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()) {
+                    try {
+                        JSONObject json = new JSONObject(response.body().string());
+                        JSONArray msgArr = json.getJSONArray("messages");
+                        for(int i = 0; i < msgArr.length(); i++){
+                            messages.add(msgArr.getJSONObject(i));
+                        }
+                        Log.d(TAG, "Messages: " + messages.toString());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Log.d(TAG, "Failed to get messages");
+                }
+                if(messages.size() > 0) {
+                    Log.d(TAG, "Creating recycler view");
+                    createRecyclerView();
+                }
+            }
+        });
+    }
+
+    private void createRecyclerView(){
+        runOnUiThread(() -> {
+            recyclerView = findViewById(R.id.msg_recycler_view);
+
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(layoutManager);
+
+            msgRecyclerAdapter = new ChatMsgRecyclerAdapter(getApplicationContext(), messages, userId);
+
+            recyclerView.setAdapter(msgRecyclerAdapter);
+            recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);
+            noMessageView.setVisibility(View.GONE);
+            msgRecyclerAdapter.notifyDataSetChanged();
         });
     }
 
@@ -220,6 +254,11 @@ public class ChatActivity extends AppCompatActivity {
                         JSONObject responseBody = new JSONObject(response.body().string());
                         JSONObject messageObj = new JSONObject(responseBody.getJSONObject("message").toString());
                         Log.d(TAG, "Message sent: " + responseBody);
+                        if(messages.size() == 0){
+                            runOnUiThread(() -> {
+                                noMessageView.setVisibility(View.GONE);
+                            });
+                        }
                         message.put("sourceUserId", userId);
                         message.put("content", msgText);
                         messages.add(message);
@@ -230,6 +269,8 @@ public class ChatActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "Not sending message to AI");
                         }
+                        if(messages.size() == 0)
+                            createRecyclerView();
                         runOnUiThread(() -> {
                             msgRecyclerAdapter.notifyDataSetChanged();
                             recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
@@ -238,7 +279,8 @@ public class ChatActivity extends AppCompatActivity {
                     } catch (JSONException | IOException e) {
                         throw new RuntimeException(e);
                     }
-
+                } else {
+                    Log.d(TAG, "Error sending message");
                 }
             }
         });

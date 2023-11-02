@@ -17,16 +17,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.langsync.ChatActivity;
 import com.example.langsync.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE = 1;
@@ -87,7 +92,6 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                         intent.putExtra("otherUserId", chatObj.getString("user2Id"));
 
                     intent.putExtra("otherUserName", chatObj.getString("otherUserName"));
-                    intent.putExtra("messages", chatObj.getString("messages"));
                     intent.putExtra("chatroomId", chatObj.getString("_id"));
 
                     context.startActivity(intent);

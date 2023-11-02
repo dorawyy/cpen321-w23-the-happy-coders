@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">LangSync</string>
-    <string name="base_url">http://20.63.119.166:8081/</string>
-<!--    <string name="base_url">http://10.0.2.2:8081/</string>-->
+    <string name="base_url">http://4.204.191.217:8081/</string>
     <string name="login_with_google">Login with Google</string>
     <string name="signup_with_google">Sign Up with Google</string>
     <string name="logo_text">LangSync</string>
@@ -9,7 +8,7 @@
     <string name="have_account"><u>Already have an account? Login</u></string>
     <string name="title_matches">Matches</string>
     <string name="title_chat">Chat</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_profile">Profile</string>
     <string name="john_doe">John Doe</string>
     <string name="name_placeholder">John Doe</string>
     <string name="server_client_id">439657244083-4ecuib7ub8dpn8aar11gqjkcvem1tnun.apps.googleusercontent.com</string>
@@ -51,6 +50,7 @@
     <string name="admin_login_text">Have an admin access code? Login here</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="toggle_ai">Toggle Ai</string>
+    <string name="loading_messages">Loading Messages</string>
     <string-array name="duration_options">
         <item>15 minutes</item>
         <item>30 minutes</item>
