@@ -54,7 +54,7 @@ async function findUsers(filter){
     return users;
 }
 
-async function createUser(email, displayName, picture) {
+async function createUser(email, displayName="", picture="") {
     userData = {
         email: email,
         displayName: displayName,
@@ -65,23 +65,6 @@ async function createUser(email, displayName, picture) {
     return user; 
 }
 
-async function createAdmin(email) {
-    let result = await User.findUserByEmail(email);
-
-    if (!result.success) {
-        return {success: false, error: result.error};
-    }
-
-    try {
-        let user = result.user;
-        user.admin = true;
-        user.save();
-
-        return {success: true, message: "Admin created successfully"};
-    } catch (error) {
-        return {success: false, error: error};
-    }
-}
 
 async function updateUser(userID, userData) {
     let user = await User.findById(userID);
@@ -131,7 +114,7 @@ async function findAdminOrCreate(email) {
 
     let admin = await User.findOne({ email: email });
 
-    if (!admin){
+    if (!admin) {
         try {
             admin = await createAdmin(email);
         } catch (error) {

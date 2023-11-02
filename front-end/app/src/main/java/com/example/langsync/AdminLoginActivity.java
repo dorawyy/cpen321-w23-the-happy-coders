@@ -102,6 +102,7 @@ public class AdminLoginActivity extends AppCompatActivity {
 
                                     // TODO move them to reports tab
                                     utilities.showToast("Logged in as" + userId);
+
                                 } catch (JSONException e) {
                                     Log.d(TAG, "Error getting admin id");
                                     utilities.showToast(getString(R.string.login_error));

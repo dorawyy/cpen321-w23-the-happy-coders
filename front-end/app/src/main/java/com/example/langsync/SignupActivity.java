@@ -123,7 +123,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
-                    Log.d(TAG, response.body().toString());
+
                     if (!response.isSuccessful()) { //User already registered
                         try {
                             JSONObject responseBody = new JSONObject(response.body().string());
