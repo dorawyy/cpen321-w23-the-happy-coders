@@ -54,7 +54,7 @@ exports.deleteReport = async (req, res) => {
 // Route for admins to ban a user
 exports.banUser = async (req, res) => {
     try {
-        console.log("Banned body: " + req.body);
+        console.log("Banned body: " + req.body.userId);
         const adminId = req.params.adminId;
         if (moderationService.isAdmin(adminId)) {
             const userId = req.body.userId;
