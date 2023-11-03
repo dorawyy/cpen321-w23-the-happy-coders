@@ -4,6 +4,7 @@ const { getGoogleClient } = require('./authenticationService');
 const { findUserByID } = require('./userService');
 
 //ChatGPT Usage: No
+// Create new Google Calendar event
 async function createEvent(authCode, rawEvent) {
     const clientResponse = await getGoogleClient(authCode);
 
@@ -36,6 +37,7 @@ async function createEvent(authCode, rawEvent) {
 }
 
 //ChatGPT Usage: No
+// Create properly formatted Google Calendar event object
 async function generateLangSyncEventObject(rawEvent) {
     const hostUser = await findUserByID(rawEvent.hostUserId);
     const invitedUser = await findUserByID(rawEvent.invitedUserId);

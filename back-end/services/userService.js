@@ -2,6 +2,8 @@ require('dotenv').config()
 const {User} = require('../models/user');
 const {getDefaultInitialIdealMatch} = require('../models/idealMatch');
 
+// ChatGPT Usage: No
+// Find user by email and create if not found
 async function findUnregistredOrCreateUser(ticket) {
     const payload = ticket.getPayload();
     const email = payload.email;
@@ -26,6 +28,8 @@ async function findUnregistredOrCreateUser(ticket) {
     }
 }
 
+// ChatGPT Usage: No
+// Find user by email and return if found
 async function findUserByEmail(email) {
     console.log("Find user by email " + email)
     const user = await User.findOne({ email: email });
@@ -37,7 +41,8 @@ async function findUserByEmail(email) {
     return {success: true, user: user};
 }
 
-
+// ChatGPT Usage: No
+// Find user by ID and return it if found, null otherwise
 async function findUserByID(userID) {
     // let user = await User.findOne({ _id : userID });
     let user = await User.findById(userID);
@@ -49,12 +54,16 @@ async function findUserByID(userID) {
     return user;
 }
 
+// ChatGPT Usage: No
+// Find users by filter and return them
 async function findUsers(filter){
     let users = await User.find(filter);
 
     return users;
 }
 
+// ChatGPT Usage: No
+// Create a new user
 async function createUser(email, displayName="", picture="") {
     userData = {
         email: email,
@@ -66,7 +75,8 @@ async function createUser(email, displayName="", picture="") {
     return user; 
 }
 
-
+// ChatGPT Usage: No
+// Update a user
 async function updateUser(userID, userData) {
     let user = await User.findById(userID);
 
@@ -94,6 +104,8 @@ async function updateUser(userID, userData) {
     }
 }
 
+// ChatGPT Usage: No
+// Ban a user
 async function banUser(userID) {
     let user = await User.findById(userID);
 
@@ -111,6 +123,8 @@ async function banUser(userID) {
     }
 }
 
+// ChatGPT Usage: No
+// Find admin by email and create if not found
 async function findAdminOrCreate(email) {
 
     let admin = await User.findOne({ email: email });
@@ -129,6 +143,8 @@ async function findAdminOrCreate(email) {
     return {success: true, user: admin};
 }
 
+// ChatGPT Usage: No
+// Create a new admin
 async function createAdmin(email) {
     adminData = {
         email: email,

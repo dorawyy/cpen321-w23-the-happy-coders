@@ -67,6 +67,9 @@ const idealMatchSchema = new mongoose.Schema({
     }
 });
 
+
+// ChatGPT Usage: No
+// Get interests in Ideal match format
 function getDefaultIdealMatchInterests(interest){
     const defaultInterests = {};
     for (const [key, value] of Object.entries(interest)) {
@@ -75,6 +78,8 @@ function getDefaultIdealMatchInterests(interest){
     return defaultInterests;
 }
 
+// ChatGPT Usage: No
+// Get learning preference in Ideal match format
 function getDefaultIdealMatchLearningPreference(learningPreference){
     const defaultLearningPreference = {
         expert: 1.0,
@@ -92,6 +97,8 @@ function getDefaultIdealMatchLearningPreference(learningPreference){
     return defaultLearningPreference;
 }
 
+// ChatGPT Usage: No
+// Get default ideal match
 function getDefaultInitialIdealMatch( user) {
     const idealMatchInterest = getDefaultIdealMatchInterests(user.interests);
     const idealMatchLearningPreference = getDefaultIdealMatchLearningPreference(user.learningPreference);
