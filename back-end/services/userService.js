@@ -31,8 +31,9 @@ async function findUserByEmail(email) {
     const user = await User.findOne({ email: email });
     if (!user || user.registered === false) {
         return {success: false, error: 'User not registered'};
+    } else if (user.banned === true) {
+        return {success: false, error: 'User banned'};
     }
-
     return {success: true, user: user};
 }
 
@@ -115,6 +116,9 @@ async function findAdminOrCreate(email) {
     let admin = await User.findOne({ email: email });
 
     if (!admin) {
+        if (admin.banned === true) {
+            return {success: false, error: 'User banned'};
+        }
         try {
             admin = await createAdmin(email);
         } catch (error) {
