@@ -19,7 +19,7 @@ exports.getReports = async (req, res) => {
     try {
         const adminId = req.params.adminId;
         if (moderationService.isAdmin(adminId)) {
-            reports = await moderationService.getReports();
+            let reports = await moderationService.getReports();
 
             return res.status(200).json({ success: true, reports: reports });
         } else {
