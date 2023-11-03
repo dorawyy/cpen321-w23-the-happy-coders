@@ -43,7 +43,7 @@ exports.deleteReport = async (req, res) => {
             return res.status(403).json({ success: false, message: "Unauthorized access to admin actions" })
         }
     } catch (error) {
-        return res.status(500).json({ success: false, error: "Error while deleting report" });
+        return res.status(500).json({ success: false, error: "Error while deleting report" + error });
     }
 }
 
