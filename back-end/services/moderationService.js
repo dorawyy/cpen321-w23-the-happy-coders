@@ -22,11 +22,11 @@ async function addReport(reportData){
             chatRoomId: chatRoomId,
             reportMessage: reportMessage
         });
-        if(reportedUser.blockedUsers == null){
-            reportedUser.blockedUsers = [];
+        if(reporterUser.blockedUsers == null){
+            reporterUser.blockedUsers = [];
         }
 
-        reporterUser.blockedUsers.push(reportData.reportedUserId);   
+        reporterUser.blockedUsers.push(reportedUserId);   
         reporterUser.matchedUsers = reporterUser.matchedUsers.filter(matchedUserId => matchedUserId != reportedUserId);
         reporterUser.likedUsers = reporterUser.likedUsers.filter(likedUserId => likedUserId != reportedUserId);
         reporterUser.chatroomIDs = reporterUser.chatroomIDs.filter(chatroomId => chatroomId != chatRoomId);
