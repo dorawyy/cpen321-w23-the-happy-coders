@@ -1,13 +1,6 @@
 require('dotenv').config();
 const userServices = require('../services/userService');
 
-exports.createUser = async (req, resp) => { 
-    const body = req.body;
-    
-    const user = await userServices.createUser(body);
-
-    return resp.status(200).json({user: user});
-};
 
 exports.updateUserProfile = async (req, resp) => {
     try {
@@ -44,25 +37,6 @@ exports.updateBlockedUsers = async (req, resp) => {
         return resp.status(200).json({ success: true });
     } catch (error) {
         return resp.status(500).json({ success: false, message: "Error adding a blocked user"});
-    }
-}
-
-exports.updateBadges = async (req, resp) => {
-    try {
-        const user = await userServices.findUserByID(req.params.id);
-
-        if (user == null) {
-            return resp.status(404).json({ success: false });
-        }
-        const body = req.body;
-
-        user.badges.push(body.badge);
-
-        user.save();
-
-        return resp.status(200).json({ success: true });
-    } catch (error) {
-        return resp.status(500).json({ success: false, message: "Error adding a new badge"});
     }
 }
 
