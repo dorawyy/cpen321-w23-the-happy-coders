@@ -1,6 +1,7 @@
 package com.example.langsync.ui.profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,9 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.langsync.AdminLoginActivity;
+import com.example.langsync.FormActivity;
+import com.example.langsync.LoginActivity;
 import com.example.langsync.R;
 import com.example.langsync.databinding.FragmentProfileBinding;
 
@@ -36,7 +40,7 @@ import okhttp3.Response;
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
-    private Button videoButton;
+    private Button editButton;
     private String userId;
     private TextView profileAge, profileInterestedLanguages, profileProficientLanguages, profileLearningPreference;
 
@@ -54,6 +58,15 @@ public class ProfileFragment extends Fragment {
         profileInterestedLanguages = root.findViewById(R.id.profile_interested_languages);
         profileProficientLanguages = root.findViewById(R.id.profile_proficient_languages);
         profileLearningPreference = root.findViewById(R.id.profile_learning_preference);
+        editButton = root.findViewById(R.id.profile_edit_button);
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(requireActivity(), FormActivity.class);
+                startActivity(intent);
+            }
+        });
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         userId = sharedPreferences.getString("loggedUserId", null); // null is the default value if the key is not found
