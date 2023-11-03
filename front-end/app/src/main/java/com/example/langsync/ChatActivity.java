@@ -333,17 +333,18 @@ public class ChatActivity extends AppCompatActivity {
                         }
                         message.put("sourceUserId", userId);
                         message.put("content", msgText);
+                        messages.add(message);
                         if (isAiOn) {
                             Log.d(TAG, "Sending message to AI");
                             socket.emit("sendMessage", chatroomId, "6541a9947cce981c74b03ecb", messageObj.getString("content"));
                         } else {
                             Log.d(TAG, "Not sending message to AI");
                         }
-                        messages.add(message);
                         runOnUiThread(() -> {
-                            recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
-                            msgRecyclerAdapter.notifyDataSetChanged();
+                            if(messages.size() > 1)
+                                recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
                             Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
+                            msgRecyclerAdapter.notifyDataSetChanged();
                         });
                     } catch (JSONException | IOException e) {
                         throw new RuntimeException(e);
