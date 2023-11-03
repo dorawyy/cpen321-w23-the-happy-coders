@@ -9,7 +9,10 @@ async function createMatch(sourceUserId, targetUserId){
     const sourceUser = await userService.findUserByID(sourceUserId)
     const targetUser = await userService.findUserByID(targetUserId)
 
-    console.log(targetUser)
+    if(sourceUser.likedUsers.includes(targetUserId)){
+        return false;
+    }
+
     sourceUser.likedUsers.push(targetUserId);
     updateIdealMatch(sourceUser)
 

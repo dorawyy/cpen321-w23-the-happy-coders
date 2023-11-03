@@ -2,7 +2,7 @@ const { Chatroom } = require("../models/chatroom");
 const { User } = require("../models/user");
 const OpenAI = require('openai');
 
-
+// ChatGPT Usage: No
 // Add message to database
 async function sendMessage(chatroomId, content, sourceUserId, learningSession){
     const chatroom = await Chatroom.findById(chatroomId);
@@ -22,6 +22,7 @@ async function sendMessage(chatroomId, content, sourceUserId, learningSession){
     return { sourceUserId: sourceUserId, content: content};;
 }
 
+// ChatGPT Usage: No
 // Get all chatrooms associated with a user
 async function getChatrooms(userId){
     const user = await User.findById(userId)
