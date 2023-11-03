@@ -48,7 +48,7 @@ public class MatchesFragment extends Fragment {
     private TextView matchName, noMatchesText, interestedLanguages, proficientLanguages, interests;
 
     private String userId;
-    private final AuthenticationUtilities  utilities = new AuthenticationUtilities(getContext());
+    private final AuthenticationUtilities utilities = new AuthenticationUtilities(getContext());
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -112,8 +112,18 @@ public class MatchesFragment extends Fragment {
                                     try {
                                         JSONObject match = matches.get(0);
                                         matchName.setText(match.getString("displayName"));
-                                        interestedLanguages.setText(match.getJSONArray("interestedLanguages").toString());
-                                        proficientLanguages.setText(match.getJSONArray("proficientLanguages").toString());
+                                        interestedLanguages.setText(match.getJSONArray("interestedLanguages")
+                                                .toString()
+                                                .replace(",", ", ")
+                                                .replace("[", "")
+                                                .replace("]", "")
+                                                .replace("\"", ""));
+                                        proficientLanguages.setText(match.getJSONArray("proficientLanguages")
+                                                .toString()
+                                                .replace(",", ", ")
+                                                .replace("[", "")
+                                                .replace("]", "")
+                                                .replace("\"", ""));
                                     } catch (JSONException e) {
                                         throw new RuntimeException(e);
                                     }
