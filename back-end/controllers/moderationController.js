@@ -26,7 +26,7 @@ exports.getReports = async (req, res) => {
             return res.status(403).json({ success: false, message: "Unauthorized access to admin actions" })
         }
     } catch (err) {
-        return res.status(500).json({ success: false, error: "Error while fetching reports: " + er });
+        return res.status(500).json({ success: false, error: "Error while fetching reports: " + err });
     }
 }
 
