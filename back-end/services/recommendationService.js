@@ -6,6 +6,10 @@ const { getDefaultInitialIdealMatch } = require("../models/idealMatch");
 async function getRecommendedUsers(userId){
     let user = await User.findById(userId);
     let users = [];
+
+    if (!user) { 
+        return [];
+    }
     
     if(user.learningPreference === "Expert"){
         const expertQuery = await getExpertQuery(user);
