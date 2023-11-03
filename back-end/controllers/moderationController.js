@@ -3,6 +3,7 @@ const moderationService = require('../services/moderationService');
 const userService = require('../services/userService');
 
 // ChatGPT Usage: No
+// Route for users to add a report
 exports.addReport = async (req, res) => {
     try {
         console.log(req.body);
@@ -15,6 +16,7 @@ exports.addReport = async (req, res) => {
 }
 
 // ChatGPT Usage: No
+// Route for admins to get all reports
 exports.getReports = async (req, res) => {
     try {
         const adminId = req.params.adminId;
@@ -31,6 +33,7 @@ exports.getReports = async (req, res) => {
 }
 
 // ChatGPT Usage: No
+// Route for admins to delete a report
 exports.deleteReport = async (req, res) => {
     try {
         const adminId = req.params.adminId;
@@ -48,8 +51,10 @@ exports.deleteReport = async (req, res) => {
 }
 
 // ChatGPT Usage: No
+// Route for admins to ban a user
 exports.banUser = async (req, res) => {
     try {
+        console.log("Banned body: " + req.body);
         const adminId = req.params.adminId;
         if (moderationService.isAdmin(adminId)) {
             const userId = req.body.userId;
