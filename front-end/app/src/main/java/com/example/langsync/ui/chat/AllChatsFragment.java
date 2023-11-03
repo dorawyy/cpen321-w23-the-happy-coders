@@ -38,8 +38,6 @@ public class AllChatsFragment extends Fragment {
 
     private static final String TAG = "AllChatsFragment";
     private FragmentAllChatsBinding binding;
-
-//    private List<JSONObject> chats = new ArrayList<>();
     private HashMap<String, JSONObject> chats = new HashMap<>();
     private RecyclerView recyclerView;
 
