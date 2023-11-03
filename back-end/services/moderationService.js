@@ -6,25 +6,22 @@ const userService = require('./userService');
 //ChatGPT Usage: No
 // Adds a new report
 async function addReport(reportData){
-
     try{
         const reporterUserId = reportData.reporterUserId;
         const reportedUserId = reportData.reportedUserId;
         const chatRoomId = reportData.chatRoomId;
         const reportMessage = reportData.Report;
-    
+        
         const reporterUser = await User.findById(reportData.reporterUserId);
         const reportedUser = await User.findById(reportData.reportedUserId);
 
-        console.log(reportedUser)
-        console.log(reporterUser)
-    
         const report = new Report({
             reporterUserId: reporterUserId,
             reportedUserId: reportedUserId,
             chatRoomId: chatRoomId,
             reportMessage: reportMessage
         });
+        
         if(reporterUser.blockedUsers == null){
             reporterUser.blockedUsers = [];
         }
@@ -34,21 +31,10 @@ async function addReport(reportData){
         reporterUser.likedUsers = reporterUser.likedUsers.filter(likedUserId => likedUserId != reportedUserId);
         reporterUser.chatroomIDs = reporterUser.chatroomIDs.filter(chatroomId => chatroomId != chatRoomId);
     
-        console.log("Reporter User")
-        console.log("Blocked users: " + reporterUser.blockedUsers);
-        console.log("Matched users: " + reporterUser.matchedUsers);
-        console.log("Liked users: " + reporterUser.likedUsers);
-        console.log("Chatroom IDs: " + reporterUser.chatroomIDs);
-    
         reportedUser.matchedUsers = reportedUser.matchedUsers.filter(matchedUserId => matchedUserId != reporterUserId);
         reportedUser.likedUsers = reportedUser.likedUsers.filter(likedUserId => likedUserId != reporterUserId);
         reportedUser.chatroomIDs = reportedUser.chatroomIDs.filter(chatroomId => chatroomId != chatRoomId);
     
-        console.log("Reported User")
-        console.log("Matched users: " + reportedUser.matchedUsers);
-        console.log("Liked users: " + reportedUser.likedUsers);
-        console.log("Chatroom IDs: " + reportedUser.chatroomIDs);
-        
         await report.save();
         await reportedUser.save();
         await reporterUser.save();
@@ -58,9 +44,7 @@ async function addReport(reportData){
     catch(error){
         console.log(error)
     }
-   
 }
-
 
 //ChatGPT Usage: No
 // Gets all open reports for an admin
@@ -69,14 +53,12 @@ async function getReports() {
     return reports;
 }
 
-
 //ChatGPT Usage: No
 // Deletes a report after an admin has reviewed it
 async function deleteReport(reportId) {
     const report = await Report.findByIdAndDelete(reportId);
     return report;
 }
-
 
 //ChatGPT Usage: No
 // Bans a user 

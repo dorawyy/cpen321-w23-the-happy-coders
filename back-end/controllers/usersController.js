@@ -4,7 +4,6 @@ const userServices = require('../services/userService');
 
 exports.updateUserProfile = async (req, resp) => {
     try {
-
         const userId = req.params.id;
         const body = req.body;
 

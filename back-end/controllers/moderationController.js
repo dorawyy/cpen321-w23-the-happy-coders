@@ -33,7 +33,7 @@ exports.deleteReport = async (req, res) => {
     try {
         const adminId = req.params.adminId;
         if (moderationService.isAdmin(adminId)) {
-            const reportId = req.params.reportId;
+            const reportId = req.body.reportId;
             await moderationService.deleteReport(reportId);
 
             return res.status(200).json({ success: true });
@@ -49,7 +49,7 @@ exports.banUser = async (req, res) => {
     try {
         const adminId = req.params.adminId;
         if (moderationService.isAdmin(adminId)) {
-            const userId = req.params.id;
+            const userId = req.body.userId;
             return await moderationService.ban(userId);
         } else {
             return res.status(403).json({ success: false, message: "Unauthorized access to admin actions" })
