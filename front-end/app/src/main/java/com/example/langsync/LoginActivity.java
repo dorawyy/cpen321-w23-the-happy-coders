@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextView signUpText;
 
-    // ChatGPT usage: No
+    // ChatGPT usage: Partial
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
