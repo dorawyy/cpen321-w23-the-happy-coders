@@ -6,14 +6,34 @@ const userService = require('./userService');
 //ChatGPT Usage: No
 // Adds a new report
 async function addReport(reportData){
+    const reporterUserId = reportData.reporterUserId;
+    const reportedUserId = reportData.reportedUserId;
+    const chatRoomId = reportData.chatRoomId;
+    const reportMessage = reportData.Report;
+
+    const reporterUser = await User.findById(reportData.reporterdUserId)
+    const reportedUser = await User.findById(reportData.reportedUserId)
+
     const report = new Report({
-        reporterUserId: reportData.reporterUserId,
-        reportedUserId: reportData.reportedUserId,
-        chatRoomId: reportData.chatRoomId,
-        report: reportData.report
+        reporterUserId: reporterUserId,
+        reportedUserId: reportedUserId,
+        chatRoomId: chatRoomId,
+        reportMessage: reportMessage
     });
 
+    reporterUser.blockedUsers.push(reportData.reportedUserId)
+
+    reporterUser.matchedUsers.filter(matchedUserId => matchedUserId != reportedUserId)
+    reporterUser.likedUsers.filter(likedUserId => likedUserId != reportedUserId)
+    reporterUser.chatroomIDs.filter(chatroomId => chatroomId != chatRoomId)
+
+    reportedUser.matchedUsers.filter(matchedUserId => matchedUserId != reporterUserId)
+    reportedUser.likedUsers.filter(likedUserId => likedUserId != reporterUserId)
+    reportedUser.chatroomIDs.filter(chatroomId => chatroomId != chatRoomId)
+
     await report.save();
+    await reportedUser.save();
+    await reporterUser.save()
 
     return report;
 }
