@@ -5,6 +5,7 @@ const userService = require('../services/userService');
 
 exports.addReport = async (req, res) => {
     try {
+        console.log(req.body);
         await moderationService.addReport(req.body);
 
         return res.status(200).json({ success: true });
