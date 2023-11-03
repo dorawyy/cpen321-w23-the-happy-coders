@@ -3,7 +3,7 @@ const { User } = require("../models/user");
 const OpenAI = require('openai');
 
 // ChatGPT Usage: No
-// Add message to database
+// Add message to database and send to OpenAI method if toggle is on
 async function sendMessage(chatroomId, content, sourceUserId, learningSession){
     try{
         const chatroom = await Chatroom.findById(chatroomId);
@@ -70,27 +70,33 @@ async function getMessages(chatroomId){
 }
 
 // ChatGPT Usage: No
-// Create a new chatroom
+// Create a new chatroom with the newly matched users
 async function createChatroom(user1Id, user2Id){
-    const user1 = await User.findById(user1Id)
-    const user2 = await User.findById(user2Id)
-
-    const chatroom = await Chatroom.create({
-        messages: [],
-        user1Id: user1Id,
-        user2Id: user2Id
-    })
-
-    user1.chatroomIDs.push(chatroom._id)
-    user2.chatroomIDs.push(chatroom._id)
-
-    await user1.save()
-    await user2.save()
-
-    return chatroom._id
+    try{
+        const user1 = await User.findById(user1Id)
+        const user2 = await User.findById(user2Id)
+    
+        const chatroom = await Chatroom.create({
+            messages: [],
+            user1Id: user1Id,
+            user2Id: user2Id
+        })
+    
+        user1.chatroomIDs.push(chatroom._id)
+        user2.chatroomIDs.push(chatroom._id)
+    
+        await user1.save()
+        await user2.save()
+    
+        return chatroom._id
+    }
+    catch(error){
+        console.log("Failed to create chatroom: ", error)
+    }
 }
 
 // ChatGPT: Partial
+// Sends the user message to OpenAI when the AI toggle is on
 async function openAIMessage(message) {
     try{
         let formattedMessage = "Is the structure and grammar of this sentence correct: " + message;
