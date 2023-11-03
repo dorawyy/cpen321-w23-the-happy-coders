@@ -37,6 +37,7 @@ public class AdminLoginActivity extends AppCompatActivity {
     private static String TAG = "AdminLoginActivity";
     private final AuthenticationUtilities utilities = new AuthenticationUtilities(AdminLoginActivity.this);
 
+    // ChatGPT Usage: No
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

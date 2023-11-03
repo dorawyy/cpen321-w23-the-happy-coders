@@ -8,6 +8,7 @@ public class ProfileViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
+    // ChatGPT Usage: No
     public ProfileViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is notifications fragment");
