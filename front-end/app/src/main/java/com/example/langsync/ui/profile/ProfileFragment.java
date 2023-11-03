@@ -46,6 +46,7 @@ public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
 
+    // ChatGPT Usage: No
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel notificationsViewModel =
@@ -115,8 +116,7 @@ public class ProfileFragment extends Fragment {
         return root;
     }
 
-
-
+    // ChatGPT Usage: No
     @Override
     public void onDestroyView() {
         super.onDestroyView();

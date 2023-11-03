@@ -47,6 +47,7 @@ public class AllChatsFragment extends Fragment {
     private String userId;
     private CardView noChats;
 
+    // ChatGPT Usage: No
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -112,6 +113,7 @@ public class AllChatsFragment extends Fragment {
         return root;
     }
 
+    // ChatGPT Usage: No
     @Override
     public void onDestroyView() {
         super.onDestroyView();

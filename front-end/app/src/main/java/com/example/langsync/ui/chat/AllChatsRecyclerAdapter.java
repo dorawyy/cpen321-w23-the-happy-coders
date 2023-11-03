@@ -49,6 +49,7 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.userID = userId;
     }
 
+    // ChatGPT Usage: No
     public class ChatViewHolder extends RecyclerView.ViewHolder {
         private TextView chat_name;
         private TextView chat_last_message;
@@ -61,7 +62,7 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-
+    // ChatGPT Usage: No
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -69,6 +70,7 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         return new ChatViewHolder(view);
     }
 
+    // ChatGPT Usage: No
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
@@ -104,6 +106,7 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+    // ChatGPT Usage: No
     @Override
     public int getItemCount() {
         if(chats.size() == 0)

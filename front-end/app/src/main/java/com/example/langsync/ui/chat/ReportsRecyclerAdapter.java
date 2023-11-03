@@ -45,12 +45,14 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     SharedPreferences sharedPreferences;
 
+    // ChatGPT Usage: No
     public ReportsRecyclerAdapter(Context context, List<JSONObject> reports, String adminId) {
         this.context = context;
         this.reports = reports;
         this.adminId = adminId;
     }
 
+    // ChatGPT Usage: No
     public class MessageViewHolder extends RecyclerView.ViewHolder {
         private TextView reportedUser, reason;
         private ImageView removeReport, banUser;
@@ -63,6 +65,7 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
+    // ChatGPT Usage: No
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -70,6 +73,7 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return new MessageViewHolder(view);
     }
 
+    // ChatGPT Usage: No
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
@@ -154,6 +158,7 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
+    // ChatGPT Usage: No
     @Override
     public int getItemCount() {
         if(reports.size() == 0)

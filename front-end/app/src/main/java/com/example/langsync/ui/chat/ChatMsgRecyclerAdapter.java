@@ -35,12 +35,14 @@ public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     SharedPreferences sharedPreferences;
 
+    // ChatGPT Usage: No
     public ChatMsgRecyclerAdapter(Context context, List<JSONObject> messages, String userId) {
         this.context = context;
         this.messages = messages;
         this.userId = userId;
     }
 
+    // ChatGPT Usage: No
     public class MessageViewHolder extends RecyclerView.ViewHolder {
         private TextView sentMsg, receivedMsg;
         private LinearLayout sentMsgView, receivedMsgView;
@@ -53,6 +55,7 @@ public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
+    // ChatGPT Usage: No
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -60,6 +63,7 @@ public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return new MessageViewHolder(view);
     }
 
+    // ChatGPT Usage: No
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
@@ -85,6 +89,7 @@ public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
+    // ChatGPT Usage: No
     @Override
     public int getItemCount() {
         if(messages.size() == 0)

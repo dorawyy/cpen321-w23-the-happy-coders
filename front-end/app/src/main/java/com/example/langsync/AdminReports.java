@@ -21,6 +21,7 @@ public class AdminReports extends AppCompatActivity {
     private RecyclerView reportsRecyclerView;
     private List<JSONObject> reports = new ArrayList<>();
 
+    // ChatGPT Usage: No
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
