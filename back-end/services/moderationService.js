@@ -8,7 +8,6 @@ const userService = require('./userService');
 async function addReport(reportData){
 
     try{
-        console.log("here")
         const reporterUserId = reportData.reporterUserId;
         const reportedUserId = reportData.reportedUserId;
         const chatRoomId = reportData.chatRoomId;
@@ -23,9 +22,11 @@ async function addReport(reportData){
             chatRoomId: chatRoomId,
             reportMessage: reportMessage
         });
-    
-        reporterUser.blockedUsers.push(reportData.reportedUserId);
-    
+        if(reportedUser.blockedUsers == null){
+            reportedUser.blockedUsers = [];
+        }
+
+        reporterUser.blockedUsers.push(reportData.reportedUserId);   
         reporterUser.matchedUsers = reporterUser.matchedUsers.filter(matchedUserId => matchedUserId != reportedUserId);
         reporterUser.likedUsers = reporterUser.likedUsers.filter(likedUserId => likedUserId != reportedUserId);
         reporterUser.chatroomIDs = reporterUser.chatroomIDs.filter(chatroomId => chatroomId != chatRoomId);
