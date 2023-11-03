@@ -14,13 +14,6 @@ exports.sendMessage = async(req,res) =>{
 }
 
 // ChatGPT Usage: No
-exports.startLearningSession = async(req,res) =>{
-    let conversationPrompts = await communicationService.startLearningSession();
-
-    return res.json({conversationPrompts});
-}
-
-// ChatGPT Usage: No
 exports.getChatrooms = async(req,res) =>{
     const sourceUserId = req.params.userId;
 
