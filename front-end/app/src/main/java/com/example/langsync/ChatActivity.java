@@ -67,7 +67,7 @@ public class ChatActivity extends AppCompatActivity {
 
     {
         try {
-            socket = IO.socket("http://4.204.191.217:8081");
+            socket = IO.socket("http://4.204.191.217:443");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
