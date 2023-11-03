@@ -134,6 +134,8 @@ async function createAdmin(email) {
         email: email,
         admin: true,
         registered: true,
+        displayName: "Admin",
+        picture: ""
     }
 
     let admin = new User(adminData);
