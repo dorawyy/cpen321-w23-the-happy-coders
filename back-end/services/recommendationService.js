@@ -39,6 +39,10 @@ async function getRecommendedUsers(userId){
     const sortedScoredUsers = sortUsersOnScore(scoredUsers, user.idealMatch);
     const recommendedUsers = arbitraryTopUsers.concat(sortedScoredUsers);
 
+    recommendedUsers = recommendedUsers.filter(recommendedUser => {
+        return !user.blockedUsers.includes(recommendedUser._id) && !recommendedUser.blockedUsers.includes(user._id)
+    })
+
     return recommendedUsers;
 }
 
