@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.langsync.util.AuthenticationUtilities;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,73 +46,74 @@ public class AdminLoginActivity extends AppCompatActivity {
         accessCodeValue = findViewById(R.id.access_code_value);
         emailValue = findViewById(R.id.email_value);
 
-        Button submitBtn = findViewById(R.id.submitBtn);
-        submitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String accessCode = accessCodeValue.getText().toString();
-                String email = emailValue.getText().toString();
-                Log.d(TAG, "access code: " + accessCode + ", email: " + email);
-                if (!accessCode.isEmpty() && !email.isEmpty()) {
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("accessCode", accessCode);
-                        jsonObject.put("email", email);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
+        MaterialButton submitBtn = findViewById(R.id.admin_login);
+        submitBtn.setOnClickListener(v -> {
+            String accessCode = accessCodeValue.getText().toString();
+            String email = emailValue.getText().toString();
+            Log.d(TAG, "access code: " + accessCode + ", email: " + email);
+            if (!accessCode.isEmpty() && !email.isEmpty()) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("accessCode", accessCode);
+                    jsonObject.put("email", email);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+                Request request = new Request.Builder()
+                        .url(getString(R.string.base_url) + "authentication/admin-login/")
+                        .post(body)
+                        .build();
+
+                Log.d(TAG, body.toString());
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        Log.d(TAG, "Error getting reports: " + e);
+                        e.printStackTrace();
+                        utilities.showToast("Error getting reports");
                     }
-                    MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-                    RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
-                    Request request = new Request.Builder()
-                            .url(getString(R.string.base_url) + "authentication/admin-login/")
-                            .post(body)
-                            .build();
 
-                    Log.d(TAG, body.toString());
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                            e.printStackTrace();
-                            utilities.showToast(getString(R.string.login_error));
-                        }
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
+                        Log.d(TAG, response.toString());
+                        if (!response.isSuccessful()) {
+                            try {
+                                JSONObject responseBody = new JSONObject(response.body().string());
+                                Log.d(TAG, responseBody.toString());
+                                String errMessage = responseBody.getString("error");
+                                Log.d(TAG, errMessage);
+                                utilities.navigateTo(SignupActivity.class, errMessage);
+                            } catch (JSONException e) {
+                                Log.d(TAG, "Error getting reports: " + e);
+                                e.printStackTrace();
+                                utilities.showToast("Error getting reports");
+                            }
+                        } else {
+                            try {
+                                JSONObject responseBody = new JSONObject(response.body().string());
+                                String userId = responseBody.getString("userId");
 
-                        @Override
-                        public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
-                            Log.d(TAG, response.toString());
-                            if (!response.isSuccessful()) {
-                                Log.d(TAG, "here");
-                                try {
-                                    JSONObject responseBody = new JSONObject(response.body().string());
-                                    Log.d(TAG, responseBody.toString());
-                                    String errMessage = responseBody.getString("error");
-                                    utilities.navigateTo(SignupActivity.class, errMessage);
-                                } catch (JSONException e) {
-                                    utilities.showToast(getString(R.string.login_error));
-                                }
-                            } else {
-                                try {
-                                    JSONObject responseBody = new JSONObject(response.body().string());
-                                    String userId = responseBody.getString("userId");
+                                // Get a reference to SharedPreferences
+                                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
-                                    // Get a reference to SharedPreferences
-                                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("loggedUserId", userId);
+                                editor.apply();
 
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putString("loggedUserId", userId);
-                                    editor.apply();
+                                utilities.navigateTo(AdminReports.class, getString(R.string.login_granted));
 
-                                    utilities.navigateTo(AdminReports.class, getString(R.string.login_granted));
-
-                                } catch (JSONException e) {
-                                    Log.d(TAG, "Error getting admin id");
-                                    utilities.showToast(getString(R.string.login_error));
-                                }
+                            } catch (JSONException e) {
+                                Log.d(TAG, "Error getting admin id: " + e);
+                                e.printStackTrace();
+                                utilities.showToast("Error getting admin id");
                             }
                         }
-                    });
-                } else {
-                    Toast.makeText(AdminLoginActivity.this, "Please enter both values", Toast.LENGTH_SHORT).show();
-                }
+                    }
+                });
+            } else {
+                Toast.makeText(AdminLoginActivity.this, "Please enter both values", Toast.LENGTH_SHORT).show();
             }
         });
     }
