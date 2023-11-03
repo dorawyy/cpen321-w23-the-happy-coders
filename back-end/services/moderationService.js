@@ -10,7 +10,7 @@ async function addReport(reportData){
         const reporterUserId = reportData.reporterUserId;
         const reportedUserId = reportData.reportedUserId;
         const chatRoomId = reportData.chatRoomId;
-        const reportMessage = reportData.Report;
+        const reportMessage = reportData.reportMessage;
         
         const reporterUser = await User.findById(reportData.reporterUserId);
         const reportedUser = await User.findById(reportData.reportedUserId);
@@ -34,7 +34,9 @@ async function addReport(reportData){
         reportedUser.matchedUsers = reportedUser.matchedUsers.filter(matchedUserId => matchedUserId != reporterUserId);
         reportedUser.likedUsers = reportedUser.likedUsers.filter(likedUserId => likedUserId != reporterUserId);
         reportedUser.chatroomIDs = reportedUser.chatroomIDs.filter(chatroomId => chatroomId != chatRoomId);
-    
+        
+        console.log(report);
+
         await report.save();
         await reportedUser.save();
         await reporterUser.save();
