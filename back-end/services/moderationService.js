@@ -15,6 +15,9 @@ async function addReport(reportData){
     
         const reporterUser = await User.findById(reportData.reporterdUserId);
         const reportedUser = await User.findById(reportData.reportedUserId);
+
+        console.log(reportedUser)
+        console.log(reporterUser)
     
         const report = new Report({
             reporterUserId: reporterUserId,
