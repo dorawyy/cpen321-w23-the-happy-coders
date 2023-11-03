@@ -53,7 +53,8 @@ exports.banUser = async (req, res) => {
         const adminId = req.params.adminId;
         if (moderationService.isAdmin(adminId)) {
             const userId = req.body.userId;
-            return await moderationService.ban(userId);
+            await moderationService.ban(userId);
+            return res.status(200).json({ success: true });
         } else {
             return res.status(403).json({ success: false, message: "Unauthorized access to admin actions" })
         }
