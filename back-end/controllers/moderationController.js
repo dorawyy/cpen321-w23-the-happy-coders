@@ -34,9 +34,8 @@ exports.getReports = async (req, res) => {
 exports.deleteReport = async (req, res) => {
     try {
         const adminId = req.params.adminId;
-        console.log("deleting request body: " + req.body);
         if (moderationService.isAdmin(adminId)) {
-            const reportId = req.body.reportId;
+            const reportId = req.params.reportId;
             await moderationService.deleteReport(reportId);
 
             return res.status(200).json({ success: true });
