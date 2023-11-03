@@ -13,7 +13,7 @@ async function addReport(reportData){
         const chatRoomId = reportData.chatRoomId;
         const reportMessage = reportData.Report;
     
-        const reporterUser = await User.findById(reportData.reporterdUserId);
+        const reporterUser = await User.findById(reportData.reporterUserId);
         const reportedUser = await User.findById(reportData.reportedUserId);
 
         console.log(reportedUser)
