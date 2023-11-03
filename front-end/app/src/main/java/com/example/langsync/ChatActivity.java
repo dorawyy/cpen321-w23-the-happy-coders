@@ -1,6 +1,7 @@
 package com.example.langsync;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.langsync.ui.chat.AllChatsRecyclerAdapter;
 import com.example.langsync.ui.chat.ChatMsgRecyclerAdapter;
+import com.example.langsync.util.AuthenticationUtilities;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,7 +52,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
     private List<JSONObject> messages = new ArrayList<>();
-    private ImageView goBack, videoCall, sendMsg, calendarInvite, langsyncSpinner;
+    private ImageView goBack, videoCall, sendMsg, calendarInvite, reportUser;
     private String otherUserName, otherUserId, userId, chatroomId;
     private CardView noMessageView, loadingMessages;
     private EditText msgInput;
@@ -65,7 +67,7 @@ public class ChatActivity extends AppCompatActivity {
 
     {
         try {
-            socket = IO.socket("http://4.204.191.217:8081/");
+            socket = IO.socket("http://4.204.191.217:8081");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -78,24 +80,24 @@ public class ChatActivity extends AppCompatActivity {
         socket.emit("joinChatroom", chatroomId, userId);
 
         socket.on("message", args -> {
-                JSONObject data = (JSONObject) args[0];
-                String userId = data.optString("userId");
-                if (!userId.equals(this.userId) || !userId.equals("6541a9947cce981c74b03ecb")) {
-                    String message = data.optString("message");
-                    Log.d(TAG, "Message received: " + message + " from " + userId);
-                    JSONObject messageObj = new JSONObject();
-                    try {
-                        messageObj.put("sourceUserId", userId);
-                        messageObj.put("content", message);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                    runOnUiThread(() -> {
-                        messages.add(messageObj);
-                        recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
-                        msgRecyclerAdapter.notifyDataSetChanged();
-                    });
+            JSONObject data = (JSONObject) args[0];
+            String userId = data.optString("userId");
+            if (!userId.equals(this.userId)) {
+                String message = data.optString("message");
+                Log.d(TAG, "Message received: " + message + " from " + userId);
+                JSONObject messageObj = new JSONObject();
+                try {
+                    messageObj.put("sourceUserId", userId);
+                    messageObj.put("content", message);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
+                runOnUiThread(() -> {
+                    messages.add(messageObj);
+                    recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
+                    msgRecyclerAdapter.notifyDataSetChanged();
+                });
+            }
         });
     }
 
@@ -123,7 +125,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
+        if (extras != null) {
             otherUserName = extras.getString("otherUserName");
             otherUserId = extras.getString("otherUserId");
             chatroomId = extras.getString("chatroomId");
@@ -136,6 +138,7 @@ public class ChatActivity extends AppCompatActivity {
         videoCall = findViewById(R.id.video_call);
         sendMsg = findViewById(R.id.send_msg);
         calendarInvite = findViewById(R.id.calendar_invite);
+        reportUser = findViewById(R.id.report_user);
 
         goBack.setOnClickListener(v -> {
             finish();
@@ -148,13 +151,12 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         sendMsg.setOnClickListener(v -> {
-            if(!msgInput.getText().toString().isEmpty()) {
+            if (!msgInput.getText().toString().isEmpty()) {
                 socket.emit("sendMessage", chatroomId, userId, msgInput.getText().toString());
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(msgInput.getWindowToken(), 0);
                 sendMessage();
-            }
-            else
+            } else
                 Toast.makeText(this, "Add text to send a message!", Toast.LENGTH_SHORT).show();
         });
 
@@ -163,8 +165,70 @@ public class ChatActivity extends AppCompatActivity {
             intent.putExtra("otherUserId", otherUserId);
             startActivity(intent);
         });
-    }
 
+        reportUser.setOnClickListener(v -> {
+            //implement a pop up modal for report details
+            AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+            builder.setTitle("Report User");
+            builder.setMessage("Please provide a reason for reporting this user");
+            builder.setCancelable(true);
+            EditText input = new EditText(ChatActivity.this);
+            builder.setView(input);
+            builder.setPositiveButton("Report", (dialog, which) -> {
+                String reportReason = input.getText().toString();
+                sendReport(reportReason);
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> {
+                dialog.cancel();
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
+
+    }
+    private void sendReport (String reason) {
+        OkHttpClient client = new OkHttpClient();
+        JSONObject jsonObject = new JSONObject();
+        AuthenticationUtilities auth = new AuthenticationUtilities(ChatActivity.this);
+        try {
+            jsonObject.put("reporterUserId", userId);
+            jsonObject.put("reportedUserId", otherUserId);
+            jsonObject.put("chatRoomId", chatroomId);
+            jsonObject.put("reportMessage", reason);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+        Request request = new Request.Builder()
+                .url(getString(R.string.base_url) + "moderation/")
+                .post(body)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.d(TAG, Objects.requireNonNull(e.getMessage()));
+                Log.d(TAG, "Error sending report");
+                auth.showToast("Error sending report");
+                e.printStackTrace();
+            }
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        JSONObject responseBody = new JSONObject(response.body().string());
+                        Log.d(TAG, "Report sent: " + responseBody);
+                        auth.showToast("User Reported");
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    Log.d(TAG, "Error sending report: " + response.body().string());
+                    auth.showToast("Error sending report");
+                }
+            }
+        });
+    }
 
     private void getMessages(String chatroomId) {
         OkHttpClient client = new OkHttpClient();
@@ -179,11 +243,11 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     try {
                         JSONObject json = new JSONObject(response.body().string());
                         JSONArray msgArr = json.getJSONArray("messages");
-                        for(int i = 0; i < msgArr.length(); i++){
+                        for (int i = 0; i < msgArr.length(); i++) {
                             messages.add(msgArr.getJSONObject(i));
                         }
                         Log.d(TAG, "Messages: " + messages.toString());
@@ -194,7 +258,7 @@ public class ChatActivity extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "Failed to get messages");
                 }
-                if(messages.size() > 0) {
+                if (messages.size() > 0) {
                     Log.d(TAG, "Creating recycler view");
                     createRecyclerView();
                 }
@@ -202,7 +266,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void createRecyclerView(){
+    private void createRecyclerView() {
         runOnUiThread(() -> {
             recyclerView = findViewById(R.id.msg_recycler_view);
 
@@ -218,7 +282,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void sendMessage(){
+    private void sendMessage() {
         OkHttpClient client = new OkHttpClient();
         JSONObject jsonObject = new JSONObject();
         try {
@@ -248,29 +312,27 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     try {
                         JSONObject message = new JSONObject();
                         JSONObject responseBody = new JSONObject(response.body().string());
                         JSONObject messageObj = new JSONObject(responseBody.getJSONObject("message").toString());
                         Log.d(TAG, "Message sent: " + responseBody);
-                        if(messages.size() == 0){
+                        if (messages.size() == 0) {
+                            createRecyclerView();
                             runOnUiThread(() -> {
                                 noMessageView.setVisibility(View.GONE);
                             });
                         }
                         message.put("sourceUserId", userId);
                         message.put("content", msgText);
-                        messages.add(message);
-                        if(isAiOn) {
+                        if (isAiOn) {
                             Log.d(TAG, "Sending message to AI");
-                            messages.add(messageObj);
                             socket.emit("sendMessage", chatroomId, "6541a9947cce981c74b03ecb", messageObj.getString("content"));
                         } else {
                             Log.d(TAG, "Not sending message to AI");
                         }
-                        if(messages.size() == 0)
-                            createRecyclerView();
+                        messages.add(message);
                         runOnUiThread(() -> {
                             msgRecyclerAdapter.notifyDataSetChanged();
                             recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);

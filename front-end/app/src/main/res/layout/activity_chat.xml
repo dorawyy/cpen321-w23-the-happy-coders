@@ -38,21 +38,31 @@
                 android:layout_weight="8"
                 android:layout_marginTop="8dp"/>
             <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:id="@+id/video_call"
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
                 android:src="@drawable/baseline_videocam_24"/>
             <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:id="@+id/calendar_invite"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
-                android:src="@drawable/baseline_calendar_month_24"
+                android:src="@drawable/baseline_calendar_month_24"/>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/report_user"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:src="@drawable/baseline_report_problem_24"
                 />
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

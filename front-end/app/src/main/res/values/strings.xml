@@ -31,7 +31,7 @@
     <string name="age">Age</string>
     <string name="complete_sign_up">Complete Sign Up</string>
     <string name="preference_file_key">com.example.langsync.preferencefile</string>
-    <string name="no_matches">No Matches</string>
+    <string name="no_matches">No Matches at this time! Come back later…</string>
     <string name="no_messages_text">No messages, send a message to start the conversation!</string>
     <string name="schedule_meeting">Schedule Meeting</string>
     <string name="meeting_date">Meeting Date</string>
