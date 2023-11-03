@@ -13,7 +13,7 @@ router.post("/", moderationController.addReport);
 router.put("/:adminId/ban", moderationController.banUser);
 
 // Deletes a report
-router.delete("/:adminId", moderationController.deleteReport);
+router.delete("/:adminId/:reportId", moderationController.deleteReport);
 
 
 module.exports = router;

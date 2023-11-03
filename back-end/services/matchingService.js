@@ -6,34 +6,29 @@ const communicationService = require("./communicationService")
 // ChatGPT Usage: No
 // Check if targetUser likes sourceUser and matches
 async function createMatch(sourceUserId, targetUserId){
-    try{
-        const sourceUser = await userService.findUserByID(sourceUserId)
-        const targetUser = await userService.findUserByID(targetUserId)
-        
-        if(!sourceUser || !targetUser || sourceUser.likedUsers.includes(targetUserId)){
-            return false;
-        }
+    const sourceUser = await userService.findUserByID(sourceUserId)
+    const targetUser = await userService.findUserByID(targetUserId)
     
-        sourceUser.likedUsers.push(targetUserId);
-        updateIdealMatch(sourceUser)
-    
-        // Check if target user likes source user and create match
-        if(targetUser.likedUsers.includes(sourceUserId)){
-            sourceUser.matchedUsers.push(targetUserId);
-            targetUser.matchedUsers.push(sourceUserId);
-            await sourceUser.save();
-            await targetUser.save();
-            await communicationService.createChatroom(sourceUserId, targetUserId);
-            return true;
-        }
-    
-        await sourceUser.save();
-        await targetUser.save();
+    if(!sourceUser || !targetUser || sourceUser.likedUsers.includes(targetUserId)){
         return false;
     }
-    catch(error){
-        console.log("Creating match/liking failed: ", error);
+
+    sourceUser.likedUsers.push(targetUserId);
+    updateIdealMatch(sourceUser)
+
+    // Check if target user likes source user and create match
+    if(targetUser.likedUsers.includes(sourceUserId)){
+        sourceUser.matchedUsers.push(targetUserId);
+        targetUser.matchedUsers.push(sourceUserId);
+        await sourceUser.save();
+        await targetUser.save();
+        await communicationService.createChatroom(sourceUserId, targetUserId);
+        return true;
     }
+
+    await sourceUser.save();
+    await targetUser.save();
+    return false;
 }
 
 // ChatGPT Usage: Partial
@@ -74,15 +69,9 @@ async function updateIdealMatch(sourceUser){
 // ChatGPT Usage: No
 // Get the users someone has matches with
 async function getAllMatches(userId){
-    try{
-        const sourceUser = await User.findById(userId);
 
-        return sourceUser.matchedUsers;
-    }
-    catch(error){
-        console.log("Failed to get matched users: ", error)
-    }
-
+    const sourceUser = await User.findById(userId);
+    return sourceUser.matchedUsers;
 }
 
 module.exports = {createMatch, getAllMatches};

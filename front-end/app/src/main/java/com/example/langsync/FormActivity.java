@@ -89,6 +89,7 @@ public class FormActivity extends AppCompatActivity {
     private String userId;
     private final AuthenticationUtilities utilities = new AuthenticationUtilities(FormActivity.this);
 
+    // ChatGPT Usage: No
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,6 +194,7 @@ public class FormActivity extends AppCompatActivity {
         });
     }
 
+    // ChatGPT Usage: No
     private JSONObject formatFormResponses() throws JSONException {
 
         JSONObject jsonObject = new JSONObject();
@@ -225,7 +227,7 @@ public class FormActivity extends AppCompatActivity {
         return jsonObject;
     }
 
-
+    // ChatGPT Usage: No
     private void multiSelectOnClick(TextView textView, String[] options, boolean[] selected, List<String> selectedOptions) {
         textView.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(FormActivity.this);

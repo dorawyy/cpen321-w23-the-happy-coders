@@ -8,6 +8,7 @@ public class MatchesViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
+    // ChatGPT Usage: No
     public MatchesViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");

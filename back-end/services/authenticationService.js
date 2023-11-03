@@ -23,7 +23,7 @@ async function verifyGoogleToken(idToken) {
     }
 }
 
-
+//ChatGPT Usage: No
 // Retrieves the access token and refresh token from the authorization code
 async function retrieveTokens(authorizationCode) {
     try {
@@ -36,6 +36,7 @@ async function retrieveTokens(authorizationCode) {
 }
 
 //ChatGPT Usage: No
+// Use authorization code to get new authorized Google Client
 async function getGoogleClient(authCode){
     const tokensResponse = await retrieveTokens(authCode);
 

@@ -73,6 +73,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT Usage: No
     @Override
     protected void onResume() {
         super.onResume();
@@ -101,12 +102,14 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    // ChatGPT Usage: No
     @Override
     protected void onPause() {
         super.onPause();
         socket.disconnect();
     }
 
+    // ChatGPT Usage: No
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,6 +188,8 @@ public class ChatActivity extends AppCompatActivity {
         });
 
     }
+
+    // ChatGPT Usage: No
     private void sendReport (String reason) {
         OkHttpClient client = new OkHttpClient();
         JSONObject jsonObject = new JSONObject();
@@ -229,6 +234,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    // ChatGPT Usage: No
     private void getMessages(String chatroomId) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -265,6 +271,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    // ChatGPT Usage: No
     private void createRecyclerView() {
         runOnUiThread(() -> {
             recyclerView = findViewById(R.id.msg_recycler_view);
@@ -281,6 +288,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    // ChatGPT Usage: No
     private void sendMessage() {
         OkHttpClient client = new OkHttpClient();
         JSONObject jsonObject = new JSONObject();

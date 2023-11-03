@@ -72,6 +72,7 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
+    // ChatGPT Usage: No
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -79,6 +80,7 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return new ReportsViewHolder(view);
     }
 
+    // ChatGPT Usage: No
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
@@ -179,6 +181,7 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
+    // ChatGPT Usage: No
     @Override
     public int getItemCount() {
         if(reports.size() == 0)

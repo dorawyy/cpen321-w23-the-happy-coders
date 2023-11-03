@@ -3,6 +3,7 @@ const { getDefaultInitialIdealMatch } = require("../models/idealMatch");
 
 
 //ChatGPT Usage: No
+// Get list of recommended users to display on matching page
 async function getRecommendedUsers(userId){
     let user = await User.findById(userId);
     let users = [];
@@ -51,6 +52,7 @@ async function getRecommendedUsers(userId){
 }
 
 //ChatGPT Usage: No
+// Get query to only select users that match the "Partner" learning preference
 function getPartnerQuery(user){
     return User.find({
         _id: { $ne: user._id }, // Exclude User
@@ -62,6 +64,7 @@ function getPartnerQuery(user){
 }
 
 // CHatGPT Usage: No
+// Get query to only select users that match the "Expert" learning preference
 function getExpertQuery(user){
     return User.find({
         _id: { $ne: user._id }, // Exclude user
@@ -73,6 +76,7 @@ function getExpertQuery(user){
 }
 
 //ChatGPT Usage: No
+// Return list of users sorted by score
 function sortUsersOnScore (users, idealMatch) {
     const usersWithScore = users.map((user) => {
         const score = getScore(user, idealMatch);
@@ -83,6 +87,7 @@ function sortUsersOnScore (users, idealMatch) {
 }
 
 //ChatGPT Usage: No
+// Return score of user compared to ideal match
 function getScore(user, idealMatch) {
     const formatedUser = getDefaultInitialIdealMatch(user);
     const score = calculateScore(formatedUser, idealMatch);
@@ -90,6 +95,7 @@ function getScore(user, idealMatch) {
 }
 
 //ChatGPT Usage: Yes
+// Calculate similarity score between two users
 function calculateScore(user, targetUser) {
     // Step 1: Calculate Euclidean distances
     const ageDistance = Math.abs(user.age - targetUser.age);
@@ -126,6 +132,7 @@ function calculateScore(user, targetUser) {
 }
 
 // ChatGPT usage: No
+// Merge two arrays of users without duplicates based on IDs
 function mergeArraysNoDuplicatesId(arr1, arr2){
     const idSet = new Set();
     const mergedArray = [];

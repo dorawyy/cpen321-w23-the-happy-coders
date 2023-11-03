@@ -51,6 +51,7 @@ public class MatchesFragment extends Fragment {
     private final AuthenticationUtilities utilities = new AuthenticationUtilities(getContext());
 
 
+    // ChatGPT Usage: No
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -154,6 +155,7 @@ public class MatchesFragment extends Fragment {
         return root;
     }
 
+    // ChatGPT Usage: No
     private void matchCardAnim(int direction) {
         matchCard.animate().translationXBy(direction * 500.0f).alpha(0.0f).setDuration(500).withEndAction(() -> {
             matchName = matchCard.findViewById(R.id.match_name);
@@ -197,6 +199,7 @@ public class MatchesFragment extends Fragment {
         });
     }
 
+    // ChatGPT Usage: No
     private void createMatch(){
         OkHttpClient client = new OkHttpClient();
 
@@ -232,6 +235,7 @@ public class MatchesFragment extends Fragment {
         });
     }
 
+    // ChatGPT Usage: No
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -8,6 +8,7 @@ public class ChatViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
+    // ChatGPT Usage: No
     public ChatViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is dashboard fragment");
