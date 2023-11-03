@@ -167,7 +167,6 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         reportUser.setOnClickListener(v -> {
-            //implement a pop up modal for report details
             AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
             builder.setTitle("Report User");
             builder.setMessage("Please provide a reason for reporting this user");
@@ -334,8 +333,8 @@ public class ChatActivity extends AppCompatActivity {
                         }
                         messages.add(message);
                         runOnUiThread(() -> {
-                            msgRecyclerAdapter.notifyDataSetChanged();
                             recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
+                            msgRecyclerAdapter.notifyDataSetChanged();
                             Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
                         });
                     } catch (JSONException | IOException e) {
