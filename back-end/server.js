@@ -17,7 +17,7 @@ const options = {
 const secureServer = https.createServer(options, app); // Create an HTTPS server
 
 const { Server } = require("socket.io");
-const io = new Server(server); 
+const io = new Server(secureServer); 
 
 const agoraTokenRoutes = require('./routes/agoraTokenRoutes');
 const usersRoutes = require('./routes/usersRoutes');
@@ -34,6 +34,7 @@ app.get("/", (req, res) => {
     res.send("LangSync");
 })
 
+// ChatGPT Usage: Partial
 io.on('connection', (socket) => {
     console.log('a user connected');
 

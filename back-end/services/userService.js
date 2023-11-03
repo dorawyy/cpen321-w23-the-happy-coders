@@ -115,15 +115,15 @@ async function findAdminOrCreate(email) {
 
     let admin = await User.findOne({ email: email });
 
-    if (!admin) {
-        if (admin.banned === true) {
-            return {success: false, error: 'User banned'};
-        }
+    if (!admin) { 
         try {
             admin = await createAdmin(email);
         } catch (error) {
             return {success: false, error: error};
         }
+    }
+    if (admin.banned === true) {
+        return {success: false, error: 'User banned'};
     }
 
     return {success: true, user: admin};

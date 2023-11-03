@@ -6,6 +6,10 @@ const { getDefaultInitialIdealMatch } = require("../models/idealMatch");
 async function getRecommendedUsers(userId){
     let user = await User.findById(userId);
     let users = [];
+
+    if (!user) { 
+        return [];
+    }
     
     if(user.learningPreference === "Expert"){
         const expertQuery = await getExpertQuery(user);
@@ -37,7 +41,11 @@ async function getRecommendedUsers(userId){
     }
 
     const sortedScoredUsers = sortUsersOnScore(scoredUsers, user.idealMatch);
-    const recommendedUsers = arbitraryTopUsers.concat(sortedScoredUsers);
+    let recommendedUsers = arbitraryTopUsers.concat(sortedScoredUsers);
+
+    recommendedUsers = recommendedUsers.filter(recommendedUser => {
+        return !user.blockedUsers.includes(recommendedUser._id) && !recommendedUser.blockedUsers.includes(user._id)
+    })
 
     return recommendedUsers;
 }

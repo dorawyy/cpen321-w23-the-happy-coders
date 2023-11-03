@@ -103,6 +103,4 @@ function getDefaultInitialIdealMatch( user) {
     }
 }
 
-
-
 module.exports = {idealMatchSchema, getDefaultInitialIdealMatch};

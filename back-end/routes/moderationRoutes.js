@@ -10,10 +10,10 @@ router.get("/:adminId", moderationController.getReports);
 router.post("/", moderationController.addReport);
 
 // Bans a given user
-router.put("/:adminId/:userId/ban", moderationController.banUser);
+router.put("/:adminId/ban", moderationController.banUser);
 
 // Deletes a report
-router.delete("/:adminId/:reportId", moderationController.deleteReport);
+router.delete("/:adminId", moderationController.deleteReport);
 
 
 module.exports = router;

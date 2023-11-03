@@ -1,3 +1,4 @@
+// ChatGPT Usage: Partial
 const mongoose = require('mongoose');
 
 const chatroomSchema = new mongoose.Schema({

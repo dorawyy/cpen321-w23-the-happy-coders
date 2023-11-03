@@ -48,7 +48,7 @@ public class MatchesFragment extends Fragment {
     private TextView matchName, noMatchesText, interestedLanguages, proficientLanguages, interests;
 
     private String userId;
-    private final AuthenticationUtilities  utilities = new AuthenticationUtilities(getContext());
+    private final AuthenticationUtilities utilities = new AuthenticationUtilities(getContext());
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -112,15 +112,36 @@ public class MatchesFragment extends Fragment {
                                     try {
                                         JSONObject match = matches.get(0);
                                         matchName.setText(match.getString("displayName"));
-                                        interestedLanguages.setText(match.getJSONArray("interestedLanguages").toString());
-                                        proficientLanguages.setText(match.getJSONArray("proficientLanguages").toString());
+                                        interestedLanguages.setText(match.getJSONArray("interestedLanguages")
+                                                .toString()
+                                                .replace(",", ", ")
+                                                .replace("[", "")
+                                                .replace("]", "")
+                                                .replace("\"", ""));
+                                        proficientLanguages.setText(match.getJSONArray("proficientLanguages")
+                                                .toString()
+                                                .replace(",", ", ")
+                                                .replace("[", "")
+                                                .replace("]", "")
+                                                .replace("\"", ""));
                                     } catch (JSONException e) {
                                         throw new RuntimeException(e);
                                     }
+                                    langsyncSpinner.clearAnimation();
+                                    loadingView.setVisibility(View.GONE);
+                                    langsyncSpinner.setVisibility(View.GONE);
+                                } else {
+                                    langsyncSpinner.clearAnimation();
+                                    matchName.setText("");
+                                    interestedLanguages.setText("");
+                                    proficientLanguages.setText("");
+                                    matchCard.setVisibility(View.GONE);
+                                    likeMatch.setVisibility(View.GONE);
+                                    dislikeMatch.setVisibility(View.GONE);
+                                    noMatchesText.setVisibility(View.VISIBLE);
+                                    loadingView.setVisibility(View.VISIBLE);
+                                    langsyncSpinner.setVisibility(View.VISIBLE);
                                 }
-                                langsyncSpinner.clearAnimation();
-                                loadingView.setVisibility(View.GONE);
-                                langsyncSpinner.setVisibility(View.GONE);
                             });
                         } catch (JSONException | IOException e) {
                             Log.d(TAG, "Error getting recommendations");
@@ -145,9 +166,6 @@ public class MatchesFragment extends Fragment {
                     matches.remove(0);
                     if (!matches.isEmpty()) {
                         matchName.setText(Objects.requireNonNull(matches.get(0)).getString("displayName"));
-//                        interests.setText(matches.get(0)
-//                                .getJSONArray("interests")
-//                                .toString());
                         interestedLanguages.setText(matches.get(0)
                                 .getJSONArray("interestedLanguages")
                                 .toString()
