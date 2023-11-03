@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+    <!--  ChatGPT Usage: Partial - MVP_9  -->
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"

@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".AdminLoginActivity">
 
-<!--  MVP_9.html used here  -->
-
     <EditText
         android:id="@+id/access_code_value"
         android:layout_width="300dp"
