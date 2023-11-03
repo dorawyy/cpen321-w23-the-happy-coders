@@ -1,5 +1,6 @@
 const { RtcTokenBuilder } = require('agora-access-token');
 
+// ChatGPT Usage: No
 exports.generateToken = (channelName, uid, role, privilegeExpireTime, tokenType) => {
     let token;
     if (tokenType === 'userAccount') {
