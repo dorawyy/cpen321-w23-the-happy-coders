@@ -1,5 +1,6 @@
 const matchingService = require('../services/matchingService'); 
 
+// ChatGPT Usage: No
 exports.createMatch = async(req,res) =>{
     const sourceUserId = req.body.sourceUserId;
     const targetUserId = req.body.targetUserId;
@@ -13,6 +14,7 @@ exports.createMatch = async(req,res) =>{
     return res.json({match: false})
 }
 
+// ChatGPT Usage: No
 exports.getAllMatches = async(req,res) =>{
     const userId = req.body.userId;
 

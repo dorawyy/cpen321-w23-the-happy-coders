@@ -2,7 +2,7 @@ require('dotenv').config();
 const moderationService = require('../services/moderationService');
 const userService = require('../services/userService');
 
-
+// ChatGPT Usage: No
 exports.addReport = async (req, res) => {
     try {
         console.log(req.body);
@@ -14,6 +14,7 @@ exports.addReport = async (req, res) => {
     }
 }
 
+// ChatGPT Usage: No
 exports.getReports = async (req, res) => {
     try {
         const adminId = req.params.adminId;
@@ -29,6 +30,7 @@ exports.getReports = async (req, res) => {
     }
 }
 
+// ChatGPT Usage: No
 exports.deleteReport = async (req, res) => {
     try {
         const adminId = req.params.adminId;
@@ -45,6 +47,7 @@ exports.deleteReport = async (req, res) => {
     }
 }
 
+// ChatGPT Usage: No
 exports.banUser = async (req, res) => {
     try {
         const adminId = req.params.adminId;

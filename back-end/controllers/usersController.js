@@ -1,7 +1,7 @@
 require('dotenv').config();
 const userServices = require('../services/userService');
 
-
+// ChatGPT Usage: No
 exports.updateUserProfile = async (req, resp) => {
     try {
         const userId = req.params.id;
@@ -20,7 +20,7 @@ exports.updateUserProfile = async (req, resp) => {
     }
 };
 
-
+// ChatGPT Usage: No
 exports.getUser =  async (req, resp) => { 
     let user =  await userServices.findUserByID(req.params.id);
 
