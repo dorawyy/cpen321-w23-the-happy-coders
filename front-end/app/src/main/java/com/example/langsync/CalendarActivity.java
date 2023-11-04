@@ -42,7 +42,11 @@ public class CalendarActivity extends AppCompatActivity {
     private Button createEventButton;
     private Button dateButton;
     private Button timeButton;
-    private Integer minute, hour, day, month, year;
+    private Integer minute; 
+    private Integer hour; 
+    private Integer day;
+    private Integer month; 
+    private Integer year;
     private final String TAG = "CalendarActivity";
     private final AuthenticationUtilities utilities = new AuthenticationUtilities(CalendarActivity.this);
     private String invitedUserId;

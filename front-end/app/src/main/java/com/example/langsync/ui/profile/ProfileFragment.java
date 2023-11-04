@@ -36,7 +36,10 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     private Button editButton;
     private String userId;
-    private TextView profileAge, profileInterestedLanguages, profileProficientLanguages, profileLearningPreference;
+    private TextView profileAge; 
+    private TextView profileInterestedLanguages; 
+    private TextView profileProficientLanguages; 
+    private TextView profileLearningPreference;
 
     private static final String TAG = "ProfileFragment";
 

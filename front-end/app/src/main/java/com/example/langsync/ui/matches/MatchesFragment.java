@@ -41,11 +41,18 @@ public class MatchesFragment extends Fragment {
 
     private static final String TAG = "MatchesFragment";
     private FragmentMatchesBinding binding;
-    private CardView matchCard, loadingView;
-    private ImageView dislikeMatch, likeMatch, langsyncSpinner;
+    private CardView matchCard;
+    private CardView loadingView;
+    private ImageView dislikeMatch;
+    private ImageView likeMatch;
+    private ImageView langsyncSpinner;
 
     ArrayList<JSONObject> matches = new ArrayList<>();
-    private TextView matchName, noMatchesText, interestedLanguages, proficientLanguages, interests;
+    private TextView matchName; 
+    private TextView noMatchesText;
+    private TextView interestedLanguages;
+    private TextView proficientLanguages; 
+    private TextView interests;
 
     private String userId;
     private final AuthenticationUtilities utilities = new AuthenticationUtilities(getContext());

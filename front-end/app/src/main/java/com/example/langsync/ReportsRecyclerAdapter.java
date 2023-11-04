@@ -49,8 +49,10 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public class ReportsViewHolder extends RecyclerView.ViewHolder {
-        private TextView reportedUser, reason;
-        private ImageView removeReport, banUser;
+        private TextView reportedUser; 
+        private TextView reason;
+        private ImageView removeReport;
+        private ImageView banUser;
         public ReportsViewHolder(View itemView) {
             super(itemView);
             reportedUser = itemView.findViewById(R.id.reported_user);

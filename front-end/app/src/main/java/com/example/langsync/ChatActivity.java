@@ -46,9 +46,17 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
     private List<JSONObject> messages = new ArrayList<>();
-    private ImageView goBack, videoCall, sendMsg, calendarInvite, reportUser;
-    private String otherUserName, otherUserId, userId, chatroomId;
-    private CardView noMessageView, loadingMessages;
+    private ImageView goBack; 
+    private ImageView videoCall; 
+    private ImageView sendMsg; 
+    private ImageView calendarInvite; 
+    private ImageView reportUser;
+    private String otherUserName; 
+    private String otherUserId;
+    private String userId;
+    private String chatroomId;
+    private CardView noMessageView;
+    private CardView loadingMessages;
     private EditText msgInput;
     private TextView chatHeaderName;
     private Socket socket;

@@ -38,8 +38,10 @@ public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     // ChatGPT Usage: No
     public class MessageViewHolder extends RecyclerView.ViewHolder {
-        private TextView sentMsg, receivedMsg;
-        private LinearLayout sentMsgView, receivedMsgView;
+        private TextView sentMsg;
+        private TextView receivedMsg;
+        private LinearLayout sentMsgView; 
+        private LinearLayout receivedMsgView;
         public MessageViewHolder(View itemView) {
             super(itemView);
             sentMsg = itemView.findViewById(R.id.sent_msg_txt);
