@@ -256,17 +256,15 @@ public class VideoCallActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == PERMISSION_REQ_ID) {// If request is cancelled, the result arrays are empty.
-            if (grantResults.length < 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                // Permission denied! Show an alert to the user.
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("This feature requires camera and microphone permissions to function. Please grant these permissions in settings.")
-                        .setTitle("Permissions required")
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setOnDismissListener(dialog -> finish()); // Close activity on dialog dismiss
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
+        if ( requestCode == PERMISSION_REQ_ID && (grantResults.length < 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED)) {
+            // Permission denied! Show an alert to the user.
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("This feature requires camera and microphone permissions to function. Please grant these permissions in settings.")
+                    .setTitle("Permissions required")
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setOnDismissListener(dialog -> finish()); // Close activity on dialog dismiss
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     }
 }
