@@ -64,7 +64,7 @@ async function generateLangSyncEventObject(rawEvent) {
         },
         start: {
             dateTime: startTime.toISOString(),
-            timeZone: timeZone,
+            timeZone,
         },    
         reminders: {
             useDefault: true,
