@@ -16,10 +16,10 @@ async function addReport(reportData){
         const reportedUser = await User.findById(reportData.reportedUserId);
 
         const report = new Report({
-            reporterUserId: reporterUserId,
-            reportedUserId: reportedUserId,
-            chatRoomId: chatRoomId,
-            reportMessage: reportMessage
+            reporterUserId,
+            reportedUserId,
+            chatRoomId,
+            reportMessage
         });
         
         if(reporterUser.blockedUsers == null){

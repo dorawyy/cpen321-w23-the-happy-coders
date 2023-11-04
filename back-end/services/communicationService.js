@@ -20,7 +20,7 @@ async function sendMessage(chatroomId, content, sourceUserId, learningSession){
 
     await chatroom.save();
 
-    return { sourceUserId: sourceUserId, content: content}; 
+    return { sourceUserId, content}; 
 }
 
 // ChatGPT Usage: No
@@ -62,8 +62,8 @@ async function createChatroom(user1Id, user2Id){
 
     const chatroom = await Chatroom.create({
         messages: [],
-        user1Id: user1Id,
-        user2Id: user2Id
+        user1Id,
+        user2Id
     })
 
     user1.chatroomIDs.push(chatroom._id)

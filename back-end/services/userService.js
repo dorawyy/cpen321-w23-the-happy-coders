@@ -10,18 +10,18 @@ async function findUnregistredOrCreateUser(ticket) {
     const picture = payload.picture;
     const displayName = payload.name;
 
-    let user = await User.findOne({ email: email });
+    let user = await User.findOne({ email });
 
     if (!user){
         try {
             user = await createUser(email, displayName, picture);
             
-            return {success: true, user: user};
+            return {success: true, user};
         } catch (error) {
-            return {success: false, error: error};
+            return {success: false, error};
         }
     }else if (user.registered === false){
-        return {success: true, user: user};
+        return {success: true, user};
     }
     else{
         return {success: false, error: "User already registered"};
@@ -32,13 +32,13 @@ async function findUnregistredOrCreateUser(ticket) {
 // Find user by email and return if found
 async function findUserByEmail(email) {
     console.log("Find user by email " + email)
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email });
     if (!user || user.registered === false) {
         return {success: false, error: 'User not registered'};
     } else if (user.banned === true) {
         return {success: false, error: 'User banned'};
     }
-    return {success: true, user: user};
+    return {success: true, user};
 }
 
 // ChatGPT Usage: No
@@ -66,9 +66,9 @@ async function findUsers(filter){
 // Create a new user
 async function createUser(email, displayName="", picture="") {
     userData = {
-        email: email,
-        displayName: displayName,
-        picture: picture,
+        email,
+        displayName,
+        picture,
     }
     let user = new User(userData);
     await user.save();
@@ -100,7 +100,7 @@ async function updateUser(userID, userData) {
 
         return {success: true, message: "User updated successfully"};
     } catch (error) {
-        return {success: false, error: error};
+        return {success: false, error};
     }
 }
 
@@ -119,7 +119,7 @@ async function banUser(userID) {
 
         return {success: true, message: "User banned successfully"};
     } catch (error) {
-        return {success: false, error: error};
+        return {success: false, error};
     }
 }
 
@@ -127,13 +127,13 @@ async function banUser(userID) {
 // Find admin by email and create if not found
 async function findAdminOrCreate(email) {
 
-    let admin = await User.findOne({ email: email });
+    let admin = await User.findOne({ email });
 
     if (!admin) { 
         try {
             admin = await createAdmin(email);
         } catch (error) {
-            return {success: false, error: error};
+            return {success: false, error};
         }
     }
     if (admin.banned === true) {
@@ -147,7 +147,7 @@ async function findAdminOrCreate(email) {
 // Create a new admin
 async function createAdmin(email) {
     adminData = {
-        email: email,
+        email,
         admin: true,
         registered: true,
         displayName: "Admin",

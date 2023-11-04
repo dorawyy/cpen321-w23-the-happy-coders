@@ -23,7 +23,7 @@ exports.getReports = async (req, res) => {
         if (moderationService.isAdmin(adminId)) {
             let reports = await moderationService.getReports();
             console.log(reports);
-            return res.status(200).json({ success: true, reports: reports });
+            return res.status(200).json({ success: true, reports });
         } else {
             return res.status(403).json({ success: false, message: "Unauthorized access to admin actions" })
         }

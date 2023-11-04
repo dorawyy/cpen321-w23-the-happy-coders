@@ -12,11 +12,11 @@ const client = new OAuth2Client({
 async function verifyGoogleToken(idToken) {
     try {
         const ticket = await client.verifyIdToken({
-            idToken: idToken,
+            idToken,
             audience: process.env.CLIENT_ID,
         });        
 
-        return { success: true, ticket: ticket };
+        return { success: true, ticket };
     } catch (error) {
         console.error('Error verifying Google token:', error);
         return { success: false, error: 'Token verification failed' };
@@ -28,7 +28,7 @@ async function verifyGoogleToken(idToken) {
 async function retrieveTokens(authorizationCode) {
     try {
         const { tokens } = await client.getToken(authorizationCode);
-        return { success: true, tokens: tokens };
+        return { success: true, tokens };
     } catch (error) {
         console.error('Error retrieving access code:', error);
         return { success: false, error: 'Access code retrieval failed' };
@@ -56,7 +56,7 @@ async function getGoogleClient(authCode){
         access_token: acccessToken,
     });
 
-    return {success: true, auth: auth};
+    return {success: true, auth};
 }
 
 module.exports = { verifyGoogleToken, retrieveTokens, getGoogleClient };

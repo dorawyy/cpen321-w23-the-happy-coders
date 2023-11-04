@@ -28,6 +28,6 @@ exports.getUser =  async (req, resp) => {
         return resp.status(404).json({ success: false });
     }
     
-    return resp.status(200).json({ success: true, user: user });
+    return resp.status(200).json({ success: true, user });
 };
 
