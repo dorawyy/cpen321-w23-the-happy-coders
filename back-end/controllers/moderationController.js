@@ -1,6 +1,5 @@
 require('dotenv').config();
 const moderationService = require('../services/moderationService');
-const userService = require('../services/userService');
 
 // ChatGPT Usage: No
 // Route for users to add a report
