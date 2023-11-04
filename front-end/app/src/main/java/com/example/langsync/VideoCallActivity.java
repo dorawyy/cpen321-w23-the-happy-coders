@@ -51,9 +51,6 @@ public class VideoCallActivity extends AppCompatActivity {
     // An integer that identifies the local user.
     private int uid = 0;
     private boolean isJoined = false;
-    private String localUserInfo;
-    private String remoteUserInfo;
-
     private RtcEngine agoraEngine;
     //SurfaceView to render local video in a Container.
     private SurfaceView localSurfaceView;

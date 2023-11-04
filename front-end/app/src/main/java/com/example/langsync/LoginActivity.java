@@ -47,9 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private final OkHttpClient client = new OkHttpClient();
     private static String TAG = "LoginActivity";
     private final AuthenticationUtilities  utilities = new AuthenticationUtilities(LoginActivity.this);
-
-    private TextView signUpText;
-
+    
     // ChatGPT usage: Partial
     @Override
     protected void onCreate(Bundle savedInstanceState) {
