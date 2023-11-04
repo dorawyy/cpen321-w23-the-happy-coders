@@ -1,23 +1,17 @@
 package com.example.langsync;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Build;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.text.InputType;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.langsync.util.AuthenticationUtilities;
 import com.google.android.material.button.MaterialButton;
@@ -28,7 +22,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,8 +29,6 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-
-import com.example.langsync.util.AuthenticationUtilities;
 
 
 public class FormActivity extends AppCompatActivity {

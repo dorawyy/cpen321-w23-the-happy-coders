@@ -15,12 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.example.langsync.AdminLoginActivity;
 import com.example.langsync.FormActivity;
-import com.example.langsync.LoginActivity;
 import com.example.langsync.R;
 import com.example.langsync.databinding.FragmentProfileBinding;
 
@@ -29,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
