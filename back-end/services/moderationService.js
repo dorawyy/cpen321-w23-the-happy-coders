@@ -6,6 +6,7 @@ const userService = require('./userService');
 //ChatGPT Usage: No
 // Adds a new report
 async function addReport(reportData){
+    let report;
     try{
         const reporterUserId = reportData.reporterUserId;
         const reportedUserId = reportData.reportedUserId;
@@ -15,7 +16,7 @@ async function addReport(reportData){
         const reporterUser = await User.findById(reportData.reporterUserId);
         const reportedUser = await User.findById(reportData.reportedUserId);
 
-        const report = new Report({
+        report = new Report({
             reporterUserId,
             reportedUserId,
             chatRoomId,
@@ -35,8 +36,6 @@ async function addReport(reportData){
         reportedUser.likedUsers = reportedUser.likedUsers.filter(likedUserId => likedUserId != reporterUserId);
         reportedUser.chatroomIDs = reportedUser.chatroomIDs.filter(chatroomId => chatroomId != chatRoomId);
         
-        console.log(report);
-
         await report.save();
         await reportedUser.save();
         await reporterUser.save();

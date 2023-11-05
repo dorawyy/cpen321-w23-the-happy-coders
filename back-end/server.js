@@ -68,18 +68,20 @@ app.use("/recommendations", recommendationRoutes);
 app.use("/moderation", moderationRoutes);
 
 async function run() {
+    let host;
+    let port;
     try {
         await mongoose.connect(process.env.DATABASE_URL);
         console.log("Connected to the database");
         server.listen(8081, (req, res) => { // Use port 8081 for HTTP
-            var host = server.address().address;
-            var port = server.address().port;
+            host = server.address().address;
+            port = server.address().port;
             console.log("Server successfully running at http://%s:%s", host, port);
         });
 
         secureServer.listen(443, () => { // Use port 443 for HTTPS
-            var host = secureServer.address().address;
-            var port = secureServer.address().port;
+            host = secureServer.address().address;
+            port = secureServer.address().port;
             console.log("Secure server successfully running at https://%s:%s", host, port);
         });
     } catch (err) {
