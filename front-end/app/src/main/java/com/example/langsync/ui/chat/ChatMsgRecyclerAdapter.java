@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int TYPE = 1;
     private final List<JSONObject> messages;
 
     private String userId;
