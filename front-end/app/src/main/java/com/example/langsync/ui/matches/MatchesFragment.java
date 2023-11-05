@@ -51,8 +51,7 @@ public class MatchesFragment extends Fragment {
     private TextView matchName; 
     private TextView noMatchesText;
     private TextView interestedLanguages;
-    private TextView proficientLanguages; 
-    private TextView interests;
+    private TextView proficientLanguages;
 
     private String userId;
     private final AuthenticationUtilities utilities = new AuthenticationUtilities(getContext());
@@ -78,7 +77,7 @@ public class MatchesFragment extends Fragment {
         noMatchesText = root.findViewById(R.id.no_matches_text);
         interestedLanguages = root.findViewById(R.id.match_interested);
         proficientLanguages = root.findViewById(R.id.match_proficiencies);
-        interests = root.findViewById(R.id.match_interests);
+        TextView interests = root.findViewById(R.id.match_interests);
 
         dislikeMatch = root.findViewById(R.id.dislike_match);
         dislikeMatch.setOnClickListener(v ->  matchCardAnim(-1));

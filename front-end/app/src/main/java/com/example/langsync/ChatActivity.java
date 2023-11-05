@@ -46,22 +46,13 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
     private List<JSONObject> messages = new ArrayList<>();
-    private ImageView goBack; 
-    private ImageView videoCall; 
-    private ImageView sendMsg; 
-    private ImageView calendarInvite; 
-    private ImageView reportUser;
-    private String otherUserName; 
     private String otherUserId;
     private String userId;
     private String chatroomId;
     private CardView noMessageView;
-    private CardView loadingMessages;
     private EditText msgInput;
-    private TextView chatHeaderName;
     private Socket socket;
 
-    private SwitchCompat toggleAi;
     boolean isAiOn = false;
 
     private RecyclerView recyclerView;
@@ -122,8 +113,8 @@ public class ChatActivity extends AppCompatActivity {
 
         noMessageView = findViewById(R.id.no_messages);
         msgInput = findViewById(R.id.msg_input);
-        chatHeaderName = findViewById(R.id.chat_header_name);
-        toggleAi = findViewById(R.id.ai_switch);
+        TextView chatHeaderName = findViewById(R.id.chat_header_name);
+        SwitchCompat toggleAi = findViewById(R.id.ai_switch);
 
         toggleAi.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isAiOn = isChecked;
@@ -131,7 +122,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            otherUserName = extras.getString("otherUserName");
+            String otherUserName = extras.getString("otherUserName");
             otherUserId = extras.getString("otherUserId");
             chatroomId = extras.getString("chatroomId");
             chatHeaderName.setText(otherUserName);
@@ -139,11 +130,11 @@ public class ChatActivity extends AppCompatActivity {
             getMessages(chatroomId);
         }
 
-        goBack = findViewById(R.id.back_btn);
-        videoCall = findViewById(R.id.video_call);
-        sendMsg = findViewById(R.id.send_msg);
-        calendarInvite = findViewById(R.id.calendar_invite);
-        reportUser = findViewById(R.id.report_user);
+        ImageView goBack = findViewById(R.id.back_btn);
+        ImageView videoCall = findViewById(R.id.video_call);
+        ImageView sendMsg = findViewById(R.id.send_msg);
+        ImageView calendarInvite = findViewById(R.id.calendar_invite);
+        ImageView reportUser = findViewById(R.id.report_user);
 
         goBack.setOnClickListener(v -> {
             finish();

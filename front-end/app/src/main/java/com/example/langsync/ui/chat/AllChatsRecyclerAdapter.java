@@ -25,7 +25,6 @@ import java.util.Objects;
 public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE = 1;
     private final Context context;
-    private final HashMap<String, JSONObject> chatrooms;
     private final List<JSONObject> chats;
     private String userID;
 
@@ -33,7 +32,6 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public AllChatsRecyclerAdapter(Context context, HashMap<String, JSONObject> chatrooms, String userId) {
         this.context = context;
-        this.chatrooms = chatrooms;
         this.chats = new ArrayList<>(chatrooms.values());
         this.userID = userId;
     }

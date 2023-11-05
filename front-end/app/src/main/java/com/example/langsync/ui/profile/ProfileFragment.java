@@ -24,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -34,9 +35,7 @@ import okhttp3.Response;
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
-    private Button editButton;
-    private String userId;
-    private TextView profileAge; 
+    private TextView profileAge;
     private TextView profileInterestedLanguages; 
     private TextView profileProficientLanguages; 
     private TextView profileLearningPreference;
@@ -56,18 +55,15 @@ public class ProfileFragment extends Fragment {
         profileInterestedLanguages = root.findViewById(R.id.profile_interested_languages);
         profileProficientLanguages = root.findViewById(R.id.profile_proficient_languages);
         profileLearningPreference = root.findViewById(R.id.profile_learning_preference);
-        editButton = root.findViewById(R.id.profile_edit_button);
+        Button editButton = root.findViewById(R.id.profile_edit_button);
 
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(requireActivity(), FormActivity.class);
-                startActivity(intent);
-            }
+        editButton.setOnClickListener(view -> {
+            Intent intent = new Intent(requireActivity(), FormActivity.class);
+            startActivity(intent);
         });
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        userId = sharedPreferences.getString("loggedUserId", null); // null is the default value if the key is not found
+        String userId = sharedPreferences.getString("loggedUserId", null); // null is the default value if the key is not found
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -92,14 +88,11 @@ public class ProfileFragment extends Fragment {
                         String learningPreference = user.getString("learningPreference");
                         Log.d(TAG, "User info: " + user);
 
-                        getActivity().runOnUiThread( new Runnable() {
-                            @Override
-                            public void run() {
-                                profileAge.setText(age);
-                                profileProficientLanguages.setText(proficientLanguages.toString());
-                                profileInterestedLanguages.setText(interestedLanguages.toString());
-                                profileLearningPreference.setText(learningPreference);
-                            }
+                        requireActivity().runOnUiThread(() -> {
+                            profileAge.setText(age);
+                            profileProficientLanguages.setText(proficientLanguages.toString());
+                            profileInterestedLanguages.setText(interestedLanguages.toString());
+                            profileLearningPreference.setText(learningPreference);
                         });
 
                     } catch (JSONException e) {

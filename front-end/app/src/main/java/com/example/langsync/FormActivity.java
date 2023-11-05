@@ -33,12 +33,9 @@ import okhttp3.RequestBody;
 
 public class FormActivity extends AppCompatActivity {
 
-    private TextView desiredLanguages; 
-    private TextView proficientLanguages; 
-    private TextView learningPreferences; 
+    private TextView learningPreferences;
     private TextView interests; 
     private TextView age;
-    private MaterialButton submitButton;
     boolean desiredLanguagesSelected[] = new boolean[DESIRED_LANGUAGES.length];
     boolean proficientLanguagesSelected[] = new boolean[PROFICIENT_LANGUAGES.length];
     boolean interestsSelected[] = new boolean[INTERESTS.length];
@@ -94,12 +91,12 @@ public class FormActivity extends AppCompatActivity {
         userId = sharedPreferences.getString("loggedUserId", null); // null is the default value if the key is not found
         Log.d(TAG, "Shared Pref User Id: " + userId);
 
-        desiredLanguages = findViewById(R.id.desired_languages);
-        proficientLanguages = findViewById(R.id.proficient_languages);
+        TextView desiredLanguages = findViewById(R.id.desired_languages);
+        TextView proficientLanguages = findViewById(R.id.proficient_languages);
         learningPreferences = findViewById(R.id.learning_preferences);
         interests = findViewById(R.id.interests);
         age = findViewById(R.id.age);
-        submitButton = findViewById(R.id.submit_button);
+        MaterialButton submitButton = findViewById(R.id.submit_button);
 
         multiSelectOnClick(desiredLanguages, DESIRED_LANGUAGES, desiredLanguagesSelected, selectedDesires);
         multiSelectOnClick(proficientLanguages, PROFICIENT_LANGUAGES, proficientLanguagesSelected, selectedProficiencies);

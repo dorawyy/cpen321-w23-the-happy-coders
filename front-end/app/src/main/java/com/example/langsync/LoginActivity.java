@@ -40,9 +40,6 @@ import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private MaterialButton loginButton;
-    private TextView signUpLink;
-    private TextView adminLoginLink;
     private GoogleSignInClient mGoogleSignInClient;
     private final OkHttpClient client = new OkHttpClient();
     private static String TAG = "LoginActivity";
@@ -62,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        loginButton = findViewById(R.id.login_button);
+        MaterialButton loginButton = findViewById(R.id.login_button);
         
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        signUpLink = findViewById(R.id.sign_up_link);
+        TextView signUpLink = findViewById(R.id.sign_up_link);
         signUpLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        adminLoginLink = findViewById(R.id.admin_login);
+        TextView adminLoginLink = findViewById(R.id.admin_login);
         adminLoginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

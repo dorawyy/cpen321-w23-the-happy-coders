@@ -39,7 +39,6 @@ import okhttp3.RequestBody;
 // Timepicker logic adapted from https://www.youtube.com/watch?v=c6c1giRekB4&ab_channel=CodeWithCal
 public class CalendarActivity extends AppCompatActivity {
     private Spinner durationSpinner;
-    private Button createEventButton;
     private Button dateButton;
     private Button timeButton;
     private Integer minute; 
@@ -64,7 +63,7 @@ public class CalendarActivity extends AppCompatActivity {
         timeButton = findViewById(R.id.time_button);
         dateButton = findViewById(R.id.date_button);
         durationSpinner = findViewById(R.id.duration_spinner);
-        createEventButton = findViewById(R.id.create_event_button);
+        Button createEventButton = findViewById(R.id.create_event_button);
 
         // Set up a listener for the create event button
         createEventButton.setOnClickListener(v -> {

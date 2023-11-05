@@ -38,8 +38,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class SignupActivity extends AppCompatActivity {
-    private TextView loginLink;
-    private MaterialButton signUpButton;
     private GoogleSignInClient mGoogleSignInClient;
     private final OkHttpClient client = new OkHttpClient();
     private static String TAG = "SignUpActivity";
@@ -59,11 +57,11 @@ public class SignupActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        signUpButton = findViewById(R.id.sign_up_button);
+        MaterialButton signUpButton = findViewById(R.id.sign_up_button);
 
         signUpButton.setOnClickListener(v -> signUp());
 
-        loginLink = findViewById(R.id.login_link);
+        TextView loginLink = findViewById(R.id.login_link);
         loginLink.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);

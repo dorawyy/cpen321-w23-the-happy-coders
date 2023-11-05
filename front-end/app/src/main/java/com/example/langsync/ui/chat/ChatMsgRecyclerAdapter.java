@@ -22,7 +22,6 @@ import java.util.Objects;
 
 public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE = 1;
-    private final Context context;
     private final List<JSONObject> messages;
 
     private String userId;
@@ -31,7 +30,6 @@ public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     // ChatGPT Usage: No
     public ChatMsgRecyclerAdapter(Context context, List<JSONObject> messages, String userId) {
-        this.context = context;
         this.messages = messages;
         this.userId = userId;
     }
