@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private final OkHttpClient client = new OkHttpClient();
     private static String TAG = "LoginActivity";
-    private final AuthenticationUtilities  utilities = new AuthenticationUtilities(LoginActivity.this);
+    private final AuthenticationUtilities utilities = new AuthenticationUtilities(LoginActivity.this);
     
     // ChatGPT usage: Partial
     @Override

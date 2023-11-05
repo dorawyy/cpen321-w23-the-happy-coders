@@ -31,7 +31,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int TYPE = 1;
     private final Context context;
     private final List<JSONObject> reports;
 

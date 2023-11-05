@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int TYPE = 1;
     private final Context context;
     private final List<JSONObject> chats;
     private String userID;
