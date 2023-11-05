@@ -34,9 +34,10 @@ exports.getChatrooms = async(req,res) =>{
 
 // ChatGPT Usage: No
 exports.getMessages = async(req,res) =>{
+    let messagesList;
     try{
         const chatroomId = req.params.cid;
-        let messagesList = await communicationService.getMessages(chatroomId);
+        messagesList = await communicationService.getMessages(chatroomId);
         return res.json({messages: messagesList});
     }
     catch(err){
