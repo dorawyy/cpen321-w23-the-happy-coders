@@ -54,8 +54,6 @@ public class MatchesFragment extends Fragment {
     private TextView proficientLanguages;
 
     private String userId;
-    private final AuthenticationUtilities utilities = new AuthenticationUtilities(getContext());
-
 
     // ChatGPT Usage: No
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -63,9 +61,6 @@ public class MatchesFragment extends Fragment {
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         userId = sharedPreferences.getString("loggedUserId", null);
-
-        MatchesViewModel matchesViewModel =
-                new ViewModelProvider(this).get(MatchesViewModel.class);
 
         binding = FragmentMatchesBinding.inflate(inflater, container, false);
 
@@ -77,7 +72,6 @@ public class MatchesFragment extends Fragment {
         noMatchesText = root.findViewById(R.id.no_matches_text);
         interestedLanguages = root.findViewById(R.id.match_interested);
         proficientLanguages = root.findViewById(R.id.match_proficiencies);
-        TextView interests = root.findViewById(R.id.match_interests);
 
         dislikeMatch = root.findViewById(R.id.dislike_match);
         dislikeMatch.setOnClickListener(v ->  matchCardAnim(-1));
@@ -235,7 +229,6 @@ public class MatchesFragment extends Fragment {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.isSuccessful()){
                     Log.d(TAG, "Match created");
-//                    utilities.showToast("Match created");
                 }
             }
         });

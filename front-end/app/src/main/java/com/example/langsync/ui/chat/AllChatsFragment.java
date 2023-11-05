@@ -47,9 +47,6 @@ public class AllChatsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        ChatViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(ChatViewModel.class);
-
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         userId = sharedPreferences.getString("loggedUserId", null);
 

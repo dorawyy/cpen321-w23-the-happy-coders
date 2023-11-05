@@ -84,7 +84,6 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             throw new RuntimeException(e);
         }
         JSONObject report = reports.get(i);
-        AuthenticationUtilities authenticationUtilities = new AuthenticationUtilities(context.getApplicationContext());
         try {
             vh.reportedUser.setText(report.getString("reportedUserId"));
             vh.reason.setText(report.getString("reportMessage"));

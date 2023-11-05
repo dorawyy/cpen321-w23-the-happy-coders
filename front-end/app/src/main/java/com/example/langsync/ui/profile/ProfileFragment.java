@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.langsync.FormActivity;
 import com.example.langsync.R;
@@ -24,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -45,8 +43,6 @@ public class ProfileFragment extends Fragment {
     // ChatGPT Usage: No
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ProfileViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(ProfileViewModel.class);
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -63,7 +59,7 @@ public class ProfileFragment extends Fragment {
         });
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String userId = sharedPreferences.getString("loggedUserId", null); // null is the default value if the key is not found
+        String userId = sharedPreferences.getString("loggedUserId", null);
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
