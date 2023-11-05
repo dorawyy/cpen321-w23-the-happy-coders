@@ -15,11 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.langsync.R;
 import com.example.langsync.databinding.FragmentMatchesBinding;
-import com.example.langsync.util.AuthenticationUtilities;
 
 import org.json.JSONArray;
 import org.json.JSONException;
