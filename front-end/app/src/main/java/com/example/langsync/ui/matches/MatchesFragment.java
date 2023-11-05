@@ -54,8 +54,6 @@ public class MatchesFragment extends Fragment {
     private TextView proficientLanguages;
 
     private String userId;
-    private final AuthenticationUtilities utilities = new AuthenticationUtilities(getContext());
-
 
     // ChatGPT Usage: No
     public View onCreateView(@NonNull LayoutInflater inflater,
