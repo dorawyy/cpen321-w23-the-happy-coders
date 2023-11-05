@@ -86,12 +86,8 @@ public class VideoCallActivity extends AppCompatActivity {
     // ChatGPT usage: No
     private boolean checkSelfPermission()
     {
-        if (ContextCompat.checkSelfPermission(this, REQUESTED_PERMISSIONS[0]) !=  PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, REQUESTED_PERMISSIONS[1]) !=  PackageManager.PERMISSION_GRANTED)
-        {
-            return false;
-        }
-        return true;
+        return ContextCompat.checkSelfPermission(this, REQUESTED_PERMISSIONS[0]) ==  PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, REQUESTED_PERMISSIONS[1]) ==  PackageManager.PERMISSION_GRANTED;
     }
 
     // ChatGPT usage: No
