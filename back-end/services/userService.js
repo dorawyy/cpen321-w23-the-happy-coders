@@ -72,7 +72,7 @@ async function findUsers(filter){
 // ChatGPT Usage: No
 // Create a new user
 async function createUser(email, displayName="", picture="") {
-    userData = {
+    let userData = {
         email,
         displayName,
         picture,
@@ -153,7 +153,7 @@ async function findAdminOrCreate(email) {
 // ChatGPT Usage: No
 // Create a new admin
 async function createAdmin(email) {
-    adminData = {
+    let adminData = {
         email,
         admin: true,
         registered: true,
