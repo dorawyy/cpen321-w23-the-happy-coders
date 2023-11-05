@@ -11,20 +11,23 @@ async function findUnregistredOrCreateUser(ticket) {
     const displayName = payload.name;
 
     let user = await User.findOne({ email });
-
+    let response;
     if (!user){
         try {
             user = await createUser(email, displayName, picture);
-            
-            return {success: true, user};
+            response = {success: true, user};
+            return response;
         } catch (error) {
-            return {success: false, error};
+            response = {success: false, error};
+            return response;
         }
     }else if (user.registered === false){
-        return {success: true, user};
+        response = {success: true, user};
+        return response;
     }
     else{
-        return {success: false, error: "User already registered"};
+        response = {success: false, error: "User already registered"};
+        return response;
     }
 }
 
@@ -32,13 +35,17 @@ async function findUnregistredOrCreateUser(ticket) {
 // Find user by email and return if found
 async function findUserByEmail(email) {
     console.log("Find user by email " + email)
+    let response;
     const user = await User.findOne({ email });
     if (!user || user.registered === false) {
-        return {success: false, error: 'User not registered'};
+        response = {success: false, error: 'User not registered'};
+        return response;
     } else if (user.banned === true) {
-        return {success: false, error: 'User banned'};
+        response = {success: false, error: 'User banned'};
+        return response;
     }
-    return {success: true, user};
+    response = {success: true, user};
+    return response;
 }
 
 // ChatGPT Usage: No

@@ -34,8 +34,9 @@ async function createMatch(sourceUserId, targetUserId){
 // ChatGPT Usage: Partial
 // Updates the users ideal match through averaging with the last liked user
 async function updateIdealMatch(sourceUser){
+    let likedUsersNum;
     try{
-        let likedUsersNum = sourceUser.likedUsers.length
+        likedUsersNum = sourceUser.likedUsers.length
         const lastLiked = await User.findById(sourceUser.likedUsers[likedUsersNum - 1])
     
         sourceUser.idealMatch.age = ((sourceUser.idealMatch.age * (likedUsersNum-1)) + lastLiked.age) / (likedUsersNum)
