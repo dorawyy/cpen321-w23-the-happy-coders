@@ -3,6 +3,7 @@ const userServices = require('../services/userService');
 
 // ChatGPT Usage: No
 exports.updateUserProfile = async (req, resp) => {
+    console.log(req.body)
     try {
         const userId = req.params.id;
         const body = req.body;

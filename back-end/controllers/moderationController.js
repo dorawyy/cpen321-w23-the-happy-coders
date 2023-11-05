@@ -4,10 +4,9 @@ const moderationService = require('../services/moderationService');
 // ChatGPT Usage: No
 // Route for users to add a report
 exports.addReport = async (req, res) => {
+    console.log(req.body);
     try {
-        console.log(req.body);
         await moderationService.addReport(req.body);
-
         return res.status(200).json({ success: true });
     } catch (error) {
         return res.status(500).json({ success: false, error: "Error while adding a report" });
@@ -17,10 +16,11 @@ exports.addReport = async (req, res) => {
 // ChatGPT Usage: No
 // Route for admins to get all reports
 exports.getReports = async (req, res) => {
+    let reports;
     try {
         const adminId = req.params.adminId;
         if (moderationService.isAdmin(adminId)) {
-            let reports = await moderationService.getReports();
+            reports = await moderationService.getReports();
             console.log(reports);
             return res.status(200).json({ success: true, reports });
         } else {
@@ -34,6 +34,7 @@ exports.getReports = async (req, res) => {
 // ChatGPT Usage: No
 // Route for admins to delete a report
 exports.deleteReport = async (req, res) => {
+    console.log(req.body);
     try {
         const adminId = req.params.adminId;
         if (moderationService.isAdmin(adminId)) {
@@ -52,8 +53,8 @@ exports.deleteReport = async (req, res) => {
 // ChatGPT Usage: No
 // Route for admins to ban a user
 exports.banUser = async (req, res) => {
+    console.log("Banned body: " + req.body.userId);
     try {
-        console.log("Banned body: " + req.body.userId);
         const adminId = req.params.adminId;
         if (moderationService.isAdmin(adminId)) {
             const userId = req.body.userId;
