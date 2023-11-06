@@ -85,7 +85,8 @@ public class ChatActivity extends AppCompatActivity {
                     messageObj.put("sourceUserId", userId);
                     messageObj.put("content", message);
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
+                    Log.d(TAG, "Error creating message object");
                 }
                 runOnUiThread(() -> {
                     messages.add(messageObj);
@@ -194,7 +195,8 @@ public class ChatActivity extends AppCompatActivity {
             jsonObject.put("chatRoomId", chatroomId);
             jsonObject.put("reportMessage", reason);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            Log.d(TAG, "Error creating report object");
         }
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
@@ -218,7 +220,8 @@ public class ChatActivity extends AppCompatActivity {
                         Log.d(TAG, "Report sent: " + responseBody);
                         auth.showToast("User Reported");
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
+                        Log.d(TAG, "Error getting report");
                     }
                 } else {
                     Log.d(TAG, "Error sending report: " + response.body().string());
@@ -291,7 +294,8 @@ public class ChatActivity extends AppCompatActivity {
             jsonObject.put("content", msgInput.getText().toString());
             jsonObject.put("learningSession", isAiOn);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            Log.d(TAG, "Error creating message object");
         }
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
@@ -341,7 +345,8 @@ public class ChatActivity extends AppCompatActivity {
                             msgRecyclerAdapter.notifyDataSetChanged();
                         });
                     } catch (JSONException | IOException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
+                        Log.d(TAG, "Error sending message");
                     }
                 } else {
                     Log.d(TAG, "Error sending message");

@@ -193,7 +193,8 @@ public class MatchesFragment extends Fragment {
                     langsyncSpinner.setVisibility(View.VISIBLE);
                 }
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                Log.d(TAG, "Error setting match info");
             }
         });
     }

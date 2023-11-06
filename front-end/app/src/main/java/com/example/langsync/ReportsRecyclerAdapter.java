@@ -121,7 +121,8 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         }
                     });
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
+                    Log.d("ReportsRecyclerAdapter", "Error banning user");
                 }
 
             });
@@ -131,6 +132,8 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 try {
                     reportId = report.getString("_id");
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("ReportsRecyclerAdapter", "Error getting report id");
                     throw new RuntimeException(e);
                 }
                 Request request = new Request.Builder()
@@ -164,7 +167,8 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 });
             });
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            Log.e("ReportsRecyclerAdapter", "Error getting report info");
         }
     }
 

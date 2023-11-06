@@ -176,7 +176,8 @@ public class FormActivity extends AppCompatActivity {
                                     utilities.showToast("Error submitting form");
                                 }
                             } catch (JSONException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
+                                Log.d(TAG, "Error getting prefernce response");
                             }
                         } else {
                             Log.d(TAG, "onResponse: " + response.body().string());

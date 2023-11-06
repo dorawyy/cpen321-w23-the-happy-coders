@@ -1,7 +1,5 @@
 package com.example.langsync.ui.chat;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
