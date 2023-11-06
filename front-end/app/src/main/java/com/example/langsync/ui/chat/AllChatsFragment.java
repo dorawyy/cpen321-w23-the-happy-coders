@@ -96,7 +96,8 @@ public class AllChatsFragment extends Fragment {
                             }
                         });
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
+                        Log.d(TAG, "Error parsing response");
                     }
 
                 }

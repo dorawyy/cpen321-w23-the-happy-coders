@@ -80,7 +80,8 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 return;
             }
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            Log.d("ReportsRecyclerAdapter", "Error getting isFirst");
+            e.printStackTrace();
         }
         JSONObject report = reports.get(i);
         try {

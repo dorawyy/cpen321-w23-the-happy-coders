@@ -62,7 +62,8 @@ public class ChatActivity extends AppCompatActivity {
         try {
             socket = IO.socket("https://langsyncapp.canadacentral.cloudapp.azure.com");
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            Log.d(TAG, "Error connecting to socket");
+            e.printStackTrace();
         }
     }
 
@@ -272,7 +273,7 @@ public class ChatActivity extends AppCompatActivity {
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
             recyclerView.setLayoutManager(layoutManager);
 
-            msgRecyclerAdapter = new ChatMsgRecyclerAdapter(getApplicationContext(), messages, userId);
+            msgRecyclerAdapter = new ChatMsgRecyclerAdapter(messages, userId);
 
             recyclerView.setAdapter(msgRecyclerAdapter);
             recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);

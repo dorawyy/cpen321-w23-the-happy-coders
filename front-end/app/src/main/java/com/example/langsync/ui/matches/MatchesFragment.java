@@ -126,7 +126,8 @@ public class MatchesFragment extends Fragment {
                                                 .replace("]", "")
                                                 .replace("\"", ""));
                                     } catch (JSONException e) {
-                                        throw new RuntimeException(e);
+                                        e.printStackTrace();
+                                        Log.d(TAG, "Error setting match info");
                                     }
                                     langsyncSpinner.clearAnimation();
                                     loadingView.setVisibility(View.GONE);

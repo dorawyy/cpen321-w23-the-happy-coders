@@ -145,6 +145,8 @@ public class FormActivity extends AppCompatActivity {
                 try {
                     jsonObject = formatFormResponses();
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d(TAG, "Error creating json object: " + e.getMessage());
                     throw new RuntimeException(e);
                 }
 

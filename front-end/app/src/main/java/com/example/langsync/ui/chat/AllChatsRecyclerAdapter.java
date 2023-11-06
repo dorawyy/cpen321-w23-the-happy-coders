@@ -2,6 +2,7 @@ package com.example.langsync.ui.chat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,11 +85,13 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                     context.startActivity(intent);
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
+                    Log.e("AllChatsRecyclerAdapter", "Error in getting chatroom id");
                 }
             });
         } catch (JSONException ex) {
-            throw new RuntimeException(ex);
+            ex.printStackTrace();
+            Log.e("AllChatsRecyclerAdapter", "Error in getting chatroom name");
         }
     }
 

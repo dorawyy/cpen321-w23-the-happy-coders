@@ -25,10 +25,8 @@ public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     private String userId;
 
-    SharedPreferences sharedPreferences;
-
     // ChatGPT Usage: No
-    public ChatMsgRecyclerAdapter(Context context, List<JSONObject> messages, String userId) {
+    public ChatMsgRecyclerAdapter(List<JSONObject> messages, String userId) {
         this.messages = messages;
         this.userId = userId;
     }
@@ -78,7 +76,8 @@ public class ChatMsgRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 vh.sentMsgView.setAlpha(0.0f);
             }
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            Log.d("ChatMsgRecyclerAdapter", "Error: " + e.getMessage());
         }
     }
 

@@ -55,7 +55,8 @@ public class AdminLoginActivity extends AppCompatActivity {
                     jsonObject.put("accessCode", accessCode);
                     jsonObject.put("email", email);
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                    Log.d(TAG, "Error creating JSON object: " + e);
+                    e.printStackTrace();
                 }
                 MediaType JSON = MediaType.parse("application/json; charset=utf-8");
                 RequestBody body = RequestBody.create(jsonObject.toString(), JSON);

@@ -44,7 +44,8 @@ public class AdminReports extends AppCompatActivity {
             first.put("isFirst", true);
             reports.add(first);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            Log.d(TAG, "Error creating JSON object: " + e);
+            e.printStackTrace();
         }
 
         OkHttpClient client = new OkHttpClient();
