@@ -78,7 +78,8 @@ public class CalendarActivity extends AppCompatActivity {
             try {
                 bodyObject = generateCreateEventRequestBody();
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                utilities.showToast(getString(R.string.meeting_error));
+                return;
             }
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(bodyObject.toString(), JSON);

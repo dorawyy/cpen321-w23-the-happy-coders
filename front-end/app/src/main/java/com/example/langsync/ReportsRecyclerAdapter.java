@@ -13,8 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.langsync.util.AuthenticationUtilities;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

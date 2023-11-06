@@ -34,7 +34,6 @@ import okhttp3.RequestBody;
 public class FormActivity extends AppCompatActivity {
 
     private TextView learningPreferences;
-    private TextView interests; 
     private TextView age;
     boolean desiredLanguagesSelected[] = new boolean[DESIRED_LANGUAGES.length];
     boolean proficientLanguagesSelected[] = new boolean[PROFICIENT_LANGUAGES.length];
@@ -94,7 +93,7 @@ public class FormActivity extends AppCompatActivity {
         TextView desiredLanguages = findViewById(R.id.desired_languages);
         TextView proficientLanguages = findViewById(R.id.proficient_languages);
         learningPreferences = findViewById(R.id.learning_preferences);
-        interests = findViewById(R.id.interests);
+        TextView interests = findViewById(R.id.interests);
         age = findViewById(R.id.age);
         MaterialButton submitButton = findViewById(R.id.submit_button);
 
