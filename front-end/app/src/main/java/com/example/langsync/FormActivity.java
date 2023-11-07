@@ -143,47 +143,45 @@ public class FormActivity extends AppCompatActivity {
                 JSONObject jsonObject;
                 try {
                     jsonObject = formatFormResponses();
+                    OkHttpClient client = new OkHttpClient();
+
+                    MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                    RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+                    Request request = new Request.Builder()
+                            .url(getString(R.string.base_url) + "users/" + userId + "/prefs")
+                            .put(body)
+                            .build();
+
+                    client.newCall(request).enqueue(new okhttp3.Callback() {
+                        @Override
+                        public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
+                            e.printStackTrace();
+                        }
+                        @Override
+                        public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                String serverResponse = Objects.requireNonNull(response.body()).string();
+                                try {
+                                    JSONObject jsonObject = new JSONObject(serverResponse);
+                                    boolean success = jsonObject.getBoolean("success");
+                                    if (success) {
+                                        utilities.navigateTo(MainActivity.class,"Form Submitted" );
+                                    } else {
+                                        utilities.showToast("Error submitting form");
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Log.d(TAG, "Error getting prefernce response");
+                                }
+                            } else {
+                                Log.d(TAG, "onResponse: " + response.body().string());
+                            }
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d(TAG, "Error creating json object: " + e.getMessage());
-                    throw new RuntimeException(e);
                 }
-
-                OkHttpClient client = new OkHttpClient();
-
-                MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-                RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
-                Request request = new Request.Builder()
-                        .url(getString(R.string.base_url) + "users/" + userId + "/prefs")
-                        .put(body)
-                        .build();
-
-                client.newCall(request).enqueue(new okhttp3.Callback() {
-                    @Override
-                    public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
-                        e.printStackTrace();
-                    }
-                    @Override
-                    public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
-                        if (response.isSuccessful()) {
-                            String serverResponse = Objects.requireNonNull(response.body()).string();
-                            try {
-                                JSONObject jsonObject = new JSONObject(serverResponse);
-                                boolean success = jsonObject.getBoolean("success");
-                                if (success) {
-                                    utilities.navigateTo(MainActivity.class,"Form Submitted" );
-                                } else {
-                                    utilities.showToast("Error submitting form");
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Log.d(TAG, "Error getting prefernce response");
-                            }
-                        } else {
-                            Log.d(TAG, "onResponse: " + response.body().string());
-                        }
-                    }
-                });
             }
         });
     }

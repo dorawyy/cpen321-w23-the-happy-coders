@@ -131,40 +131,41 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 String reportId;
                 try {
                     reportId = report.getString("_id");
+                    Request request = new Request.Builder()
+                            .url(context.getString(R.string.base_url) + "moderation/" + adminId + "/" + reportId)
+                            .delete()
+                            .build();
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                            Log.d("ReportsRecyclerAdapter", "Error removing report");
+                            Log.d("ReportsRecyclerAdapter", Objects.requireNonNull(e.getMessage()));
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                            if(response.isSuccessful()){
+                                Log.d("ReportsRecyclerAdapter", "Successfully removed report");
+                                Log.d("ReportsRecyclerAdapter", Objects.requireNonNull(response.body()).string());
+                                reports.remove(i);
+
+                                parentActivity.runOnUiThread(() -> {
+                                    notifyDataSetChanged();
+                                });
+
+                            } else{
+                                Log.d("ReportsRecyclerAdapter", "Error removing report");
+                                Log.d("ReportsRecyclerAdapter", Objects.requireNonNull(response.body()).string());
+                            }
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("ReportsRecyclerAdapter", "Error getting report id");
-                    throw new RuntimeException(e);
+
                 }
-                Request request = new Request.Builder()
-                        .url(context.getString(R.string.base_url) + "moderation/" + adminId + "/" + reportId)
-                        .delete()
-                        .build();
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                        Log.d("ReportsRecyclerAdapter", "Error removing report");
-                        Log.d("ReportsRecyclerAdapter", Objects.requireNonNull(e.getMessage()));
-                        e.printStackTrace();
-                    }
 
-                    @Override
-                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                        if(response.isSuccessful()){
-                            Log.d("ReportsRecyclerAdapter", "Successfully removed report");
-                            Log.d("ReportsRecyclerAdapter", Objects.requireNonNull(response.body()).string());
-                            reports.remove(i);
-
-                            parentActivity.runOnUiThread(() -> {
-                                notifyDataSetChanged();
-                            });
-
-                        } else{
-                            Log.d("ReportsRecyclerAdapter", "Error removing report");
-                            Log.d("ReportsRecyclerAdapter", Objects.requireNonNull(response.body()).string());
-                        }
-                    }
-                });
             });
         } catch (JSONException e) {
             e.printStackTrace();

@@ -58,7 +58,7 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter msgRecyclerAdapter;
 
-    {
+    private void setSocket(){
         try {
             socket = IO.socket("https://langsyncapp.canadacentral.cloudapp.azure.com");
         } catch (URISyntaxException e) {
@@ -109,6 +109,8 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        setSocket();
 
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         userId = sharedPreferences.getString("loggedUserId", null);
