@@ -57,11 +57,12 @@ function getPartnerQuery(user){
     return User.find({ 
         $and: [
             { _id: { $ne: user._id } }, // Exclude User
-            { _id: { $nin: [...user.likedUsers, ...user.matchedUsers] } }, // Exclude users that user already liked or matched
+            { _id: { $nin: [...user.likedUsers, ...user.matchedUsers, ...user.blockedUsers] } }, // Exclude users that user already liked, matched, or blocked
         ],
         learningPreference: { $in: ["Partner", "Both"] },
         interestedLanguages: { $in: user.interestedLanguages },
         proficientLanguages: { $in: user.proficientLanguages },
+        banned: false, // Exclude banned users
     }).exec();
 }
 
@@ -71,11 +72,12 @@ function getExpertQuery(user){
     return User.find({
         $and: [
             { _id: { $ne: user._id } }, // Exclude User
-            { _id: { $nin: [...user.likedUsers, ...user.matchedUsers] } }, // Exclude users that user already liked or matched
+            { _id: { $nin: [...user.likedUsers, ...user.matchedUsers, ...user.blockedUsers] } }, // Exclude users that user already liked, matched, or blocked
         ],
         learningPreference: { $in: ["Expert", "Both"] },
         proficientLanguages: { $in: user.interestedLanguages },
         interestedLanguages: { $in: user.proficientLanguages },
+        banned: false, // Exclude banned users
     }).exec();
 }
 
