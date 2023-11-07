@@ -1,12 +1,5 @@
 package com.example.langsync;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,26 +7,28 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.langsync.util.AuthenticationUtilities;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.HashSet;
-import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -42,20 +37,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private MaterialButton loginButton;
-    private TextView signUpLink;
-    private TextView adminLoginLink;
     private GoogleSignInClient mGoogleSignInClient;
     private final OkHttpClient client = new OkHttpClient();
     private static String TAG = "LoginActivity";
-    private final AuthenticationUtilities  utilities = new AuthenticationUtilities(LoginActivity.this);
-
-    private TextView signUpText;
-
+    private final AuthenticationUtilities utilities = new AuthenticationUtilities(LoginActivity.this);
+    
     // ChatGPT usage: Partial
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        loginButton = findViewById(R.id.login_button);
+        MaterialButton loginButton = findViewById(R.id.login_button);
         
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        signUpLink = findViewById(R.id.sign_up_link);
+        TextView signUpLink = findViewById(R.id.sign_up_link);
         signUpLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        adminLoginLink = findViewById(R.id.admin_login);
+        TextView adminLoginLink = findViewById(R.id.admin_login);
         adminLoginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

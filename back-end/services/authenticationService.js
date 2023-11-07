@@ -10,28 +10,33 @@ const client = new OAuth2Client({
 // ChatGPT Usage: No
 // Verifies that the tokens retrieved from login and sign up are valid
 async function verifyGoogleToken(idToken) {
+    let response;
     try {
         const ticket = await client.verifyIdToken({
-            idToken: idToken,
+            idToken,
             audience: process.env.CLIENT_ID,
         });        
-
-        return { success: true, ticket: ticket };
+        response = { success: true, ticket };
+        return response;
     } catch (error) {
         console.error('Error verifying Google token:', error);
-        return { success: false, error: 'Token verification failed' };
+        response = { success: false, error: 'Token verification failed' };
+        return response;
     }
 }
 
 //ChatGPT Usage: No
 // Retrieves the access token and refresh token from the authorization code
 async function retrieveTokens(authorizationCode) {
+    let response;
     try {
         const { tokens } = await client.getToken(authorizationCode);
-        return { success: true, tokens: tokens };
+        response = { success: true, tokens };
+        return response;
     } catch (error) {
         console.error('Error retrieving access code:', error);
-        return { success: false, error: 'Access code retrieval failed' };
+        response = { success: false, error: 'Access code retrieval failed' };
+        return response;
     }
 }
 
@@ -56,7 +61,8 @@ async function getGoogleClient(authCode){
         access_token: acccessToken,
     });
 
-    return {success: true, auth: auth};
+    let response = {success: true, auth}
+    return response;
 }
 
 module.exports = { verifyGoogleToken, retrieveTokens, getGoogleClient };

@@ -1,20 +1,18 @@
 package com.example.langsync;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.langsync.util.AuthenticationUtilities;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -40,8 +38,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class SignupActivity extends AppCompatActivity {
-    private TextView loginLink;
-    private MaterialButton signUpButton;
     private GoogleSignInClient mGoogleSignInClient;
     private final OkHttpClient client = new OkHttpClient();
     private static String TAG = "SignUpActivity";
@@ -61,11 +57,11 @@ public class SignupActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        signUpButton = findViewById(R.id.sign_up_button);
+        MaterialButton signUpButton = findViewById(R.id.sign_up_button);
 
         signUpButton.setOnClickListener(v -> signUp());
 
-        loginLink = findViewById(R.id.login_link);
+        TextView loginLink = findViewById(R.id.login_link);
         loginLink.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);

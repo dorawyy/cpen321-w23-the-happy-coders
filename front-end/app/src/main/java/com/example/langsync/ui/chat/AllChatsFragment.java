@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,9 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -48,9 +45,6 @@ public class AllChatsFragment extends Fragment {
     // ChatGPT Usage: No
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-        ChatViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(ChatViewModel.class);
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         userId = sharedPreferences.getString("loggedUserId", null);
@@ -101,7 +95,8 @@ public class AllChatsFragment extends Fragment {
                             }
                         });
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
+                        Log.d(TAG, "Error parsing response");
                     }
 
                 }

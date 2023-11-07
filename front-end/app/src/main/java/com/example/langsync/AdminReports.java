@@ -1,14 +1,14 @@
 package com.example.langsync;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +44,8 @@ public class AdminReports extends AppCompatActivity {
             first.put("isFirst", true);
             reports.add(first);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            Log.d(TAG, "Error creating JSON object: " + e);
+            e.printStackTrace();
         }
 
         OkHttpClient client = new OkHttpClient();

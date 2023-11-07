@@ -1,37 +1,23 @@
 package com.example.langsync;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.media.Image;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.langsync.AdminReports;
-import com.example.langsync.MainActivity;
-import com.example.langsync.R;
-import com.example.langsync.util.AuthenticationUtilities;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -43,7 +29,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int TYPE = 1;
     private final Context context;
     private final List<JSONObject> reports;
 
@@ -61,8 +46,10 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public class ReportsViewHolder extends RecyclerView.ViewHolder {
-        private TextView reportedUser, reason;
-        private ImageView removeReport, banUser;
+        private TextView reportedUser; 
+        private TextView reason;
+        private ImageView removeReport;
+        private ImageView banUser;
         public ReportsViewHolder(View itemView) {
             super(itemView);
             reportedUser = itemView.findViewById(R.id.reported_user);
@@ -91,10 +78,10 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 return;
             }
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            Log.d("ReportsRecyclerAdapter", "Error getting isFirst");
+            e.printStackTrace();
         }
         JSONObject report = reports.get(i);
-        AuthenticationUtilities authenticationUtilities = new AuthenticationUtilities(context.getApplicationContext());
         try {
             vh.reportedUser.setText(report.getString("reportedUserId"));
             vh.reason.setText(report.getString("reportMessage"));
@@ -134,7 +121,8 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         }
                     });
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
+                    Log.d("ReportsRecyclerAdapter", "Error banning user");
                 }
 
             });
@@ -143,41 +131,45 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 String reportId;
                 try {
                     reportId = report.getString("_id");
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                Request request = new Request.Builder()
-                        .url(context.getString(R.string.base_url) + "moderation/" + adminId + "/" + reportId)
-                        .delete()
-                        .build();
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                        Log.d("ReportsRecyclerAdapter", "Error removing report");
-                        Log.d("ReportsRecyclerAdapter", Objects.requireNonNull(e.getMessage()));
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                        if(response.isSuccessful()){
-                            Log.d("ReportsRecyclerAdapter", "Successfully removed report");
-                            Log.d("ReportsRecyclerAdapter", Objects.requireNonNull(response.body()).string());
-                            reports.remove(i);
-
-                            parentActivity.runOnUiThread(() -> {
-                                notifyDataSetChanged();
-                            });
-
-                        } else{
+                    Request request = new Request.Builder()
+                            .url(context.getString(R.string.base_url) + "moderation/" + adminId + "/" + reportId)
+                            .delete()
+                            .build();
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
                             Log.d("ReportsRecyclerAdapter", "Error removing report");
-                            Log.d("ReportsRecyclerAdapter", Objects.requireNonNull(response.body()).string());
+                            Log.d("ReportsRecyclerAdapter", Objects.requireNonNull(e.getMessage()));
+                            e.printStackTrace();
                         }
-                    }
-                });
+
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                            if(response.isSuccessful()){
+                                Log.d("ReportsRecyclerAdapter", "Successfully removed report");
+                                Log.d("ReportsRecyclerAdapter", Objects.requireNonNull(response.body()).string());
+                                reports.remove(i);
+
+                                parentActivity.runOnUiThread(() -> {
+                                    notifyDataSetChanged();
+                                });
+
+                            } else{
+                                Log.d("ReportsRecyclerAdapter", "Error removing report");
+                                Log.d("ReportsRecyclerAdapter", Objects.requireNonNull(response.body()).string());
+                            }
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("ReportsRecyclerAdapter", "Error getting report id");
+
+                }
+
             });
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            Log.e("ReportsRecyclerAdapter", "Error getting report info");
         }
     }
 

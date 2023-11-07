@@ -54,12 +54,15 @@ async function getRecommendedUsers(userId){
 //ChatGPT Usage: No
 // Get query to only select users that match the "Partner" learning preference
 function getPartnerQuery(user){
-    return User.find({
-        _id: { $ne: user._id }, // Exclude User
-        _id: { $nin: [...user.likedUsers, ...user.matchedUsers] }, // Exclude users that user already liked or matched
+    return User.find({ 
+        $and: [
+            { _id: { $ne: user._id } }, // Exclude User
+            { _id: { $nin: [...user.likedUsers, ...user.matchedUsers, ...user.blockedUsers] } }, // Exclude users that user already liked, matched, or blocked
+        ],
         learningPreference: { $in: ["Partner", "Both"] },
         interestedLanguages: { $in: user.interestedLanguages },
         proficientLanguages: { $in: user.proficientLanguages },
+        banned: false, // Exclude banned users
     }).exec();
 }
 
@@ -67,11 +70,14 @@ function getPartnerQuery(user){
 // Get query to only select users that match the "Expert" learning preference
 function getExpertQuery(user){
     return User.find({
-        _id: { $ne: user._id }, // Exclude user
-        _id: { $nin: [...user.likedUsers, ...user.matchedUsers] }, // Exclude users that user already liked or matched
+        $and: [
+            { _id: { $ne: user._id } }, // Exclude User
+            { _id: { $nin: [...user.likedUsers, ...user.matchedUsers, ...user.blockedUsers] } }, // Exclude users that user already liked, matched, or blocked
+        ],
         learningPreference: { $in: ["Expert", "Both"] },
         proficientLanguages: { $in: user.interestedLanguages },
         interestedLanguages: { $in: user.proficientLanguages },
+        banned: false, // Exclude banned users
     }).exec();
 }
 

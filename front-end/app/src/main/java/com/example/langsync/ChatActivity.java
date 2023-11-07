@@ -1,28 +1,24 @@
 package com.example.langsync;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.cardview.widget.CardView;
-import androidx.navigation.Navigator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.langsync.ui.chat.AllChatsRecyclerAdapter;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.langsync.ui.chat.ChatMsgRecyclerAdapter;
 import com.example.langsync.util.AuthenticationUtilities;
 
@@ -30,16 +26,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import io.socket.client.IO;
-import io.socket.client.Socket;
-
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import io.socket.emitter.Emitter;
+import io.socket.client.IO;
+import io.socket.client.Socket;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -52,24 +46,24 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
     private List<JSONObject> messages = new ArrayList<>();
-    private ImageView goBack, videoCall, sendMsg, calendarInvite, reportUser;
-    private String otherUserName, otherUserId, userId, chatroomId;
-    private CardView noMessageView, loadingMessages;
+    private String otherUserId;
+    private String userId;
+    private String chatroomId;
+    private CardView noMessageView;
     private EditText msgInput;
-    private TextView chatHeaderName;
     private Socket socket;
 
-    private SwitchCompat toggleAi;
     boolean isAiOn = false;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter msgRecyclerAdapter;
 
-    {
+    private void setSocket(){
         try {
             socket = IO.socket("https://langsyncapp.canadacentral.cloudapp.azure.com");
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            Log.d(TAG, "Error connecting to socket");
+            e.printStackTrace();
         }
     }
 
@@ -91,7 +85,8 @@ public class ChatActivity extends AppCompatActivity {
                     messageObj.put("sourceUserId", userId);
                     messageObj.put("content", message);
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
+                    Log.d(TAG, "Error creating message object");
                 }
                 runOnUiThread(() -> {
                     messages.add(messageObj);
@@ -115,13 +110,15 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        setSocket();
+
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         userId = sharedPreferences.getString("loggedUserId", null);
 
         noMessageView = findViewById(R.id.no_messages);
         msgInput = findViewById(R.id.msg_input);
-        chatHeaderName = findViewById(R.id.chat_header_name);
-        toggleAi = findViewById(R.id.ai_switch);
+        TextView chatHeaderName = findViewById(R.id.chat_header_name);
+        SwitchCompat toggleAi = findViewById(R.id.ai_switch);
 
         toggleAi.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isAiOn = isChecked;
@@ -129,7 +126,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            otherUserName = extras.getString("otherUserName");
+            String otherUserName = extras.getString("otherUserName");
             otherUserId = extras.getString("otherUserId");
             chatroomId = extras.getString("chatroomId");
             chatHeaderName.setText(otherUserName);
@@ -137,11 +134,11 @@ public class ChatActivity extends AppCompatActivity {
             getMessages(chatroomId);
         }
 
-        goBack = findViewById(R.id.back_btn);
-        videoCall = findViewById(R.id.video_call);
-        sendMsg = findViewById(R.id.send_msg);
-        calendarInvite = findViewById(R.id.calendar_invite);
-        reportUser = findViewById(R.id.report_user);
+        ImageView goBack = findViewById(R.id.back_btn);
+        ImageView videoCall = findViewById(R.id.video_call);
+        ImageView sendMsg = findViewById(R.id.send_msg);
+        ImageView calendarInvite = findViewById(R.id.calendar_invite);
+        ImageView reportUser = findViewById(R.id.report_user);
 
         goBack.setOnClickListener(v -> {
             finish();
@@ -200,7 +197,8 @@ public class ChatActivity extends AppCompatActivity {
             jsonObject.put("chatRoomId", chatroomId);
             jsonObject.put("reportMessage", reason);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            Log.d(TAG, "Error creating report object");
         }
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
@@ -224,7 +222,8 @@ public class ChatActivity extends AppCompatActivity {
                         Log.d(TAG, "Report sent: " + responseBody);
                         auth.showToast("User Reported");
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
+                        Log.d(TAG, "Error getting report");
                     }
                 } else {
                     Log.d(TAG, "Error sending report: " + response.body().string());
@@ -279,7 +278,7 @@ public class ChatActivity extends AppCompatActivity {
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
             recyclerView.setLayoutManager(layoutManager);
 
-            msgRecyclerAdapter = new ChatMsgRecyclerAdapter(getApplicationContext(), messages, userId);
+            msgRecyclerAdapter = new ChatMsgRecyclerAdapter(messages, userId);
 
             recyclerView.setAdapter(msgRecyclerAdapter);
             recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);
@@ -297,7 +296,8 @@ public class ChatActivity extends AppCompatActivity {
             jsonObject.put("content", msgInput.getText().toString());
             jsonObject.put("learningSession", isAiOn);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            Log.d(TAG, "Error creating message object");
         }
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
@@ -347,7 +347,8 @@ public class ChatActivity extends AppCompatActivity {
                             msgRecyclerAdapter.notifyDataSetChanged();
                         });
                     } catch (JSONException | IOException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
+                        Log.d(TAG, "Error sending message");
                     }
                 } else {
                     Log.d(TAG, "Error sending message");

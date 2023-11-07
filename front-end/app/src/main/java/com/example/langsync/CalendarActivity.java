@@ -4,15 +4,13 @@ package com.example.langsync;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.ArrayAdapter;
-
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,10 +39,13 @@ import okhttp3.RequestBody;
 // Timepicker logic adapted from https://www.youtube.com/watch?v=c6c1giRekB4&ab_channel=CodeWithCal
 public class CalendarActivity extends AppCompatActivity {
     private Spinner durationSpinner;
-    private Button createEventButton;
     private Button dateButton;
     private Button timeButton;
-    private Integer minute, hour, day, month, year;
+    private Integer minute; 
+    private Integer hour; 
+    private Integer day;
+    private Integer month; 
+    private Integer year;
     private final String TAG = "CalendarActivity";
     private final AuthenticationUtilities utilities = new AuthenticationUtilities(CalendarActivity.this);
     private String invitedUserId;
@@ -62,7 +63,7 @@ public class CalendarActivity extends AppCompatActivity {
         timeButton = findViewById(R.id.time_button);
         dateButton = findViewById(R.id.date_button);
         durationSpinner = findViewById(R.id.duration_spinner);
-        createEventButton = findViewById(R.id.create_event_button);
+        Button createEventButton = findViewById(R.id.create_event_button);
 
         // Set up a listener for the create event button
         createEventButton.setOnClickListener(v -> {
@@ -77,7 +78,8 @@ public class CalendarActivity extends AppCompatActivity {
             try {
                 bodyObject = generateCreateEventRequestBody();
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                utilities.showToast(getString(R.string.meeting_error));
+                return;
             }
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(bodyObject.toString(), JSON);

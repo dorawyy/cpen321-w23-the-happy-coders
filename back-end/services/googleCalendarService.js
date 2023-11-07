@@ -60,18 +60,18 @@ async function generateLangSyncEventObject(rawEvent) {
         ],
         end: {
             dateTime: endTime.toISOString(),
-            timeZone: timeZone,
+            timeZone,
         },
         start: {
             dateTime: startTime.toISOString(),
-            timeZone: timeZone,
+            timeZone,
         },    
         reminders: {
             useDefault: true,
         }
     }
 
-    return { success: true, event: event };
+    return { success: true, event };
 }
 
 module.exports = { createEvent };

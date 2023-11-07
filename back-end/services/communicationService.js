@@ -5,22 +5,23 @@ const OpenAI = require('openai');
 // ChatGPT Usage: No
 // Add message to database and send to OpenAI method if toggle is on
 async function sendMessage(chatroomId, content, sourceUserId, learningSession){
-
+    let response;
     const chatroom = await Chatroom.findById(chatroomId);
     chatroom.messages.push({sourceUserId, content})
-        
+    
     if(learningSession){
         let openAIResponse = await openAIMessage(content)
         openAIResponse = "AI Assistant: " + openAIResponse;
         let id = "6541a9947cce981c74b03ecb";
         chatroom.messages.push({sourceUserId: id, content: openAIResponse})
         await chatroom.save();
-        return { sourceUserId: id, content: openAIResponse };
+        response = { sourceUserId: id, content: openAIResponse };
+        return response;
     }
 
     await chatroom.save();
-
-    return { sourceUserId: sourceUserId, content: content}; 
+    response = { sourceUserId, content}; 
+    return response; 
 }
 
 // ChatGPT Usage: No
@@ -62,8 +63,8 @@ async function createChatroom(user1Id, user2Id){
 
     const chatroom = await Chatroom.create({
         messages: [],
-        user1Id: user1Id,
-        user2Id: user2Id
+        user1Id,
+        user2Id
     })
 
     user1.chatroomIDs.push(chatroom._id)
@@ -78,8 +79,9 @@ async function createChatroom(user1Id, user2Id){
 // ChatGPT: Partial
 // Sends the user message to OpenAI when the AI toggle is on
 async function openAIMessage(message) {
+    let formattedMessage;
     try{
-        let formattedMessage = "Is the structure and grammar of this sentence correct: " + message;
+        formattedMessage = "Is the structure and grammar of this sentence correct: " + message;
         const openai = new OpenAI({
             apiKey: process.env.OPENAIKEY
         })

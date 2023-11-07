@@ -141,8 +141,8 @@ const userSchema = new mongoose.Schema({
                 gaming: 0
             },
             learningPreference: {
-                expert: 0,
-                partner: 0
+                expert: 1.0,
+                partner: 1.0
             }
         }
     }

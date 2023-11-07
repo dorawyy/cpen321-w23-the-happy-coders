@@ -13,14 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.example.langsync.AdminLoginActivity;
 import com.example.langsync.FormActivity;
-import com.example.langsync.LoginActivity;
 import com.example.langsync.R;
 import com.example.langsync.databinding.FragmentProfileBinding;
 
@@ -29,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -40,17 +33,16 @@ import okhttp3.Response;
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
-    private Button editButton;
-    private String userId;
-    private TextView profileAge, profileInterestedLanguages, profileProficientLanguages, profileLearningPreference;
+    private TextView profileAge;
+    private TextView profileInterestedLanguages; 
+    private TextView profileProficientLanguages; 
+    private TextView profileLearningPreference;
 
     private static final String TAG = "ProfileFragment";
 
     // ChatGPT Usage: No
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ProfileViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(ProfileViewModel.class);
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -59,18 +51,15 @@ public class ProfileFragment extends Fragment {
         profileInterestedLanguages = root.findViewById(R.id.profile_interested_languages);
         profileProficientLanguages = root.findViewById(R.id.profile_proficient_languages);
         profileLearningPreference = root.findViewById(R.id.profile_learning_preference);
-        editButton = root.findViewById(R.id.profile_edit_button);
+        Button editButton = root.findViewById(R.id.profile_edit_button);
 
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(requireActivity(), FormActivity.class);
-                startActivity(intent);
-            }
+        editButton.setOnClickListener(view -> {
+            Intent intent = new Intent(requireActivity(), FormActivity.class);
+            startActivity(intent);
         });
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        userId = sharedPreferences.getString("loggedUserId", null); // null is the default value if the key is not found
+        String userId = sharedPreferences.getString("loggedUserId", null);
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -95,14 +84,11 @@ public class ProfileFragment extends Fragment {
                         String learningPreference = user.getString("learningPreference");
                         Log.d(TAG, "User info: " + user);
 
-                        getActivity().runOnUiThread( new Runnable() {
-                            @Override
-                            public void run() {
-                                profileAge.setText(age);
-                                profileProficientLanguages.setText(proficientLanguages.toString());
-                                profileInterestedLanguages.setText(interestedLanguages.toString());
-                                profileLearningPreference.setText(learningPreference);
-                            }
+                        requireActivity().runOnUiThread(() -> {
+                            profileAge.setText(age);
+                            profileProficientLanguages.setText(proficientLanguages.toString());
+                            profileInterestedLanguages.setText(interestedLanguages.toString());
+                            profileLearningPreference.setText(learningPreference);
                         });
 
                     } catch (JSONException e) {

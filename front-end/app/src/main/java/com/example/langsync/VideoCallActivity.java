@@ -1,35 +1,32 @@
 package com.example.langsync;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.os.Bundle;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.example.langsync.R;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
+import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
-import io.agora.rtc2.ChannelMediaOptions;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -54,9 +51,6 @@ public class VideoCallActivity extends AppCompatActivity {
     // An integer that identifies the local user.
     private int uid = 0;
     private boolean isJoined = false;
-    private String localUserInfo;
-    private String remoteUserInfo;
-
     private RtcEngine agoraEngine;
     //SurfaceView to render local video in a Container.
     private SurfaceView localSurfaceView;
@@ -92,12 +86,8 @@ public class VideoCallActivity extends AppCompatActivity {
     // ChatGPT usage: No
     private boolean checkSelfPermission()
     {
-        if (ContextCompat.checkSelfPermission(this, REQUESTED_PERMISSIONS[0]) !=  PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, REQUESTED_PERMISSIONS[1]) !=  PackageManager.PERMISSION_GRANTED)
-        {
-            return false;
-        }
-        return true;
+        return ContextCompat.checkSelfPermission(this, REQUESTED_PERMISSIONS[0]) ==  PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, REQUESTED_PERMISSIONS[1]) ==  PackageManager.PERMISSION_GRANTED;
     }
 
     // ChatGPT usage: No
@@ -262,17 +252,15 @@ public class VideoCallActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == PERMISSION_REQ_ID) {// If request is cancelled, the result arrays are empty.
-            if (grantResults.length < 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                // Permission denied! Show an alert to the user.
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("This feature requires camera and microphone permissions to function. Please grant these permissions in settings.")
-                        .setTitle("Permissions required")
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setOnDismissListener(dialog -> finish()); // Close activity on dialog dismiss
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
+        if ( requestCode == PERMISSION_REQ_ID && (grantResults.length < 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED)) {
+            // Permission denied! Show an alert to the user.
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("This feature requires camera and microphone permissions to function. Please grant these permissions in settings.")
+                    .setTitle("Permissions required")
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setOnDismissListener(dialog -> finish()); // Close activity on dialog dismiss
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     }
 }

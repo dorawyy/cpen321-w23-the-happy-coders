@@ -10,21 +10,24 @@ async function findUnregistredOrCreateUser(ticket) {
     const picture = payload.picture;
     const displayName = payload.name;
 
-    let user = await User.findOne({ email: email });
-
+    let user = await User.findOne({ email });
+    let response;
     if (!user){
         try {
             user = await createUser(email, displayName, picture);
-            
-            return {success: true, user: user};
+            response = {success: true, user};
+            return response;
         } catch (error) {
-            return {success: false, error: error};
+            response = {success: false, error};
+            return response;
         }
     }else if (user.registered === false){
-        return {success: true, user: user};
+        response = {success: true, user};
+        return response;
     }
     else{
-        return {success: false, error: "User already registered"};
+        response = {success: false, error: "User already registered"};
+        return response;
     }
 }
 
@@ -32,13 +35,17 @@ async function findUnregistredOrCreateUser(ticket) {
 // Find user by email and return if found
 async function findUserByEmail(email) {
     console.log("Find user by email " + email)
-    const user = await User.findOne({ email: email });
+    let response;
+    const user = await User.findOne({ email });
     if (!user || user.registered === false) {
-        return {success: false, error: 'User not registered'};
+        response = {success: false, error: 'User not registered'};
+        return response;
     } else if (user.banned === true) {
-        return {success: false, error: 'User banned'};
+        response = {success: false, error: 'User banned'};
+        return response;
     }
-    return {success: true, user: user};
+    response = {success: true, user};
+    return response;
 }
 
 // ChatGPT Usage: No
@@ -65,10 +72,10 @@ async function findUsers(filter){
 // ChatGPT Usage: No
 // Create a new user
 async function createUser(email, displayName="", picture="") {
-    userData = {
-        email: email,
-        displayName: displayName,
-        picture: picture,
+    let userData = {
+        email,
+        displayName,
+        picture,
     }
     let user = new User(userData);
     await user.save();
@@ -100,7 +107,7 @@ async function updateUser(userID, userData) {
 
         return {success: true, message: "User updated successfully"};
     } catch (error) {
-        return {success: false, error: error};
+        return {success: false, error};
     }
 }
 
@@ -119,7 +126,7 @@ async function banUser(userID) {
 
         return {success: true, message: "User banned successfully"};
     } catch (error) {
-        return {success: false, error: error};
+        return {success: false, error};
     }
 }
 
@@ -127,13 +134,13 @@ async function banUser(userID) {
 // Find admin by email and create if not found
 async function findAdminOrCreate(email) {
 
-    let admin = await User.findOne({ email: email });
+    let admin = await User.findOne({ email });
 
     if (!admin) { 
         try {
             admin = await createAdmin(email);
         } catch (error) {
-            return {success: false, error: error};
+            return {success: false, error};
         }
     }
     if (admin.banned === true) {
@@ -146,8 +153,8 @@ async function findAdminOrCreate(email) {
 // ChatGPT Usage: No
 // Create a new admin
 async function createAdmin(email) {
-    adminData = {
-        email: email,
+    let adminData = {
+        email,
         admin: true,
         registered: true,
         displayName: "Admin",

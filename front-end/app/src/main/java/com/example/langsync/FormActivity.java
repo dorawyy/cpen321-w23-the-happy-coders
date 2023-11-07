@@ -1,23 +1,17 @@
 package com.example.langsync;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Build;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.text.InputType;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.langsync.util.AuthenticationUtilities;
 import com.google.android.material.button.MaterialButton;
@@ -28,7 +22,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,13 +30,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-import com.example.langsync.util.AuthenticationUtilities;
-
 
 public class FormActivity extends AppCompatActivity {
 
-    private TextView desiredLanguages, proficientLanguages, learningPreferences, interests, age;
-    private MaterialButton submitButton;
+    private TextView learningPreferences;
+    private TextView age;
     boolean desiredLanguagesSelected[] = new boolean[DESIRED_LANGUAGES.length];
     boolean proficientLanguagesSelected[] = new boolean[PROFICIENT_LANGUAGES.length];
     boolean interestsSelected[] = new boolean[INTERESTS.length];
@@ -99,12 +90,12 @@ public class FormActivity extends AppCompatActivity {
         userId = sharedPreferences.getString("loggedUserId", null); // null is the default value if the key is not found
         Log.d(TAG, "Shared Pref User Id: " + userId);
 
-        desiredLanguages = findViewById(R.id.desired_languages);
-        proficientLanguages = findViewById(R.id.proficient_languages);
+        TextView desiredLanguages = findViewById(R.id.desired_languages);
+        TextView proficientLanguages = findViewById(R.id.proficient_languages);
         learningPreferences = findViewById(R.id.learning_preferences);
-        interests = findViewById(R.id.interests);
+        TextView interests = findViewById(R.id.interests);
         age = findViewById(R.id.age);
-        submitButton = findViewById(R.id.submit_button);
+        MaterialButton submitButton = findViewById(R.id.submit_button);
 
         multiSelectOnClick(desiredLanguages, DESIRED_LANGUAGES, desiredLanguagesSelected, selectedDesires);
         multiSelectOnClick(proficientLanguages, PROFICIENT_LANGUAGES, proficientLanguagesSelected, selectedProficiencies);
@@ -152,44 +143,45 @@ public class FormActivity extends AppCompatActivity {
                 JSONObject jsonObject;
                 try {
                     jsonObject = formatFormResponses();
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
+                    OkHttpClient client = new OkHttpClient();
 
-                OkHttpClient client = new OkHttpClient();
+                    MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                    RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+                    Request request = new Request.Builder()
+                            .url(getString(R.string.base_url) + "users/" + userId + "/prefs")
+                            .put(body)
+                            .build();
 
-                MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-                RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
-                Request request = new Request.Builder()
-                        .url(getString(R.string.base_url) + "users/" + userId + "/prefs")
-                        .put(body)
-                        .build();
-
-                client.newCall(request).enqueue(new okhttp3.Callback() {
-                    @Override
-                    public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
-                        e.printStackTrace();
-                    }
-                    @Override
-                    public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
-                        if (response.isSuccessful()) {
-                            String serverResponse = Objects.requireNonNull(response.body()).string();
-                            try {
-                                JSONObject jsonObject = new JSONObject(serverResponse);
-                                boolean success = jsonObject.getBoolean("success");
-                                if (success) {
-                                    utilities.navigateTo(MainActivity.class,"Form Submitted" );
-                                } else {
-                                    utilities.showToast("Error submitting form");
-                                }
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                        } else {
-                            Log.d(TAG, "onResponse: " + response.body().string());
+                    client.newCall(request).enqueue(new okhttp3.Callback() {
+                        @Override
+                        public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
+                            e.printStackTrace();
                         }
-                    }
-                });
+                        @Override
+                        public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                String serverResponse = Objects.requireNonNull(response.body()).string();
+                                try {
+                                    JSONObject jsonObject = new JSONObject(serverResponse);
+                                    boolean success = jsonObject.getBoolean("success");
+                                    if (success) {
+                                        utilities.navigateTo(MainActivity.class,"Form Submitted" );
+                                    } else {
+                                        utilities.showToast("Error submitting form");
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Log.d(TAG, "Error getting prefernce response");
+                                }
+                            } else {
+                                Log.d(TAG, "onResponse: " + response.body().string());
+                            }
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d(TAG, "Error creating json object: " + e.getMessage());
+                }
             }
         });
     }

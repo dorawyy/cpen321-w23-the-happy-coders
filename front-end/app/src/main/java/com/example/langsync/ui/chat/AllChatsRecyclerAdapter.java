@@ -1,8 +1,7 @@
 package com.example.langsync.ui.chat;
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,32 +10,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.langsync.ChatActivity;
 import com.example.langsync.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int TYPE = 1;
     private final Context context;
-    private final HashMap<String, JSONObject> chatrooms;
     private final List<JSONObject> chats;
     private String userID;
 
@@ -44,7 +32,6 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public AllChatsRecyclerAdapter(Context context, HashMap<String, JSONObject> chatrooms, String userId) {
         this.context = context;
-        this.chatrooms = chatrooms;
         this.chats = new ArrayList<>(chatrooms.values());
         this.userID = userId;
     }
@@ -98,11 +85,13 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                     context.startActivity(intent);
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
+                    Log.e("AllChatsRecyclerAdapter", "Error in getting chatroom id");
                 }
             });
         } catch (JSONException ex) {
-            throw new RuntimeException(ex);
+            ex.printStackTrace();
+            Log.e("AllChatsRecyclerAdapter", "Error in getting chatroom name");
         }
     }
 
