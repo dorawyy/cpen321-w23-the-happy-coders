@@ -86,8 +86,20 @@ async function run() {
         });
     } catch (err) {
         console.log(err);
-        await mongoose.close();
+        await mongoose.disconnect(); // Close the connection on error
     }
+
+    // Handling the closing of the connection on process termination (Ctrl+C)
+    process.on('SIGINT', async () => {
+        try {
+            await mongoose.disconnect();
+            process.exit(0); // Exit the process after disconnecting
+        } catch (err) {
+            console.error('Error during disconnection:', err);
+            process.exit(1); // Exit with an error code
+        }
+    });
 }
 
 run();
+module.exports = app;
