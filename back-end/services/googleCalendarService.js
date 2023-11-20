@@ -16,7 +16,7 @@ async function createEvent(authCode, rawEvent) {
     const eventResponse = await generateLangSyncEventObject(rawEvent);
 
     if(!eventResponse.success) {
-        return { success: false, error: 'Error creating event' };
+        return { success: false, error: eventResponse.error };
     }
 
     const event = eventResponse.event;

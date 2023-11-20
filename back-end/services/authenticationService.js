@@ -35,7 +35,7 @@ async function retrieveTokens(authorizationCode) {
         return response;
     } catch (error) {
         console.error('Error retrieving access code:', error);
-        response = { success: false, error: 'Access code retrieval failed' };
+        response = { success: false, error: error.message };
         return response;
     }
 }
