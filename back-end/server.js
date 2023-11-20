@@ -1,7 +1,6 @@
-var express = require("express");
 require('dotenv').config()
 const { default: mongoose } = require("mongoose");
-var app = express();
+const app = require('./app');
 
 // Reference: https://socket.io/get-started/chat
 const http = require('http');
@@ -18,21 +17,6 @@ const secureServer = https.createServer(options, app); // Create an HTTPS server
 
 const { Server } = require("socket.io");
 const io = new Server(secureServer); 
-
-const agoraTokenRoutes = require('./routes/agoraTokenRoutes');
-const usersRoutes = require('./routes/usersRoutes');
-const authenticationRoutes = require('./routes/authenticationRoutes');
-const googleCalendarRoutes = require('./routes/googleCalendarRoutes');
-const matchingRoutes = require('./routes/matchingRoutes');
-const communicationRoutes = require('./routes/communicationRoutes');
-const recommendationRoutes = require('./routes/recommendationRoutes');
-const moderationRoutes = require('./routes/moderationRoutes');
-
-app.use(express.json());
-
-app.get("/", (req, res) => {
-    res.send("LangSync");
-})
 
 // ChatGPT Usage: Partial
 io.on('connection', (socket) => {
@@ -56,16 +40,6 @@ io.on('connection', (socket) => {
         console.log('A user disconnected.');
     });
 });
-
-// Routes
-app.use('/agoraToken', agoraTokenRoutes);
-app.use("/users", usersRoutes);
-app.use("/authentication", authenticationRoutes);
-app.use("/events", googleCalendarRoutes);
-app.use("/matches", matchingRoutes);
-app.use("/chatrooms", communicationRoutes);
-app.use("/recommendations", recommendationRoutes);
-app.use("/moderation", moderationRoutes);
 
 async function run() {
     let host;

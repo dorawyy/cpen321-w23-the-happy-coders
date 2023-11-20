@@ -7,15 +7,11 @@ require('dotenv').config();
 exports.getRTCToken = async (req, resp) => { 
     resp.header('Access-Control-Allow-Origin', '*');
     const channelName = req.params.channel;
-    if (!channelName) {
-        return resp.status(500).json({ 'error': 'channel is required' });
+    if (!channelName || !channelName.replace(/\s/g, '').length) {
+        return resp.status(400).json({ 'error': 'channel is required' });
     }
 
     let uid = req.params.uid;
-    if(!uid || uid === '') {
-        return resp.status(500).json({ 'error': 'uid is required' });
-    }
-
     // get role
     let role;
     if (req.params.role === 'publisher') {
@@ -23,23 +19,19 @@ exports.getRTCToken = async (req, resp) => {
     } else if (req.params.role === 'audience') {
         role = RtcRole.SUBSCRIBER
     } else {
-        return resp.status(500).json({ 'error': 'role is incorrect' });
+        return resp.status(400).json({ 'error': 'role is incorrect' });
     }
 
-    // get token expiration time
-    let expireTime = req.query.expiry;
-    if (!expireTime || expireTime === '') {
-        expireTime = 3600;
-    } else {
-        expireTime = parseInt(expireTime, 10);
-    }
+    // set token expiration time
+    const expireTime = 3600;
+
     const currentTime = Math.floor(Date.now() / 1000);
     const privilegeExpireTime = currentTime + expireTime;
 
     // get token type
     const tokenType = req.params.tokentype 
     if(tokenType !== 'uid' && tokenType !== 'userAccount') { 
-        return resp.status(500).json({ 'error': 'toke type is incorrect' });
+        return resp.status(400).json({ 'error': 'token type is incorrect' });
     }
 
     const token = agoraTokenService.generateToken(channelName, uid, role, privilegeExpireTime, tokenType);

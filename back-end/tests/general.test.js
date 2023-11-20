@@ -1,13 +1,8 @@
 const request = require('supertest');
-const app = require('../server'); // Adjust the path as needed
-const mongoose = require('mongoose');
+const app = require('../app'); // Adjust the path as needed
 
 
 describe('GET /', () => {
-    afterAll(async () => {
-        // Disconnect from the database after running tests
-        await mongoose.disconnect();
-    });
 
     it('responds with "LangSync"', async () => {
         const response = await request(app).get('/');
