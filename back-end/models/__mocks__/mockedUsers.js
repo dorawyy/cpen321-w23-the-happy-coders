@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb');
 
-const mockUser1 = {
+const mockUser0 = {
   _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a0'),
   age: 25,
   displayName: 'Alice',
@@ -12,7 +12,7 @@ const mockUser1 = {
   learningPreference: 'Expert',
   matchedUsers: [],
   blockedUsers: [],
-  likedUsers: [],
+  likedUsers: [new ObjectId('5f9d88b9d4b4d4c6a0b0f6a3')],
   chatroomIDs: [],
   badges: [],
   interests: {
@@ -48,7 +48,7 @@ const mockUser1 = {
   },
 };
 
-const mockUser2 ={
+const mockUser1 ={
   _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a1'),
   age: 30,
   displayName: 'Bob',
@@ -96,7 +96,7 @@ const mockUser2 ={
   },
 };
 
-const mockUser3 ={
+const mockUser2 ={
   _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a2'),
   age: 28,
   displayName: 'Charlie',
@@ -123,7 +123,7 @@ const mockUser3 ={
     gaming: true,
   },
   admin: false,
-  banned: true,
+  banned: false,
   idealMatch: {
     age: 25,
     interests: {
@@ -144,7 +144,7 @@ const mockUser3 ={
   },
 };
 
-const mockUser4 = {
+const mockUser3 = {
   _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a3'),
   age: 32,
   displayName: 'David',
@@ -152,8 +152,8 @@ const mockUser4 = {
   picture: 'david.jpg',
   email: 'david@example.com',
   proficientLanguages: ['French', 'Spanish'],
-  interestedLanguages: ['German'],
-  learningPreference: 'Expert',
+  interestedLanguages: ['English', 'Punjabi'],
+  learningPreference: 'Both',
   matchedUsers: [],
   blockedUsers: [],
   likedUsers: [],
@@ -167,6 +167,54 @@ const mockUser4 = {
     movies: false,
     art: true,
     music: false,
+    reading: true,
+    gaming: false,
+  },
+  admin: false,
+  banned: false,
+  idealMatch: {
+    age: 30,
+    interests: {
+      business: 0,
+      sports: 0,
+      cooking: 0,
+      travel: 0,
+      movies: 0,
+      art: 0,
+      music: 0,
+      reading: 0,
+      gaming: 0,
+    },
+    learningPreference: {
+      expert: 1,
+      partner: 0,
+    },
+  },
+};
+
+const mockUser4 = {
+  _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a4'),
+  age: 25,
+  displayName: 'Leo',
+  registered: true,
+  picture: 'leo.jpg',
+  email: 'leo@example.com',
+  proficientLanguages: ['English', 'Spanish'],
+  interestedLanguages: ['French', 'Punjabi'],
+  learningPreference: 'Both',
+  matchedUsers: [],
+  blockedUsers: [],
+  likedUsers: [],
+  chatroomIDs: [],
+  badges: [],
+  interests: {
+    business: true,
+    sports: false,
+    cooking: true,
+    travel: false,
+    movies: true,
+    art: false,
+    music: true,
     reading: true,
     gaming: false,
   },
@@ -192,6 +240,102 @@ const mockUser4 = {
   },
 };
 
-const mockUsers = [ mockUser1, mockUser2, mockUser3, mockUser4 ];  
+const mockUser5 = {
+  _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a5'),
+  age: 30,
+  displayName: 'Daniel',
+  registered: true,
+  picture: 'daniel.jpg',
+  email: 'daniel@example.com',
+  proficientLanguages: ['English', 'Spanish'],
+  interestedLanguages: ['French'],
+  learningPreference: 'Expert',
+  matchedUsers: [],
+  blockedUsers: [],
+  likedUsers: [],
+  chatroomIDs: [],
+  badges: [],
+  interests: {
+    business: false,
+    sports: false,
+    cooking: false,
+    travel: false,
+    movies: false,
+    art: false,
+    music: false,
+    reading: false,
+    gaming: false,
+  },
+  admin: false,
+  banned: false,
+  idealMatch: {
+    age: 30,
+    interests: {
+      business: 0.5,
+      sports: 0.3,
+      cooking: 0.7,
+      travel: 0.2,
+      movies: 0.6,
+      art: 0.4,
+      music: 0.8,
+      reading: 0.9,
+      gaming: 0.1,
+    },
+    learningPreference: {
+      expert: 0.9,
+      partner: 0.6,
+    },
+  },
+};
+
+const mockUser6 = {
+  _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a6'),
+  age: 30,
+  displayName: 'Daniel',
+  registered: true,
+  picture: 'daniel.jpg',
+  email: 'daniel@example.com',
+  proficientLanguages: ['Portuguese'],
+  interestedLanguages: ['French'],
+  learningPreference: 'Expert',
+  matchedUsers: [],
+  blockedUsers: [],
+  likedUsers: [],
+  chatroomIDs: [],
+  badges: [],
+  interests: {
+    business: false,
+    sports: false,
+    cooking: false,
+    travel: false,
+    movies: false,
+    art: false,
+    music: false,
+    reading: false,
+    gaming: false,
+  },
+  admin: false,
+  banned: false,
+  idealMatch: {
+    age: 30,
+    interests: {
+      business: 0.5,
+      sports: 0.3,
+      cooking: 0.7,
+      travel: 0.2,
+      movies: 0.6,
+      art: 0.4,
+      music: 0.8,
+      reading: 0.9,
+      gaming: 0.1,
+    },
+    learningPreference: {
+      expert: 0.9,
+      partner: 0.6,
+    },
+  },
+};
+
+const mockUsers = [mockUser0, mockUser1, mockUser2, mockUser3, mockUser4, mockUser5, mockUser6 ];  
 
 module.exports = mockUsers;

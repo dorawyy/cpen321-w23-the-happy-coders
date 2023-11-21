@@ -9,7 +9,7 @@ async function getRecommendedUsers(userId){
     let users = [];
 
     if (!user) { 
-        return [];
+        return { success: false, error: 'User not found' };
     }
     
     if(user.learningPreference === "Expert"){
@@ -31,10 +31,8 @@ async function getRecommendedUsers(userId){
     
     for (let i = 0; i < users.length; i++) {
         let targetUser = users[i];
-        if (targetUser._id == userId ) {
-            continue;
-        }
-        if (targetUser.likedUsers.includes(userId) ) {
+
+        if (targetUser.likedUsers.some(id => id.toString() === userId) ) {
             arbitraryTopUsers.push(targetUser);
         } else{
             scoredUsers.push(targetUser);
@@ -48,7 +46,7 @@ async function getRecommendedUsers(userId){
         return !user.blockedUsers.includes(recommendedUser._id) && !recommendedUser.blockedUsers.includes(user._id)
     })
 
-    return recommendedUsers;
+    return { success: true, recommendedUsersList: recommendedUsers};
 }
 
 //ChatGPT Usage: No
@@ -144,10 +142,8 @@ function mergeArraysNoDuplicatesId(arr1, arr2){
     const mergedArray = [];
 
     for (const obj of arr1) {
-        if (!idSet.has(obj._id.toString())) {
-          mergedArray.push(obj);
-          idSet.add(obj._id.toString());
-        }
+        mergedArray.push(obj);
+        idSet.add(obj._id.toString());
     }
 
     for (const obj of arr2) {

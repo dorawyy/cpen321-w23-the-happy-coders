@@ -2,14 +2,16 @@ const recommendationService = require('../services/recommendationService');
 
 // ChatGPT Usage: No
 exports.getRecommendedUsers = async(req,res) =>{
-    let recommendedUsers;
     try{
         const userId = req.params.id;
-        recommendedUsers = await recommendationService.getRecommendedUsers(userId);
-    
-        return res.status(200).json({recommendedUsersList: recommendedUsers});
+        const recommendedUsersResult = await recommendationService.getRecommendedUsers(userId);
+        if(!recommendedUsersResult.success){
+            return res.status(400).json({error: recommendedUsersResult.error});
+        }
+
+        return res.status(200).json({recommendedUsersList: recommendedUsersResult.recommendedUsersList });
     }
     catch(err){
-        return res.status(500).json({error: "Error getting recommended users"});
+        return res.status(500).json({error: err.message});
     }
 }
