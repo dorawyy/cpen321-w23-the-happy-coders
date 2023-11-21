@@ -91,6 +91,10 @@ async function updateUser(userID, userData) {
         return {success: false, error: "User not found"};
     }
 
+    if (user.banned === true) {
+        return {success: false, error: 'User banned'};
+    }
+
     try {
         user.proficientLanguages = userData.proficientLanguages;
         user.interestedLanguages = userData.interestedLanguages;
