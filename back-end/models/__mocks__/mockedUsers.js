@@ -26,7 +26,7 @@ const mockUser0 = {
     reading: true,
     gaming: false,
   },
-  admin: false,
+  admin: true,
   banned: false,
   idealMatch: {
     age: 30,
@@ -74,7 +74,7 @@ const mockUser1 ={
     reading: true,
     gaming: true,
   },
-  admin: true,
+  admin: false,
   banned: false,
   idealMatch: {
     age: 28,

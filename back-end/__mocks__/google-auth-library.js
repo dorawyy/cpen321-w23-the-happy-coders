@@ -14,14 +14,21 @@ class MockedOAuth2Client {
   
     async verifyIdToken({ idToken, audience }) {
       let email
-      if (idToken === 'validToken' && audience === this.clientId) {
-        email = 'mocked@email.com';
-      } else if(idToken === 'validTokenUnregisteredUser'){
-        email = unregisteredUser.email;
-      } else if (idToken === 'validTokenRegisteredMockUser0'){
-        email = mockedUsers[0].email;
-      } else {
-        throw new Error('Invalid token or audience');
+      switch (idToken) {
+        case 'validToken':
+          email = 'mocked@email.com';
+          break;
+        case 'validTokenUnregisteredUser':
+          email = unregisteredUser.email;
+          break;
+        case 'validTokenRegisteredMockUser0':
+          email = mockedUsers[0].email;
+          break;
+        case 'validTokenBannedMockUser7':
+          email = mockedUsers[7].email;
+          break;
+        default:
+          throw new Error('Invalid token or audience');
       }
       return { 
         getPayload: () => ({

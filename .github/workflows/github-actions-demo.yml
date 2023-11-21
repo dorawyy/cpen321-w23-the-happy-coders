@@ -18,7 +18,7 @@ jobs:
       run: | 
         cd back-end  # Navigate to the backend folder
         touch .env
-        echo ADMIN_ACCESS_CODE="1234" >> .env
+        echo ADMIN_ACCESS_CODE=${{ secrets.ADMIN_ACCESS_CODE }} >> .env
 
     - name: Install dependencies
       run: |
