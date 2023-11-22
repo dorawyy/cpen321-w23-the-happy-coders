@@ -7,44 +7,46 @@ const userService = require('./userService');
 // Adds a new report
 async function addReport(reportData){
     let report;
-    try{
-        const reporterUserId = reportData.reporterUserId;
-        const reportedUserId = reportData.reportedUserId;
-        const chatRoomId = reportData.chatRoomId;
-        const reportMessage = reportData.reportMessage;
-        
-        const reporterUser = await User.findById(reportData.reporterUserId);
-        const reportedUser = await User.findById(reportData.reportedUserId);
-
-        report = new Report({
-            reporterUserId,
-            reportedUserId,
-            chatRoomId,
-            reportMessage
-        });
-        
-        if(reporterUser.blockedUsers == null){
-            reporterUser.blockedUsers = [];
-        }
-
-        reporterUser.blockedUsers.push(reportedUserId);   
-        reporterUser.matchedUsers = reporterUser.matchedUsers.filter(matchedUserId => matchedUserId != reportedUserId);
-        reporterUser.likedUsers = reporterUser.likedUsers.filter(likedUserId => likedUserId != reportedUserId);
-        reporterUser.chatroomIDs = reporterUser.chatroomIDs.filter(chatroomId => chatroomId != chatRoomId);
-    
-        reportedUser.matchedUsers = reportedUser.matchedUsers.filter(matchedUserId => matchedUserId != reporterUserId);
-        reportedUser.likedUsers = reportedUser.likedUsers.filter(likedUserId => likedUserId != reporterUserId);
-        reportedUser.chatroomIDs = reportedUser.chatroomIDs.filter(chatroomId => chatroomId != chatRoomId);
-        
-        await report.save();
-        await reportedUser.save();
-        await reporterUser.save();
-    
-        return report;
+    if (reportData.reporterUserId == null || reportData.reportedUserId == null || reportData.chatRoomId == null || reportData.reportMessage == null){
+        return {success: false, error: "Missing report data"};
     }
-    catch(error){
-        console.log(error)
+    const reporterUserId = reportData.reporterUserId;
+    const reportedUserId = reportData.reportedUserId;
+    const chatRoomId = reportData.chatRoomId;
+    const reportMessage = reportData.reportMessage;
+    
+    const reporterUser = await User.findById(reportData.reporterUserId);
+    const reportedUser = await User.findById(reportData.reportedUserId);
+
+    if (!reporterUser || !reportedUser) {
+        return {success: false, error: "User not found"};
     }
+
+    report = new Report({
+        reporterUserId,
+        reportedUserId,
+        chatRoomId,
+        reportMessage
+    });
+    
+    if(reporterUser.blockedUsers == null){
+        reporterUser.blockedUsers = [];
+    }
+
+    reporterUser.blockedUsers.push(reportedUserId);   
+    reporterUser.matchedUsers = reporterUser.matchedUsers.filter(matchedUserId => matchedUserId != reportedUserId);
+    reporterUser.likedUsers = reporterUser.likedUsers.filter(likedUserId => likedUserId != reportedUserId);
+    reporterUser.chatroomIDs = reporterUser.chatroomIDs.filter(chatroomId => chatroomId != chatRoomId);
+
+    reportedUser.matchedUsers = reportedUser.matchedUsers.filter(matchedUserId => matchedUserId != reporterUserId);
+    reportedUser.likedUsers = reportedUser.likedUsers.filter(likedUserId => likedUserId != reporterUserId);
+    reportedUser.chatroomIDs = reportedUser.chatroomIDs.filter(chatroomId => chatroomId != chatRoomId);
+    
+    await report.save();
+    await reportedUser.save();
+    await reporterUser.save();
+
+    return {success: true, report: report};
 }
 
 //ChatGPT Usage: No
@@ -70,11 +72,11 @@ async function ban(userId) {
 async function isAdmin(adminId) {
     const admin = await User.findById(adminId);
 
-    if (!admin) {
-        return false;
+    if (admin) {
+        return admin.admin;
     }
     
-    return admin.admin;
+    return false;
 }
 
 module.exports = { addReport, getReports, deleteReport, ban, isAdmin }

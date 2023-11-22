@@ -119,17 +119,13 @@ async function banUser(userID) {
     let user = await User.findById(userID);
 
     if (!user) {
-        return {success: false, error: "User not found"};
+        return {success: false};
     }
 
-    try {
-        user.banned = true;
-        user.save();
+    user.banned = true;
+    await user.save();
 
-        return {success: true, message: "User banned successfully"};
-    } catch (error) {
-        return {success: false, error};
-    }
+    return {success: true};
 }
 
 // ChatGPT Usage: No
