@@ -97,7 +97,7 @@ const mockUser1 ={
 };
 
 const mockUser2 ={
-  _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a2'),
+  _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f7b4'),
   age: 28,
   displayName: 'Charlie',
   registered: true,
@@ -413,7 +413,7 @@ const mockUser8 = {
     gaming: false,
   },
   admin: false,
-  banned: true,
+  banned: false,
   idealMatch: {
     age: 0,
     interests: {
@@ -442,6 +442,6 @@ const unregisteredAdmin = {
   email: "unregistered@admin.com"
 }
 
-const mockedUsers = [mockUser0, mockUser1, mockUser2, mockUser3, mockUser4, mockUser5, mockUser6, mockUser7 ];  
+const mockedUsers = [mockUser0, mockUser1, mockUser2, mockUser3, mockUser4, mockUser5, mockUser6, mockUser7, mockUser8];  
 
 module.exports = {mockedUsers, unregisteredUser, unregisteredAdmin};

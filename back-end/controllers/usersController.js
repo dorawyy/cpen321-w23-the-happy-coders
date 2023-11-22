@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { clear } = require('google-auth-library/build/src/auth/envDetect');
 const userServices = require('../services/userService');
 
 // ChatGPT Usage: No
@@ -25,7 +26,7 @@ exports.updateUserProfile = async (req, resp) => {
 exports.getUser =  async (req, resp) => { 
     let user ;
     try {
-        await userServices.findUserByID(req.params.id);
+        user = await userServices.findUserByID(req.params.id);
 
         if (user == null) {
             return resp.status(400).json({ success: false, error: 'Invalid user id' });

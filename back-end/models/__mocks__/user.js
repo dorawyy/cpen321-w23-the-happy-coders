@@ -12,18 +12,27 @@ class User {
         this.banned = obj.banned ?? false;
         
         this.save = jest.fn().mockImplementation(() => {
-            mockedUsers.push({
-                _id: obj._id,
-                email: obj.email,
-                displayName: obj.displayName,
-                admin: obj.admin ?? false,
-                registered: obj.registered,
-                picture: obj.picture,
-                learningPreference: obj.learningPreference,
-                interestedLanguages: obj.interestedLanguages,
-                proficientLanguages: obj.proficientLanguages,
-                banned: obj.banned
-            })
+            const index = mockedUsers.findIndex(u => u._id === obj._id);
+            if (index !== -1) {
+                mockedUsers[index] = {
+                ...mockedUsers[index],
+                ...obj,
+                };
+            } else {
+                mockedUsers.push({
+                        _id: obj._id,
+                        email: obj.email,
+                        displayName: obj.displayName,
+                        admin: obj.admin ?? false,
+                        registered: obj.registered,
+                        picture: obj.picture,
+                        learningPreference: obj.learningPreference,
+                        interestedLanguages: obj.interestedLanguages,
+                        proficientLanguages: obj.proficientLanguages,
+                        banned: obj.banned,
+                    });
+            }
+            return { success: true, message: "User saved successfully" };
         });
     }
 }
@@ -52,13 +61,13 @@ User.findById = jest.fn().mockImplementation((id) =>{
     if(id === "errorId"){
         throw new Error('User not found');
     }
-    user = mockedUsers.find((user) => user._id.equals(id));
+    let user = mockedUsers.find((user) => user._id.equals(id));
     return user;
 })
 
 User.findOne = jest.fn().mockImplementation((query) =>{
     const { email } = query;
-    user = mockedUsers.find((user) => user.email === email) ?? null;
+    let user = mockedUsers.find((user) => user.email === email) ?? null;
     return user;
 })
 
