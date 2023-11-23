@@ -3,8 +3,7 @@ const app = require('../app');
 
 jest.mock('../models/user');
 
-const { mockedUsers } = require('../models/__mocks__/mockedUsers');
-const {User} = require('../models/user');
+const { mockedUsers } = require('../models/__mocks__/user');
 
 describe('GET /users/:id', () => {
 

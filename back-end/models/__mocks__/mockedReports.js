@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb');
-const {mockedUsers} = require("./mockedUsers");
+const { mockedUsers } = require('./user');
 
 const mockReport0 = {
     _id: new ObjectId('5f9d88b9d4b4d4c6a0c7d8e1'),

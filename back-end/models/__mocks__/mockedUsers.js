@@ -442,6 +442,6 @@ const unregisteredAdmin = {
   email: "unregistered@admin.com"
 }
 
-const mockedUsers = [mockUser0, mockUser1, mockUser2, mockUser3, mockUser4, mockUser5, mockUser6, mockUser7, mockUser8];  
+const mockUsers = [mockUser0, mockUser1, mockUser2, mockUser3, mockUser4, mockUser5, mockUser6, mockUser7, mockUser8];  
 
-module.exports = {mockedUsers, unregisteredUser, unregisteredAdmin};
+module.exports = {mockUsers, unregisteredUser, unregisteredAdmin};

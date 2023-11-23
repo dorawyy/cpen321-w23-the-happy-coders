@@ -4,7 +4,7 @@ const app = require('../app');
 jest.mock('../models/user');
 jest.mock('../models/report');
 
-const { mockedUsers } = require('../models/__mocks__/mockedUsers');
+const { mockedUsers } = require('../models/__mocks__/user');    
 const { mockedReports } = require('../models/__mocks__/mockedReports');
 const { ObjectId } = require('mongodb');
 
