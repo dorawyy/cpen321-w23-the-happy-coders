@@ -13,7 +13,7 @@ const mockUser0 = {
   matchedUsers: [],
   blockedUsers: [],
   likedUsers: [new ObjectId('5f9d88b9d4b4d4c6a0b0f6a3')],
-  chatroomIDs: [],
+  chatroomIDs: ['5f9d88b9d4b4d4c6a0b0f6a8'],
   badges: [],
   interests: {
     business: true,
