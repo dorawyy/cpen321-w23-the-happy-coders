@@ -57,7 +57,7 @@ User.find = jest.fn((query) => {
     return { exec: () => filteredUsers}
 })
 
-User.findById = jest.fn().mockImplementation((id) =>{
+User.findById = jest.fn().mockImplementation((id) =>{ 
     if(id === "errorId"){
         throw new Error('User not found');
     }
