@@ -48,7 +48,10 @@ Report.findById = jest.fn().mockImplementation((id) =>{
     if(id === "errorId"){
         throw new Error('Report not found');
     }
-    const report = mockedReports.find((r) => r._id === id);
+    if(id === "invalidId"){
+        return null;
+    }
+    const report = mockedReports.find((r) => r._id.toString() === id);
     return report;
 });
 
@@ -56,14 +59,17 @@ Report.findByIdAndDelete = jest.fn().mockImplementation((id) =>{
     if(id === "errorId"){
         throw new Error('Report not found');
     }
-    const report = mockedReports.find((r) => r._id === id);
+    if(id === "invalidId"){
+        return null;
+    }
+    const report = mockedReports.find((r) => r._id.toString() === id);
     const index = mockedReports.indexOf(report);
     mockedReports.splice(index, 1);
     return report;
 });
 
 Report.findOne = jest.fn().mockImplementation((query) =>{
-    const report = mockedReports.find((r) => r._id === query._id);
+    const report = mockedReports.find((r) => r._id.toString() === query._id);
     return report;
 });
 

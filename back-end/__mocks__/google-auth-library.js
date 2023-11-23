@@ -1,4 +1,4 @@
-const { unregisteredUser} = require('../models/__mocks__/mockedUsers');
+const { unregisteredUser, errorUser} = require('../models/__mocks__/mockedUsers');
 const { mockedUsers } = require('../models/__mocks__/user');
 
 class MockedOAuth2Client {
@@ -27,6 +27,12 @@ class MockedOAuth2Client {
           break;
         case 'validTokenBannedMockUser7':
           email = mockedUsers[7].email;
+          break;
+        case 'validTokenErrorOnSave':
+          email = errorUser.email;
+          break;
+        case 'validTokenUnregisteredAlreadyInDbMockedUser8':
+          email = mockedUsers[8].email;
           break;
         default:
           throw new Error('Invalid token or audience');

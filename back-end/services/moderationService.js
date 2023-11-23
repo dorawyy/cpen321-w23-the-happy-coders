@@ -29,10 +29,6 @@ async function addReport(reportData){
         reportMessage
     });
     
-    if(reporterUser.blockedUsers == null){
-        reporterUser.blockedUsers = [];
-    }
-
     reporterUser.blockedUsers.push(reportedUserId);   
     reporterUser.matchedUsers = reporterUser.matchedUsers.filter(matchedUserId => matchedUserId != reportedUserId);
     reporterUser.likedUsers = reporterUser.likedUsers.filter(likedUserId => likedUserId != reportedUserId);
