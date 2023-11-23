@@ -41,18 +41,22 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    implementation("androidx.navigation:navigation-fragment:2.7.4")
-    implementation("androidx.navigation:navigation-ui:2.7.4")
+    implementation("androidx.navigation:navigation-fragment:2.7.5")
+    implementation("androidx.navigation:navigation-ui:2.7.5")
+    implementation("androidx.tracing:tracing:1.1.0")
     implementation("io.socket:socket.io-client:2.0.0") {
         exclude("org.json","json")
     }
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
+    androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha01")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha01")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.6.0-alpha01")
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.3.0-alpha05")
     implementation("io.agora.rtc:full-sdk:4.0.1")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
 
 }
