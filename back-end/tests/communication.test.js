@@ -5,7 +5,7 @@ const {Chatroom, mockedChats} = require('../models/__mocks__/chatroom.js');
 
 jest.mock('../models/user');
 jest.mock('../models/chatroom');
-
+jest.mock('openai');
 describe('GET /chatrooms/:userId', () => {
 
     // Input: valid userId

@@ -4,7 +4,6 @@ const {User, mockedUsers} = require('../models/__mocks__/user.js');
 
 jest.mock('../models/user');
 jest.mock('../models/chatroom');
-jest.mock('openai');
 
 describe('POST /matches', () => {
 

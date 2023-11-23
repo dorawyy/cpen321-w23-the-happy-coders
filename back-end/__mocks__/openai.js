@@ -1,3 +1,4 @@
+// ChatGPT Usage: Partial
 class OpenAI {
     constructor(str){
         this.apiKey = str

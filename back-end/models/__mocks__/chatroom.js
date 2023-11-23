@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongodb');
 
-  
 class Chatroom {
+    // ChatGPT Usage: Partial
     constructor(obj) {
         this._id = obj._id;
         this.messages = obj.messages ?? [];
@@ -9,6 +9,8 @@ class Chatroom {
         this.user2Id = obj.user2Id;
 
     }
+    
+    // ChatGPT Usage: Partial
     save() {
         const index = mockedChats.findIndex(c => c._id.equals(this._id));
         if (index !== -1) {
@@ -22,6 +24,7 @@ class Chatroom {
     }
 }
 
+// ChatGPT Usage: Partial
 const mockChat0 = new Chatroom({
     _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a8'),
     messages: [
@@ -63,11 +66,10 @@ const mockChat0 = new Chatroom({
   });
 const mockedChats = [mockChat0, mockChat1, mockChat2];  
 
+// ChatGPT Usage: Partial
 Chatroom.findById = jest.fn().mockImplementation((id) =>{
-   console.log("mocked: " + mockedChats)
-
     if(id === "errorId"){
-        throw new Error('User not found');
+        throw new Error('Chatroom not found');
     }
     let chatroom = mockedChats.find((chatroom) => chatroom._id == id);
 
@@ -75,6 +77,7 @@ Chatroom.findById = jest.fn().mockImplementation((id) =>{
 
 })
 
+// ChatGPT Usage: Partial
 Chatroom.create = jest.fn().mockImplementation(({messages, user1Id, user2Id}) =>{
     let chatroom = new Chatroom({
         _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6b3'),
