@@ -60,7 +60,7 @@ const mockUser1 ={
   learningPreference: 'Partner',
   matchedUsers: [],
   blockedUsers: [],
-  likedUsers: [],
+  likedUsers: ['5f9d88b9d4b4d4c6a0b0f6a0'],
   chatroomIDs: [],
   badges: [],
   interests: {
