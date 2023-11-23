@@ -4,10 +4,12 @@ const moderationService = require('../services/moderationService');
 // ChatGPT Usage: No
 // Route for users to add a report
 exports.addReport = async (req, res) => {
-    console.log(req.body);
     try {
-        await moderationService.addReport(req.body);
-        return res.status(200).json({ success: true });
+        const addReportResponse = await moderationService.addReport(req.body);
+        if (addReportResponse.success) {
+            return res.status(200).json({ success: true, report: addReportResponse.report });
+        }
+        return res.status(400).json({ success: false, error: "Invalid report" });
     } catch (error) {
         return res.status(500).json({ success: false, error: "Error while adding a report" });
     }
@@ -19,53 +21,67 @@ exports.getReports = async (req, res) => {
     let reports;
     try {
         const adminId = req.params.adminId;
-        if (moderationService.isAdmin(adminId)) {
+        const isAdmin = await moderationService.isAdmin(adminId);
+        if (isAdmin) {
+            if (adminId == "invalidId") {
+                console.log("why am i here");
+            }
             reports = await moderationService.getReports();
-            console.log(reports);
             return res.status(200).json({ success: true, reports });
         } else {
-            return res.status(403).json({ success: false, message: "Unauthorized access to admin actions" })
+            return res.status(400).json({ success: false, error: "Unauthorized access to admin actions" })
         }
     } catch (err) {
-        return res.status(500).json({ success: false, error: "Error while fetching reports: " + err });
+        return res.status(500).json({ success: false, error: "Error getting reports" });
     }
 }
 
 // ChatGPT Usage: No
 // Route for admins to delete a report
 exports.deleteReport = async (req, res) => {
-    console.log(req.body);
     try {
         const adminId = req.params.adminId;
-        if (moderationService.isAdmin(adminId)) {
+        if (await moderationService.isAdmin(adminId)) {
             const reportId = req.params.reportId;
-            await moderationService.deleteReport(reportId);
+            let report = await moderationService.deleteReport(reportId);
 
-            return res.status(200).json({ success: true });
+            if (report == null) {
+                return res.status(400).json({ success: false, error: "Report not found" });
+            }
+
+            return res.status(200).json({ success: true, message: "Report deleted successfully" });
         } else {
-            return res.status(403).json({ success: false, message: "Unauthorized access to admin actions" })
+            return res.status(400).json({ success: false, error: "Unauthorized access to admin actions" })
         }
     } catch (error) {
-        return res.status(500).json({ success: false, error: "Error while deleting report" + error });
+        return res.status(500).json({ success: false, error: "Error while deleting report"});
     }
 }
 
 // ChatGPT Usage: No
 // Route for admins to ban a user
 exports.banUser = async (req, res) => {
-    console.log("Banned body: " + req.body.userId);
     try {
         const adminId = req.params.adminId;
-        if (moderationService.isAdmin(adminId)) {
+        if (await moderationService.isAdmin(adminId)) {
             const userId = req.body.userId;
             const reportId = req.body.reportId;
 
-            await moderationService.ban(userId);
-            await moderationService.deleteReport(reportId);
+            let response1 =  await moderationService.ban(userId);
+
+            if (!response1.success) {
+                return res.status(400).json({ success: false, error: "Invalid user id" });
+            }
+
+            let response2 = await moderationService.deleteReport(reportId);
+
+            if (response2 == null) {
+                return res.status(400).json({ success: false, error: "Report not found" });
+            }
             
-            return res.status(200).json({ success: true });
+            return res.status(200).json({ success: true , message: "User banned successfully"});
         } else {
-            return res.status(403).json({ success: false, message: "Unauthorized access to admin actions" })
+            return res.status(400).json({ success: false, error: "Unauthorized access to admin actions" })
         }
     } catch (error) {
         return res.status(500).json({ success: false, error: "Error while banning user" });

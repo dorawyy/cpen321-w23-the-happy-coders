@@ -85,30 +85,32 @@ async function createUser(email, displayName="", picture="") {
 // ChatGPT Usage: No
 // Update a user
 async function updateUser(userID, userData) {
+
     let user = await User.findById(userID);
 
     if (!user) {
-        return {success: false, error: "User not found"};
+        return {success: false, error: "Invalid user id"};
     }
 
-    try {
-        user.proficientLanguages = userData.proficientLanguages;
-        user.interestedLanguages = userData.interestedLanguages;
-        user.learningPreference = userData.learningPreference;
-        user.interests = userData.interests;
-        user.age = userData.age;
-
-        if (user.registered === false) {
-            user.idealMatch = getDefaultInitialIdealMatch(user);
-            user.registered = true;
-        }
-
-        user.save();
-
-        return {success: true, message: "User updated successfully"};
-    } catch (error) {
-        return {success: false, error};
+    if (user.banned === true) {
+        return {success: false, error: 'User banned'};
     }
+
+    user.proficientLanguages = userData.proficientLanguages;
+    user.interestedLanguages = userData.interestedLanguages;
+    user.learningPreference = userData.learningPreference;
+    user.interests = userData.interests;
+    user.age = userData.age;
+
+    if (user.registered === false) {
+        user.idealMatch = getDefaultInitialIdealMatch(user);
+        user.registered = true;
+    }
+
+    console.log("About to save updates to user" + user.displayName);
+    await user.save();
+
+    return {success: true, message: "User updated successfully"};
 }
 
 // ChatGPT Usage: No
@@ -117,17 +119,13 @@ async function banUser(userID) {
     let user = await User.findById(userID);
 
     if (!user) {
-        return {success: false, error: "User not found"};
+        return {success: false};
     }
 
-    try {
-        user.banned = true;
-        user.save();
+    user.banned = true;
+    await user.save();
 
-        return {success: true, message: "User banned successfully"};
-    } catch (error) {
-        return {success: false, error};
-    }
+    return {success: true};
 }
 
 // ChatGPT Usage: No

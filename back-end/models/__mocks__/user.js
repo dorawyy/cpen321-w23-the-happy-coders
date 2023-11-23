@@ -1,30 +1,40 @@
-const  {mockedUsers}  = require("./mockedUsers");
+const  {mockUsers}  = require("./mockedUsers");
+
 class User {
     constructor(obj) {
-        this.email = obj.email;
+        this._id = obj._id;
+        this.age = obj.age ?? 0;
         this.displayName = obj.displayName;
-        this.admin = obj.admin ?? false;
-        this.registered = obj.registered;
+        this.registered = obj.registered ?? false;
         this.picture = obj.picture;
-        this.learningPreference = obj.learningPreference ?? [];
-        this.interestedLanguages = obj.interestedLanguages ?? [];
+        this.email = obj.email;
         this.proficientLanguages = obj.proficientLanguages ?? [];
+        this.interestedLanguages = obj.interestedLanguages ?? [];
+        this.matchedUsers = obj.matchedUsers ?? [];
+        this.blockedUsers = obj.blockedUsers ?? [];
+        this.likedUsers = obj.likedUsers ?? [];
+        this.chatroomIDs = obj.chatroomIDs ?? [];
+        this.badges = obj.badges ?? [];
+        this.interests = obj.interests ?? {};
+        this.admin = obj.admin ?? false;
         this.banned = obj.banned ?? false;
-        
-        this.save = jest.fn().mockImplementation(() => {
-            mockedUsers.push({
-                _id: obj._id,
-                email: obj.email,
-                displayName: obj.displayName,
-                admin: obj.admin ?? false,
-                registered: obj.registered,
-                picture: obj.picture,
-                learningPreference: obj.learningPreference,
-                interestedLanguages: obj.interestedLanguages,
-                proficientLanguages: obj.proficientLanguages,
-                banned: obj.banned
-            })
-        });
+        this.registered = obj.registered;
+        this.idealMatch = obj.idealMatch ?? {};
+        this.learningPreference = obj.learningPreference ?? "Both"; 
+
+    }
+
+    save() {
+        const index = mockedUsers.findIndex(u => u._id.equals(this._id));
+        if (index !== -1) {
+            mockedUsers[index] = {
+            ...mockedUsers[index],
+            ...this,
+            };
+        } else {
+            mockedUsers.push(this);
+        }
+        return { success: true, message: "User saved successfully" };
     }
 }
 
@@ -34,7 +44,6 @@ User.find = jest.fn((query) => {
 
     const userId = $and.find((cond) => cond._id && cond._id.$ne)._id.$ne;
     const notInterestUsers = $and.find((cond) => cond._id && cond._id.$nin)._id.$nin;
-
     let filteredUsers = mockedUsers.filter((user) => {
         return (
             user._id !== userId &&
@@ -46,22 +55,24 @@ User.find = jest.fn((query) => {
         );
     });
     return { exec: () => filteredUsers}
-})
+});
 
-User.findById = jest.fn().mockImplementation((id) =>{
+User.findById = jest.fn().mockImplementation((id) =>{ 
     if(id === "errorId"){
         throw new Error('User not found');
     }
-    user = mockedUsers.find((user) => user._id.equals(id));
+    let user = mockedUsers.find((user) => user._id.equals(id));
     return user;
 })
 
 User.findOne = jest.fn().mockImplementation((query) =>{
     const { email } = query;
-    user = mockedUsers.find((user) => user.email === email) ?? null;
+    let user = mockedUsers.find((user) => user.email === email) ?? null;
     return user;
 })
 
+mockedUsers = mockUsers.map((user) => new User(user));
+
   
-module.exports = { User };
+module.exports = { User, mockedUsers };
   

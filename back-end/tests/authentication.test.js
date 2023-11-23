@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../app'); 
-const { mockedUsers, unregisteredUser, unregisteredAdmin } = require('../models/__mocks__/mockedUsers');
-const {User} = require('../models/user');
+const {  unregisteredUser, unregisteredAdmin } = require('../models/__mocks__/mockedUsers');
+const {User, mockedUsers} = require('../models/user');
 require('dotenv').config();
 
 jest.mock('googleapis');

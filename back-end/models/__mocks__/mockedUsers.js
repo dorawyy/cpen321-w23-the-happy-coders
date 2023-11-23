@@ -97,7 +97,7 @@ const mockUser1 ={
 };
 
 const mockUser2 ={
-  _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a2'),
+  _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f7b4'),
   age: 28,
   displayName: 'Charlie',
   registered: true,
@@ -385,6 +385,55 @@ const mockUser7 = {
   },
 };
 
+
+const mockUser8 = {
+  _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a8'),
+  age: 0,
+  displayName: 'Unregistered',
+  registered: false,
+  picture: 'unregistered.jpg',
+  email: 'unregistered@example.com',
+  proficientLanguages: [],
+  interestedLanguages: [],
+  learningPreference: 'Both',
+  matchedUsers: [],
+  blockedUsers: [],
+  likedUsers: [],
+  chatroomIDs: [],
+  badges: [],
+  interests: {
+    business: false,
+    sports: false,
+    cooking: false,
+    travel: false,
+    movies: false,
+    art: false,
+    music: false,
+    reading: false,
+    gaming: false,
+  },
+  admin: false,
+  banned: false,
+  idealMatch: {
+    age: 0,
+    interests: {
+      business: 0,
+      sports: 0,
+      cooking: 0,
+      travel: 0,
+      movies: 0,
+      art: 0,
+      music: 0,
+      reading: 0,
+      gaming: 0,
+    },
+    learningPreference: {
+      expert: 1.0,
+      partner: 1.0,
+    },
+  },
+};
+
 const unregisteredUser = {
   email: "unregistered@gmail.com"
 }
@@ -393,6 +442,6 @@ const unregisteredAdmin = {
   email: "unregistered@admin.com"
 }
 
-const mockedUsers = [mockUser0, mockUser1, mockUser2, mockUser3, mockUser4, mockUser5, mockUser6, mockUser7 ];  
+const mockUsers = [mockUser0, mockUser1, mockUser2, mockUser3, mockUser4, mockUser5, mockUser6, mockUser7, mockUser8];  
 
-module.exports = {mockedUsers, unregisteredUser, unregisteredAdmin};
+module.exports = {mockUsers, unregisteredUser, unregisteredAdmin};

@@ -1,4 +1,5 @@
-const {mockedUsers, unregisteredUser} = require('../models/__mocks__/mockedUsers');
+const { unregisteredUser} = require('../models/__mocks__/mockedUsers');
+const { mockedUsers } = require('../models/__mocks__/user');
 
 class MockedOAuth2Client {
     constructor({ clientId, clientSecret }) {
