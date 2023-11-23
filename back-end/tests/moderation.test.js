@@ -8,12 +8,14 @@ const { mockedUsers } = require('../models/__mocks__/user');
 const { mockedReports } = require('../models/__mocks__/mockedReports');
 const { ObjectId } = require('mongodb');
 
+
 describe('GET /moderation/:adminId', () => {
 
     // Input: A valid adminId
     // Expected status code: 200
     // Expected behaviour: Returns the reports
     // Expected output: { success: true, reports: mockedReports }
+    // ChatGPT Usage: No
     test('Valid adminId', async () => {
         const response = await request(app).get(`/moderation/${mockedUsers[0]._id}`);
         expect(response.statusCode).toBe(200);
@@ -37,6 +39,7 @@ describe('GET /moderation/:adminId', () => {
     // Expected status code: 400
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Unauthorized access to admin actions' }
+    // ChatGPT Usage: No
     test('Invalid adminId', async () => {
         const response = await request(app).get('/moderation/invalidId');
         expect(response.statusCode).toBe(400);
@@ -48,6 +51,7 @@ describe('GET /moderation/:adminId', () => {
     // Expected status code: 500
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Error getting reports' }
+    // ChatGPT Usage: No
     test('Get a database error', async () => {
         const response = await request(app).get(`/moderation/errorId`);
         expect(response.statusCode).toBe(500);
@@ -61,6 +65,7 @@ describe('POST /moderation/', () => {
     // Expected status code: 200
     // Expected behaviour: Returns success message
     // Expected output: { success: true }
+    // ChatGPT Usage: No
     test('Valid report', async () => {
         const response = await request(app).post('/moderation/').send(
             {
@@ -78,6 +83,7 @@ describe('POST /moderation/', () => {
     // Expected status code: 400
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Invalid report' }
+    // ChatGPT Usage: No
     test('Malformed report', async () => {
         const response = await request(app).post('/moderation').send({});
         expect(response.statusCode).toBe(400);
@@ -89,6 +95,7 @@ describe('POST /moderation/', () => {
     // Expected status code: 400
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Invalid user ids' }
+    // ChatGPT Usage: No
     test('Invalid reporterUserId', async () => {
         const response = await request(app).post('/moderation').send(
             {
@@ -107,6 +114,7 @@ describe('POST /moderation/', () => {
     // Expected status code: 400
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Invalid user ids' }
+    // ChatGPT Usage: No
     test('Invalid reportedUserId', async () => {
         const response = await request(app).post('/moderation').send(
             {
@@ -125,6 +133,7 @@ describe('POST /moderation/', () => {
     // Expected status code: 500
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Error while adding a report' }
+    // ChatGPT Usage: No
     test('Get a database error', async () => {
         const response = await request(app).post('/moderation').send(
             {
@@ -146,6 +155,7 @@ describe('PUT /moderation/:adminId/ban', () => {
     // Expected status code: 200
     // Expected behaviour: Returns success message
     // Expected output: { success: true }
+    // ChatGPT Usage: No
     test('Valid ids', async () => {
         const response = await request(app).put(`/moderation/${mockedUsers[0]._id}/ban`).send(
             { 
@@ -161,6 +171,7 @@ describe('PUT /moderation/:adminId/ban', () => {
     // Expected status code: 400
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Unauthorized access to admin actions' }
+    // ChatGPT Usage: No
     test('Invalid adminId', async () => {
         const response = await request(app).put(`/moderation/invalidId/ban`).send(
             {
@@ -176,6 +187,7 @@ describe('PUT /moderation/:adminId/ban', () => {
     // Expected status code: 500
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Error while banning user' }
+    // ChatGPT Usage: No
     test('Get a database error', async () => {
         const response = await request(app).put(`/moderation/errorId/ban`).send(
             {
@@ -191,6 +203,7 @@ describe('PUT /moderation/:adminId/ban', () => {
     // Expected status code: 400
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Invalid user id' }
+    // ChatGPT Usage: No
     test('Invalid userId', async () => {
         const response = await request(app).put(`/moderation/${mockedUsers[0]._id}/ban`).send(
             {
@@ -206,6 +219,7 @@ describe('PUT /moderation/:adminId/ban', () => {
     // Expected status code: 400
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Report not found' }
+    // ChatGPT Usage: No
     test('Invalid reportId', async () => {
         const response = await request(app).put(`/moderation/${mockedUsers[0]._id}/ban`).send(
             {
@@ -221,6 +235,7 @@ describe('PUT /moderation/:adminId/ban', () => {
     // Expected status code: 500
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Error while banning user' }
+    // ChatGPT Usage: No
     test('Get a database error from report', async () => {
         const response = await request(app).put(`/moderation/${mockedUsers[0]._id}/ban`).send(
             {
@@ -236,6 +251,7 @@ describe('PUT /moderation/:adminId/ban', () => {
     // Expected status code: 500
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Error while banning user' }
+    // ChatGPT Usage: No
     test('Get a database error from user', async () => {
         const response = await request(app).put(`/moderation/${mockedUsers[0]._id}/ban`).send(
             {
@@ -255,6 +271,7 @@ describe('DELETE /moderation/:adminId/:reportId', () => {
     // Expected status code: 200
     // Expected behaviour: Returns success message
     // Expected output: { success: true, message: 'Report deleted successfully' }
+    // ChatGPT Usage: No
     test('Valid ids', async () => {
         const response = await request(app).delete(`/moderation/${mockedUsers[0]._id}/${mockedReports[0]._id}`);
         expect(response.statusCode).toBe(200);
@@ -266,6 +283,7 @@ describe('DELETE /moderation/:adminId/:reportId', () => {
     // Expected status code: 403
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Unauthorized access to admin actions' }
+    // ChatGPT Usage: No
     test('Invalid adminId', async () => {
         const response = await request(app).delete(`/moderation/invalidId/${mockedReports[1]._id}`);
         expect(response.statusCode).toBe(400);
@@ -277,6 +295,7 @@ describe('DELETE /moderation/:adminId/:reportId', () => {
     // Expected status code: 500
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Error while deleting report' }
+    // ChatGPT Usage: No
     test('Get a database error from admin', async () => {
         const response = await request(app).delete(`/moderation/errorId/${mockedReports[1]._id}`);
         expect(response.statusCode).toBe(500);
@@ -288,6 +307,7 @@ describe('DELETE /moderation/:adminId/:reportId', () => {
     // Expected status code: 400
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Report not found' }
+    // ChatGPT Usage: No
     test('Invalid reportId', async () => {
         const response = await request(app).delete(`/moderation/${mockedUsers[0]._id}/invalidId`);
         expect(response.statusCode).toBe(400);
@@ -299,6 +319,7 @@ describe('DELETE /moderation/:adminId/:reportId', () => {
     // Expected status code: 500
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Error while deleting report' }
+    // ChatGPT Usage: No
     test('Get a database error from report', async () => {
         const response = await request(app).delete(`/moderation/${mockedUsers[0]._id}/errorId`);
         expect(response.statusCode).toBe(500);

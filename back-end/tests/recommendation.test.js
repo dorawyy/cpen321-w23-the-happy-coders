@@ -8,6 +8,7 @@ describe('GET /recommendations/:id', () => {
     // Expected status code: 200
     // Expected behaviour: return list of recommended users
     // Expected output: { recommendedUsersList: [mockedUsers[3]] }
+    // ChatGPT Usage: No
     test('Succesfully get recommendations for user with "Both" as learning preference', async () => {
         const response = await request(app).get(`/recommendations/${mockedUsers[0]._id}`);
 
@@ -21,6 +22,7 @@ describe('GET /recommendations/:id', () => {
     // Expected status code: 200
     // Expected behaviour: return list of recommended users
     // Expected output: { recommendedUsersList: [mockedUsers[2]] }
+    // ChatGPT Usage: No
     test('Succesfully get recommendations for user with "Partner" as learning preference', async () => {
         const response = await request(app).get(`/recommendations/${mockedUsers[1]._id}`);
 
@@ -34,6 +36,7 @@ describe('GET /recommendations/:id', () => {
     // Expected status code: 200
     // Expected behaviour: return list of recommended users
     // Expected output: { recommendedUsersList: [mockedUsers[1]] }
+    // ChatGPT Usage: No
     test('Succesfully get recommendations for user with "Both" as learning preference', async () => {
         const response = await request(app).get(`/recommendations/${mockedUsers[2]._id}`);
 
@@ -47,6 +50,7 @@ describe('GET /recommendations/:id', () => {
     // Expected status code: 200
     // Expected behaviour: return list of recommended users ordered first by if user liked user, then by similarity
     // Expected output: { recommendedUsersList: [mockedUsers[0], mockedUsers[5], mockedUsers[4]] }, List must be in this order
+    // ChatGPT Usage: No
     test('Succesfully get recommendations for expert user testing recommendation algorithm', async () => {
         const response = await request(app).get(`/recommendations/${mockedUsers[3]._id}`);
 
@@ -63,6 +67,7 @@ describe('GET /recommendations/:id', () => {
     // Expected status code: 200
     // Expected behaviour: return empty list
     // Expected output: { recommendedUsersList: [] }
+    // ChatGPT Usage: No
     test('Succesfully get recommendations for user that should have no recommendations', async () => {
         const response = await request(app).get(`/recommendations/${mockedUsers[6]._id}`);
 
@@ -74,6 +79,7 @@ describe('GET /recommendations/:id', () => {
     // Expected status code: 400
     // Expected behaviour: return error message
     // Expected output: { error: 'User not found' }
+    // ChatGPT Usage: No
     test('Get recommendation with non existent userId', async () => {
         const response = await request(app).get(`/recommendations/123`);
 
@@ -85,6 +91,7 @@ describe('GET /recommendations/:id', () => {
     // Expected status code: 500
     // Expected behaviour: return error message
     // Expected output: { error: 'User not found' }
+    // ChatGPT Usage: No
     test('Get recommendation and get db error', async () => {
         const response = await request(app).get(`/recommendations/errorId`);
 

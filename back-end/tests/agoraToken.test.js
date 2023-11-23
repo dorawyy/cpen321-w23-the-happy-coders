@@ -14,6 +14,7 @@ describe('GET /:channel/:role/:tokentype/:uid', () => {
     // Expected status code: 400 
     // Expected behaviour: return error message
     // Expected output: {'error': 'channel is required'}
+    // ChatGPT Usage: No
     test('Make request with empty channel', async () => {
         const channel = " ";
         const role = "publisher";
@@ -30,6 +31,7 @@ describe('GET /:channel/:role/:tokentype/:uid', () => {
     // Expected status code: 400 
     // Expected behaviour: return error message
     // Expected output: {'error': 'role is incorrect'}
+    // ChatGPT Usage: No
     test('Make request with incorrect role', async () => {
         const channel = "test";
         const role = "publisherd";
@@ -46,6 +48,7 @@ describe('GET /:channel/:role/:tokentype/:uid', () => {
     // Expected status code: 400 
     // Expected behaviour: return error message
     // Expected output: {'error': 'token type is incorrect'}
+    // ChatGPT Usage: No
     test('Make request with invalid token type', async () => {
         const channel = "test";
         const role = "publisher";
@@ -62,6 +65,7 @@ describe('GET /:channel/:role/:tokentype/:uid', () => {
     // Expected status code: 200 
     // Expected behaviour: return token
     // Expected output: { 'agoraToken': 'testToken'  }
+    // ChatGPT Usage: No
     test('Make succesfull request for userAccount Token type', async () => {
         const channel = "test";
         const role = "audience";
@@ -80,6 +84,7 @@ describe('GET /:channel/:role/:tokentype/:uid', () => {
     // Expected status code: 200 
     // Expected behaviour: return token
     // Expected output: { 'agoraToken': 'testToken'  }
+    // ChatGPT Usage: No
     test('Make succesfull request for uid Token type', async () => {
         const channel = "test";
         const role = "audience";

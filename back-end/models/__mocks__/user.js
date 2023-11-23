@@ -1,7 +1,9 @@
 const  {mockUsers}  = require("./mockedUsers");
 const { ObjectId } = require("mongodb");
 
+
 class User {
+    // ChatGPT Usage: Partial
     constructor(obj) {
         this._id = obj._id ?? new ObjectId();
         this.age = obj.age ?? 0;
@@ -24,7 +26,7 @@ class User {
         this.learningPreference = obj.learningPreference ?? "Both"; 
 
     }
-
+    // ChatGPT Usage: Partial
     save() {
         if(this.email.includes("erroremail")){
             throw new Error('Error saving user');
@@ -43,6 +45,7 @@ class User {
     }
 }
 
+// ChatGPT Usage: Partial
 User.find = jest.fn((query) => {
     if (!query) return { exec: () => mockedUsers };
     const { $and, learningPreference, interestedLanguages, proficientLanguages, banned } = query;
@@ -62,6 +65,7 @@ User.find = jest.fn((query) => {
     return { exec: () => filteredUsers}
 });
 
+// ChatGPT Usage: Partial
 User.findById = jest.fn().mockImplementation((id) =>{ 
     if(id === "errorId"){
         throw new Error('User not found');
@@ -70,6 +74,7 @@ User.findById = jest.fn().mockImplementation((id) =>{
     return user;
 })
 
+// ChatGPT Usage: Partial
 User.findOne = jest.fn().mockImplementation((query) =>{
     const { email } = query;
     let user = mockedUsers.find((user) => user.email === email) ?? null;
