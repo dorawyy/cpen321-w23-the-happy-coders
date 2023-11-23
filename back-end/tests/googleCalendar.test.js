@@ -14,6 +14,7 @@ describe('POST /events', () => {
     // Expected status code: 200
     // Expected behaviour: return success message
     // Expected output: { success: true, message: 'Event Created' }
+    // ChatGPT Usage: No
     test('Succesfully create event', async () => {
 
         const response = await request(app).post('/events').send({
@@ -34,6 +35,7 @@ describe('POST /events', () => {
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: { success: false, erro: 'Error finding host or invited user' }
+    // ChatGPT Usage: No
     test('Creating event with invilid userId', async () => {
 
         const response = await request(app).post('/events').send({
@@ -54,6 +56,7 @@ describe('POST /events', () => {
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: { success: false, erro: 'Invalid authorization code' }
+    // ChatGPT Usage: No
     test('Creating event fails when inserting into calendar', async () => {
 
         const response = await request(app).post('/events').send({
@@ -74,6 +77,7 @@ describe('POST /events', () => {
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: { success: false, erro: 'Invalid authorization code' }
+    // ChatGPT Usage: No
     test('Creating event fails when inserting into calendar', async () => {
 
         const response = await request(app).post('/events').send({

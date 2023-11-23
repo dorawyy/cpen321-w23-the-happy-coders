@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../app'); // Adjust the path as needed
 
-
+// ChatGPT Usage: No
 describe('GET /', () => {
 
     it('responds with "LangSync"', async () => {

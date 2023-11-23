@@ -11,6 +11,7 @@ describe('GET /users/:id', () => {
     // Expected status code: 200
     // Expected behaviour: Returns the user
     // Expected output: { success: true, user: mockedUsers[2] }
+    // ChatGPT Usage: No
     test('Valid id', async () => {
         const response = await request(app).get(`/users/${mockedUsers[2]._id}`);
         expect(response.statusCode).toBe(200);
@@ -23,6 +24,7 @@ describe('GET /users/:id', () => {
     // Expected status code: 400
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Invalid user id' }
+    // ChatGPT Usage: No
     test('Invalid id', async () => {
         const response = await request(app).get('/users/invalidId');
         expect(response.statusCode).toBe(400);
@@ -34,6 +36,7 @@ describe('GET /users/:id', () => {
     // Expected status code: 500
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Error getting user' }
+    // ChatGPT Usage: No
     test('Get a database error', async () => {
         const response = await request(app).get(`/users/errorId`);
         expect(response.statusCode).toBe(500);
@@ -62,10 +65,11 @@ describe('PUT /users/:id/prefs', () => {
         age: 20
     };
 
-    // Input: A valid userId belonging to a registered user - mockedUsers[3]
+    // Input: A valid userId belonging to a registered user
     // Expected status code: 200
     // Expected behaviour: Returns success message
     // Expected output: { success: true }
+    // ChatGPT Usage: No
     test('Valid registered id', async () => {
         const response = await request(app).put(`/users/${mockedUsers[3]._id}/prefs`).send(updatedPreferences);
 
@@ -74,10 +78,11 @@ describe('PUT /users/:id/prefs', () => {
     });
 
 
-    // Input: A valid userId belonging to an unregistered user - mockedUsers[8]
+    // Input: A valid userId belonging to an unregistered user
     // Expected status code: 200
     // Expected behaviour: Returns success message
     // Expected output: { success: true }
+    // ChatGPT Usage: No
     test('Valid unregistered id', async () => {
         const response = await request(app).put(`/users/${mockedUsers[8]._id}/prefs`).send(updatedPreferences);
         expect(response.statusCode).toBe(200);
@@ -85,10 +90,11 @@ describe('PUT /users/:id/prefs', () => {
     });
 
 
-    // Input: A userId for a user that is banned - mockedUsers[7]
+    // Input: A userId for a user that is banned
     // Expected status code: 400
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'User banned' }
+    // ChatGPT Usage: No
     test('Banned user', async () => {
         const response = await request(app).put(`/users/${mockedUsers[7]._id}/prefs`).send(updatedPreferences);
         expect(response.statusCode).toBe(400);
@@ -100,6 +106,7 @@ describe('PUT /users/:id/prefs', () => {
     // Expected status code: 400
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Invalid user id' }
+    // ChatGPT Usage: No
     test('Invalid id', async () => {
         const response = await request(app).put('/users/invalidId/prefs').send(updatedPreferences);
         expect(response.statusCode).toBe(400);
@@ -111,6 +118,7 @@ describe('PUT /users/:id/prefs', () => {
     // Expected status code: 500
     // Expected behaviour: Returns an error message
     // Expected output: { success: false, error: 'Error saving updates to user' }
+    // ChatGPT Usage: No
     test('Get a database error', async () => {
         const response = await request(app).put(`/users/errorId/prefs`).send(updatedPreferences);
         expect(response.statusCode).toBe(500);

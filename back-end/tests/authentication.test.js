@@ -14,6 +14,7 @@ describe('POST /authentication/login', () => {
     // Expected status code: 200
     // Expected behaviour: return success message
     // Expected output: { success: true, userId: mockedUsers[0]._id.toString() }
+    // ChatGPT Usage: No
     test('Login with registered user', async () => {
         const response = await request(app).post('/authentication/login').send({idToken: 'validTokenRegisteredMockUser0'});
         expect(response.statusCode).toBe(200);
@@ -24,6 +25,7 @@ describe('POST /authentication/login', () => {
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: { success: false, error: 'Token verification failed' }
+    // ChatGPT Usage: No
     test('Test login with invalid Token', async () => {
         const response = await request(app).post('/authentication/login').send({idToken: 'invalidToken'});
         expect(response.statusCode).toBe(401);
@@ -34,6 +36,7 @@ describe('POST /authentication/login', () => {
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: { success: false, error: 'User not registered' }
+    // ChatGPT Usage: No
     test('Try login with unregistered user', async () => {
         const response = await request(app).post('/authentication/login').send({idToken: 'validTokenUnregisteredUser'});
         expect(response.statusCode).toBe(401);
@@ -44,6 +47,7 @@ describe('POST /authentication/login', () => {
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: {success: false, error: "User banned"}
+    // ChatGPT Usage: No
     test('Try login with banned user', async () => {
         const response = await request(app).post('/authentication/login').send({idToken: 'validTokenBannedMockUser7'});
         expect(response.statusCode).toBe(401);
@@ -56,6 +60,7 @@ describe('POST /authentication/admin-login', () => {
     // Expected status code: 200
     // Expected behaviour: return success message
     // Expected output: {success: true, userId: mockedUsers[0]._id.toString()}
+    // ChatGPT Usage: No
     test('Correct accessCode and registered  user', async () => {
         const response = await request(app).post('/authentication/admin-login').send({
             accessCode: process.env.ADMIN_ACCESS_CODE,
@@ -70,6 +75,7 @@ describe('POST /authentication/admin-login', () => {
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: {success: false, error: "Invalid access code"}
+    // ChatGPT Usage: No
     test('Invalid admin access code', async () => {
         const response = await request(app).post('/authentication/admin-login').send({
             accessCode: 'invalidToken',
@@ -83,6 +89,7 @@ describe('POST /authentication/admin-login', () => {
     // Expected status code: 200
     // Expected behaviour: return success message and create new admin user
     // Expected output: {success: true, userId: <new random user id> }
+    // ChatGPT Usage: No
     test('Valid access code and unregistered user', async () => {
         expect(User.findOne({email: unregisteredAdmin.email})).toBeNull();
 
@@ -101,6 +108,7 @@ describe('POST /authentication/admin-login', () => {
     // Expected status code: 401
     // Expected behaviour: return success message and create new admin user
     // Expected output: {success: true, userId: <new random user id> }
+    // ChatGPT Usage: No
     test('Valid access code and user that will throw error on save', async () => {
         const response = await request(app).post('/authentication/admin-login').send({
             accessCode: process.env.ADMIN_ACCESS_CODE,
@@ -115,6 +123,7 @@ describe('POST /authentication/admin-login', () => {
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: {success: false, error: "User banned"}
+    // ChatGPT Usage: No
     test('Banned user', async () => {
         const response = await request(app).post('/authentication/admin-login').send({
             accessCode: process.env.ADMIN_ACCESS_CODE,
@@ -130,6 +139,7 @@ describe('POST /authentication/signup', () => {
     // Expected status code: 200
     // Expected behaviour: return success message and create user
     // Expected output: {success: true, userId: <new random user id> }
+    // ChatGPT Usage: No
     test('Unregistered user', async () => {
         expect(User.findOne({email: unregisteredUser.email})).toBeNull();
 
@@ -144,6 +154,7 @@ describe('POST /authentication/signup', () => {
     // Expected status code: 200
     // Expected behaviour: return success message
     // Expected output: {success: true, userId: mockedUsers[8]._id.toString() }
+    // ChatGPT Usage: No
     test('Unregistered user that already tried to register once', async () => {
         expect(User.findOne({email: mockedUsers[8].email})).not.toBeNull();
 
@@ -156,6 +167,7 @@ describe('POST /authentication/signup', () => {
     // Expected status code: 401
     // Expected behaviour: return error message and not create user
     // Expected output: {success: false, error: "Token verification failed"}
+    // ChatGPT Usage: No
     test('Invalid Token', async () => {
         const response = await request(app).post('/authentication/signup').send({idToken: 'invalidToken'});
         expect(response.statusCode).toBe(401);
@@ -166,6 +178,7 @@ describe('POST /authentication/signup', () => {
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: {success: false, error: "User already registered"}
+    // ChatGPT Usage: No
     test('Registered user', async () => {
         const response = await request(app).post('/authentication/signup').send({idToken: 'validTokenRegisteredMockUser0'});
         expect(response.statusCode).toBe(401);
@@ -176,6 +189,7 @@ describe('POST /authentication/signup', () => {
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: {success: false, error: "Error saving user"}
+    // ChatGPT Usage: No
     test('Error when saving user', async () => {
         const response = await request(app).post('/authentication/signup').send({idToken: 'validTokenErrorOnSave'});
         expect(response.statusCode).toBe(401);

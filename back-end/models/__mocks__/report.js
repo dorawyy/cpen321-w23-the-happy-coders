@@ -1,4 +1,6 @@
 const  {mockedReports}  = require("./mockedReports");
+
+// ChatGPT Usage: Partial
 class Report {
     constructor(obj) {
         this._id = obj._id;
@@ -28,6 +30,7 @@ class Report {
     }
 }
 
+// ChatGPT Usage: Partial
 Report.find = jest.fn((query) => {
     if (!query) return  mockedReports;
     const { $and, reporterUserId, reportedUserId, chatRoomId } = query;
@@ -44,6 +47,7 @@ Report.find = jest.fn((query) => {
     return filteredReports;
 });
 
+// ChatGPT Usage: Partial
 Report.findById = jest.fn().mockImplementation((id) =>{
     if(id === "errorId"){
         throw new Error('Report not found');
@@ -55,6 +59,7 @@ Report.findById = jest.fn().mockImplementation((id) =>{
     return report;
 });
 
+// ChatGPT Usage: Partial
 Report.findByIdAndDelete = jest.fn().mockImplementation((id) =>{
     if(id === "errorId"){
         throw new Error('Report not found');
@@ -68,6 +73,7 @@ Report.findByIdAndDelete = jest.fn().mockImplementation((id) =>{
     return report;
 });
 
+// ChatGPT Usage: Partial
 Report.findOne = jest.fn().mockImplementation((query) =>{
     const report = mockedReports.find((r) => r._id.toString() === query._id);
     return report;
