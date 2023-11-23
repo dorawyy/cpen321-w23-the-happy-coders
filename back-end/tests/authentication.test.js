@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../app'); 
-const {  unregisteredUser, unregisteredAdmin } = require('../models/__mocks__/mockedUsers');
+const {  unregisteredUser, unregisteredAdmin, errorUser } = require('../models/__mocks__/mockedUsers');
 const {User, mockedUsers} = require('../models/user');
 require('dotenv').config();
 
@@ -82,19 +82,33 @@ describe('POST /authentication/admin-login', () => {
     // Input: valid access code and unregistered email
     // Expected status code: 200
     // Expected behaviour: return success message and create new admin user
-    // Expected output: {success: true}
+    // Expected output: {success: true, userId: <new random user id> }
     test('Valid access code and unregistered user', async () => {
         expect(User.findOne({email: unregisteredAdmin.email})).toBeNull();
 
         const response = await request(app).post('/authentication/admin-login').send({
             accessCode: process.env.ADMIN_ACCESS_CODE,
-            email:unregisteredAdmin.email
+            email:unregisteredAdmin.email   
         });
 
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({success: true});
+        expect(response.body.success).toEqual(true);
 
         expect(User.findOne({email: unregisteredAdmin.email})).not.toBeNull();
+    });
+
+    // Input: valid access code and user email that will throw error on save (hard coded on mock)
+    // Expected status code: 401
+    // Expected behaviour: return success message and create new admin user
+    // Expected output: {success: true, userId: <new random user id> }
+    test('Valid access code and user that will throw error on save', async () => {
+        const response = await request(app).post('/authentication/admin-login').send({
+            accessCode: process.env.ADMIN_ACCESS_CODE,
+            email:errorUser.email   
+        });
+
+        expect(response.statusCode).toBe(401);
+        expect(response.body).toEqual({"error": "Error saving user", "success": false}   );
     });
 
     // Input: valid access code and email of banned user
@@ -115,15 +129,27 @@ describe('POST /authentication/signup', () => {
     // Input: valid idToken for user not registered
     // Expected status code: 200
     // Expected behaviour: return success message and create user
-    // Expected output: {success: true}
+    // Expected output: {success: true, userId: <new random user id> }
     test('Unregistered user', async () => {
         expect(User.findOne({email: unregisteredUser.email})).toBeNull();
 
         const response = await request(app).post('/authentication/signup').send({idToken: 'validTokenUnregisteredUser'});
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({success: true});
+        expect(response.body.success).toEqual(true);
 
         expect(User.findOne({email: unregisteredUser.email})).not.toBeNull();
+    });
+
+    // Input: valid idToken for user not registered but already tried once and is on db
+    // Expected status code: 200
+    // Expected behaviour: return success message
+    // Expected output: {success: true, userId: mockedUsers[8]._id.toString() }
+    test('Unregistered user that already tried to register once', async () => {
+        expect(User.findOne({email: mockedUsers[8].email})).not.toBeNull();
+
+        const response = await request(app).post('/authentication/signup').send({idToken: 'validTokenUnregisteredAlreadyInDbMockedUser8'});
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual( {success: true, userId: mockedUsers[8]._id.toString() });
     });
 
     // Input: invalid idToken
@@ -144,5 +170,15 @@ describe('POST /authentication/signup', () => {
         const response = await request(app).post('/authentication/signup').send({idToken: 'validTokenRegisteredMockUser0'});
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, "error": "User already registered"});
+    });
+
+    // Input: valid idToken for  user that will throw error on save (hard coded in mock)
+    // Expected status code: 401
+    // Expected behaviour: return error message
+    // Expected output: {success: false, error: "Error saving user"}
+    test('Error when saving user', async () => {
+        const response = await request(app).post('/authentication/signup').send({idToken: 'validTokenErrorOnSave'});
+        expect(response.statusCode).toBe(401);
+        expect(response.body).toEqual({success: false, error: "Error saving user"});
     });
 });

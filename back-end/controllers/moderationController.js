@@ -7,7 +7,7 @@ exports.addReport = async (req, res) => {
     try {
         const addReportResponse = await moderationService.addReport(req.body);
         if (addReportResponse.success) {
-            return res.status(200).json({ success: true, report: addReportResponse.report });
+            return res.status(200).json({ success: true, message: "Report saved successfully" });
         }
         return res.status(400).json({ success: false, error: "Invalid report" });
     } catch (error) {
@@ -23,9 +23,6 @@ exports.getReports = async (req, res) => {
         const adminId = req.params.adminId;
         const isAdmin = await moderationService.isAdmin(adminId);
         if (isAdmin) {
-            if (adminId == "invalidId") {
-                console.log("why am i here");
-            }
             reports = await moderationService.getReports();
             return res.status(200).json({ success: true, reports });
         } else {
@@ -44,7 +41,6 @@ exports.deleteReport = async (req, res) => {
         if (await moderationService.isAdmin(adminId)) {
             const reportId = req.params.reportId;
             let report = await moderationService.deleteReport(reportId);
-
             if (report == null) {
                 return res.status(400).json({ success: false, error: "Report not found" });
             }

@@ -18,7 +18,7 @@ async function findUnregistredOrCreateUser(ticket) {
             response = {success: true, user};
             return response;
         } catch (error) {
-            response = {success: false, error};
+            response = {success: false, error: error.message};
             return response;
         }
     }else if (user.registered === false){
@@ -61,13 +61,6 @@ async function findUserByID(userID) {
     return user;
 }
 
-// ChatGPT Usage: No
-// Find users by filter and return them
-async function findUsers(filter){
-    let users = await User.find(filter);
-
-    return users;
-}
 
 // ChatGPT Usage: No
 // Create a new user
@@ -138,7 +131,7 @@ async function findAdminOrCreate(email) {
         try {
             admin = await createAdmin(email);
         } catch (error) {
-            return {success: false, error};
+            return {success: false, error: error.message};
         }
     }
     if (admin.banned === true) {
@@ -163,4 +156,4 @@ async function createAdmin(email) {
     return admin;
 }
 
-module.exports = { findUnregistredOrCreateUser, findUserByEmail, findUserByID, findUsers, createUser, updateUser, banUser, findAdminOrCreate, createAdmin };
+module.exports = { findUnregistredOrCreateUser, findUserByEmail, findUserByID, createUser, updateUser, banUser, findAdminOrCreate, createAdmin };
