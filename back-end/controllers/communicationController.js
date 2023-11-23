@@ -3,6 +3,8 @@ const communicationService = require('../services/communicationService');
 // ChatGPT Usage: No
 exports.sendMessage = async(req,res) =>{
     let message;
+    console.log(req.body)
+    console.log("sending message")
     try{
         const chatroomId = req.params.id;
         const content = req.body.content;
@@ -10,7 +12,6 @@ exports.sendMessage = async(req,res) =>{
         const learningSession = req.body.learningSession;
     
         message = await communicationService.sendMessage(chatroomId, content, sourceUserId, learningSession);
-    
         return res.status(200).json({message});
     }
     catch(err){
@@ -41,7 +42,7 @@ exports.getMessages = async(req,res) =>{
         return res.json({messages: messagesList});
     }
     catch(err){
-        return res.status(500).json({error: "Error getting chatrooms"});
+        return res.status(500).json({error: "Error getting messages"});
     }
 }
 
