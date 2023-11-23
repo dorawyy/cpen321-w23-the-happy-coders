@@ -1,8 +1,9 @@
 const  {mockUsers}  = require("./mockedUsers");
+const { ObjectId } = require("mongodb");
 
 class User {
     constructor(obj) {
-        this._id = obj._id;
+        this._id = obj._id ?? new ObjectId();
         this.age = obj.age ?? 0;
         this.displayName = obj.displayName;
         this.registered = obj.registered ?? false;
@@ -25,6 +26,10 @@ class User {
     }
 
     save() {
+        if(this.email.includes("erroremail")){
+            throw new Error('Error saving user');
+        }
+
         const index = mockedUsers.findIndex(u => u._id.equals(this._id));
         if (index !== -1) {
             mockedUsers[index] = {
