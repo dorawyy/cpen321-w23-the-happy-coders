@@ -9,20 +9,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.langsync.FormActivity;
+import com.example.langsync.LoginActivity;
 import com.example.langsync.R;
 import com.example.langsync.databinding.FragmentProfileBinding;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,8 +47,12 @@ public class ProfileFragment extends Fragment {
     private TextView profileInterestedLanguages; 
     private TextView profileProficientLanguages; 
     private TextView profileLearningPreference;
-
+    private TextView profileName;
+    private TextView profileInterests;
+    private ImageView profileImage;
+    private GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "ProfileFragment";
+
 
     // ChatGPT Usage: No
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -51,11 +65,19 @@ public class ProfileFragment extends Fragment {
         profileInterestedLanguages = root.findViewById(R.id.profile_interested_languages);
         profileProficientLanguages = root.findViewById(R.id.profile_proficient_languages);
         profileLearningPreference = root.findViewById(R.id.profile_learning_preference);
+        profileImage = root.findViewById(R.id.profile_image);
+        profileName = root.findViewById(R.id.profile_name);
+        profileInterests = root.findViewById(R.id.profile_interests);
         Button editButton = root.findViewById(R.id.profile_edit_button);
+        Button logoutButton = root.findViewById(R.id.logout_button);
 
         editButton.setOnClickListener(view -> {
             Intent intent = new Intent(requireActivity(), FormActivity.class);
             startActivity(intent);
+        });
+
+        logoutButton.setOnClickListener(view -> {
+            signOut();
         });
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -75,20 +97,33 @@ public class ProfileFragment extends Fragment {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.isSuccessful()) {
                     try {
-                        Log.d(TAG, "Im over here");
                         JSONObject json = new JSONObject(response.body().string());
                         JSONObject user = json.getJSONObject("user");
                         JSONArray proficientLanguages = user.getJSONArray("proficientLanguages");
                         JSONArray interestedLanguages = user.getJSONArray("interestedLanguages");
                         String age = user.getString("age");
                         String learningPreference = user.getString("learningPreference");
+                        String displayName = user.getString("displayName");
+                        String interests = getInterestsString(user.getJSONObject("interests"));
+                        String pictureUrl = null;
+                        try {
+                            pictureUrl = user.getString("picture");
+                        }catch (Exception e){
+                            Log.d(TAG, "User has no profile picture");
+                        }
                         Log.d(TAG, "User info: " + user);
+                        String finalPictureUrl = pictureUrl;
 
                         requireActivity().runOnUiThread(() -> {
                             profileAge.setText(age);
-                            profileProficientLanguages.setText(proficientLanguages.toString());
-                            profileInterestedLanguages.setText(interestedLanguages.toString());
+                            profileProficientLanguages.setText(jsonArrayToString(proficientLanguages));
+                            profileInterestedLanguages.setText(jsonArrayToString(interestedLanguages));
                             profileLearningPreference.setText(learningPreference);
+                            profileName.setText(displayName);
+                            profileInterests.setText(interests);
+                            if(finalPictureUrl != null && !finalPictureUrl.isEmpty()){
+                                Picasso.get().load(finalPictureUrl).into(profileImage);
+                            }
                         });
 
                     } catch (JSONException e) {
@@ -107,5 +142,54 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    // ChatGPT usage: No
+    private String jsonArrayToString(JSONArray list){
+        if ( list == null || list.length() == 0) return "";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(list.opt(0));
+
+        for(int i = 1; i < list.length() - 1; i++){
+            sb.append(", ");
+            sb.append(list.opt(i));
+        }
+
+        if(list.length() > 1){
+            sb.append(" and ");
+            sb.append(list.opt(list.length() - 1));
+        }
+        return sb.toString();
+    }
+
+    private String getInterestsString(JSONObject interestsObjects) throws JSONException {
+        JSONArray array = new JSONArray();
+
+        for (Iterator<String> it = interestsObjects.keys(); it.hasNext(); ) {
+            String key = it.next();
+            if(interestsObjects.getBoolean(key) == true){
+                array.put(capitalizeFirstLetter(key));
+            }
+        }
+
+        return jsonArrayToString(array);
+    }
+
+    // ChatGPT usage: no
+    private String capitalizeFirstLetter(String word) {
+        return Character.toUpperCase(word.charAt(0)) + word.substring(1);
+    }
+
+    // ChatGPT usage: No
+    private void signOut() {
+        mGoogleSignInClient  = GoogleSignIn.getClient(requireContext(), GoogleSignInOptions.DEFAULT_SIGN_IN);
+
+        mGoogleSignInClient.signOut().addOnCompleteListener(requireActivity(),
+                task -> {
+                    Toast.makeText(requireActivity(), getString(R.string.logout_success), Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(requireActivity(), LoginActivity.class);
+                    startActivity(intent);
+        });
     }
 }
