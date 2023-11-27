@@ -18,6 +18,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.langsync.R;
 import com.example.langsync.databinding.FragmentMatchesBinding;
+import com.example.langsync.util.JSONObjectUtilities;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +52,9 @@ public class MatchesFragment extends Fragment {
     private TextView noMatchesText;
     private TextView interestedLanguages;
     private TextView proficientLanguages;
+    private TextView matchAge;
+    private TextView matchInterests;
+    private ImageView matchProfileImage;
 
     private String userId;
 
@@ -70,6 +75,9 @@ public class MatchesFragment extends Fragment {
         noMatchesText = root.findViewById(R.id.no_matches_text);
         interestedLanguages = root.findViewById(R.id.match_interested);
         proficientLanguages = root.findViewById(R.id.match_proficiencies);
+        matchAge = root.findViewById(R.id.match_age);
+        matchInterests = root.findViewById(R.id.match_interests);
+        matchProfileImage = root.findViewById(R.id.match_img);
 
         dislikeMatch = root.findViewById(R.id.dislike_match);
         dislikeMatch.setOnClickListener(v ->  matchCardAnim(-1));
@@ -110,19 +118,7 @@ public class MatchesFragment extends Fragment {
                                 if (!matches.isEmpty()) {
                                     try {
                                         JSONObject match = matches.get(0);
-                                        matchName.setText(match.getString("displayName"));
-                                        interestedLanguages.setText(match.getJSONArray("interestedLanguages")
-                                                .toString()
-                                                .replace(",", ", ")
-                                                .replace("[", "")
-                                                .replace("]", "")
-                                                .replace("\"", ""));
-                                        proficientLanguages.setText(match.getJSONArray("proficientLanguages")
-                                                .toString()
-                                                .replace(",", ", ")
-                                                .replace("[", "")
-                                                .replace("]", "")
-                                                .replace("\"", ""));
+                                        fillMatchInformation(match);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                         Log.d(TAG, "Error setting match info");
@@ -135,6 +131,9 @@ public class MatchesFragment extends Fragment {
                                     matchName.setText("");
                                     interestedLanguages.setText("");
                                     proficientLanguages.setText("");
+                                    matchAge.setText("");
+                                    matchInterests.setText("");
+                                    matchProfileImage.setImageResource(R.drawable.placeholder_match_img_foreground);
                                     matchCard.setVisibility(View.GONE);
                                     likeMatch.setVisibility(View.GONE);
                                     dislikeMatch.setVisibility(View.GONE);
@@ -166,27 +165,17 @@ public class MatchesFragment extends Fragment {
                 if (!matches.isEmpty()) {
                     matches.remove(0);
                     if (!matches.isEmpty()) {
-                        matchName.setText(Objects.requireNonNull(matches.get(0)).getString("displayName"));
-                        interestedLanguages.setText(matches.get(0)
-                                .getJSONArray("interestedLanguages")
-                                .toString()
-                                .replace(",", ", ")
-                                .replace("[", "")
-                                .replace("]", "")
-                                .replace("\"", ""));
-                        proficientLanguages.setText(matches.get(0)
-                                .getJSONArray("proficientLanguages")
-                                .toString()
-                                .replace(",", ", ")
-                                .replace("[", "")
-                                .replace("]", "")
-                                .replace("\"", ""));
+                        JSONObject match = matches.get(0);
+                        fillMatchInformation(match);
                     }
                 }
                 if(matches.isEmpty()) {
                     matchName.setText("");
                     interestedLanguages.setText("");
                     proficientLanguages.setText("");
+                    matchAge.setText("");
+                    matchInterests.setText("");
+                    matchProfileImage.setImageResource(R.drawable.placeholder_match_img_foreground);
                     matchCard.setVisibility(View.GONE);
                     noMatchesText.setVisibility(View.VISIBLE);
                     loadingView.setVisibility(View.VISIBLE);
@@ -197,6 +186,30 @@ public class MatchesFragment extends Fragment {
                 Log.d(TAG, "Error setting match info");
             }
         });
+    }
+
+    private void fillMatchInformation( JSONObject match) throws JSONException {
+        JSONArray interestedLanguagesObj = match.getJSONArray("interestedLanguages");
+        JSONArray proficientLanguagesObj = match.getJSONArray("proficientLanguages");
+        JSONObject matchInterestsObj = match.getJSONObject("interests");
+        String pictureUrl = null;
+        try {
+            pictureUrl = match.getString("picture");
+        }catch (Exception e){
+            Log.d(TAG, "User has no profile picture");
+        }
+
+        matchName.setText(match.getString("displayName"));
+        matchAge.setText(match.getString("age"));
+        interestedLanguages.setText(JSONObjectUtilities.jsonArrayToString(interestedLanguagesObj));
+        proficientLanguages.setText(JSONObjectUtilities.jsonArrayToString(proficientLanguagesObj));
+        matchInterests.setText(JSONObjectUtilities.getInterestsString(matchInterestsObj));
+
+        if(pictureUrl != null && !pictureUrl.isEmpty()){
+            Picasso.get().load(pictureUrl).into(matchProfileImage);
+        }else{
+            matchProfileImage.setImageResource(R.drawable.placeholder_match_img_foreground);
+        }
     }
 
     // ChatGPT Usage: No

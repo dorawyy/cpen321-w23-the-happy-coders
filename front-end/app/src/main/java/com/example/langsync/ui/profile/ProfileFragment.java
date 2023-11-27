@@ -20,6 +20,7 @@ import com.example.langsync.FormActivity;
 import com.example.langsync.LoginActivity;
 import com.example.langsync.R;
 import com.example.langsync.databinding.FragmentProfileBinding;
+import com.example.langsync.util.JSONObjectUtilities;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -104,7 +105,7 @@ public class ProfileFragment extends Fragment {
                         String age = user.getString("age");
                         String learningPreference = user.getString("learningPreference");
                         String displayName = user.getString("displayName");
-                        String interests = getInterestsString(user.getJSONObject("interests"));
+                        String interests = JSONObjectUtilities.getInterestsString(user.getJSONObject("interests"));
                         String pictureUrl = null;
                         try {
                             pictureUrl = user.getString("picture");
@@ -116,8 +117,8 @@ public class ProfileFragment extends Fragment {
 
                         requireActivity().runOnUiThread(() -> {
                             profileAge.setText(age);
-                            profileProficientLanguages.setText(jsonArrayToString(proficientLanguages));
-                            profileInterestedLanguages.setText(jsonArrayToString(interestedLanguages));
+                            profileProficientLanguages.setText(JSONObjectUtilities.jsonArrayToString(proficientLanguages));
+                            profileInterestedLanguages.setText(JSONObjectUtilities.jsonArrayToString(interestedLanguages));
                             profileLearningPreference.setText(learningPreference);
                             profileName.setText(displayName);
                             profileInterests.setText(interests);
@@ -145,41 +146,7 @@ public class ProfileFragment extends Fragment {
     }
 
     // ChatGPT usage: No
-    private String jsonArrayToString(JSONArray list){
-        if ( list == null || list.length() == 0) return "";
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(list.opt(0));
-
-        for(int i = 1; i < list.length() - 1; i++){
-            sb.append(", ");
-            sb.append(list.opt(i));
-        }
-
-        if(list.length() > 1){
-            sb.append(" and ");
-            sb.append(list.opt(list.length() - 1));
-        }
-        return sb.toString();
-    }
-
-    private String getInterestsString(JSONObject interestsObjects) throws JSONException {
-        JSONArray array = new JSONArray();
-
-        for (Iterator<String> it = interestsObjects.keys(); it.hasNext(); ) {
-            String key = it.next();
-            if(interestsObjects.getBoolean(key) == true){
-                array.put(capitalizeFirstLetter(key));
-            }
-        }
-
-        return jsonArrayToString(array);
-    }
-
-    // ChatGPT usage: no
-    private String capitalizeFirstLetter(String word) {
-        return Character.toUpperCase(word.charAt(0)) + word.substring(1);
-    }
 
     // ChatGPT usage: No
     private void signOut() {
