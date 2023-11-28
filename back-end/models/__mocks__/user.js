@@ -45,7 +45,8 @@ class User {
         } else {
             mockedUsers.push(this);
         }
-        return { success: true, message: "User saved successfully" };
+        const returnObj = { success: true, message: "User saved successfully" };
+        return returnObj;
     }
 }
 

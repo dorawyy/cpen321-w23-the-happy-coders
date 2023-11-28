@@ -4,8 +4,9 @@ const moderationService = require('../services/moderationService');
 // ChatGPT Usage: No
 // Route for users to add a report
 exports.addReport = async (req, res) => {
+    const requestBody = req.body;
     try {
-        const addReportResponse = await moderationService.addReport(req.body);
+        const addReportResponse = await moderationService.addReport(requestBody);
         if (addReportResponse.success) {
             return res.status(200).json({ success: true, message: "Report saved successfully" });
         }

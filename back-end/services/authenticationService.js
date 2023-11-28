@@ -29,13 +29,14 @@ async function verifyGoogleToken(idToken) {
 //ChatGPT Usage: No
 // Retrieves the access token and refresh token from the authorization code
 async function retrieveAccessToken(authorizationCode, userId) {
+    let access_token;
     try {
-        let access_token;
         const user = await User.findById(userId);
         console.log(user);
 
         if (!user) {
-            return { success: false, error: 'Error finding host or invited user' };
+            const returnObj = { success: false, error: 'Error finding user' };
+            return returnObj;
         }
 
         // Check if user has tokens saved and if they are not expired
@@ -62,11 +63,12 @@ async function retrieveAccessToken(authorizationCode, userId) {
         }
 
         await user.save();
-
-        return { success: true, access_token };
+        const returnObj = { success: true, access_token };
+        return returnObj;
     } catch (error) {
         console.error('Error retrieving or updating tokens:', error);
-        return { success: false, error: error.message };
+        const returnObj = { success: false, error: 'Error retrieving or updating tokens' };
+        return returnObj;
     }
 }
 

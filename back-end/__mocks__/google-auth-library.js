@@ -45,13 +45,14 @@ class MockedOAuth2Client {
   
     async getToken(authorizationCode) {
       if (authorizationCode === 'validAuthorizationCode') {
-        return {
-          tokens: {
-            access_token: 'validAccessToken',
-            refresh_token: 'validRefreshToken',
-            expiry_date: Date.now() + 1000000,
-          },
-        };
+        const tokens = {
+          access_token: 'validAccessToken',
+          refresh_token: 'validRefreshToken',
+          expiry_date: Date.now() + 1000000,
+        }
+
+        const returnObj = {tokens};
+        return returnObj;
       } else {
         throw new Error('Invalid authorization code');
       }

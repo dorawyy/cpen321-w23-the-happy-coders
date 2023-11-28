@@ -35,7 +35,8 @@ class Event {
         } else {
             mockedEvents.push(this);
         }
-        return { success: true, message: "Event saved successfully" };
+        const returnObj = { success: true, message: "Event saved successfully" };
+        return returnObj;
     }
 }
 

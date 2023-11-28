@@ -8,7 +8,8 @@ const userService = require('./userService');
 async function addReport(reportData){
     let report;
     if (reportData.reporterUserId == null || reportData.reportedUserId == null || reportData.chatRoomId == null || reportData.reportMessage == null){
-        return {success: false, error: "Missing report data"};
+        const returnObj = {success: false, error: "Missing report data"};
+        return returnObj;
     }
     const reporterUserId = reportData.reporterUserId;
     const reportedUserId = reportData.reportedUserId;
@@ -19,7 +20,8 @@ async function addReport(reportData){
     const reportedUser = await User.findById(reportData.reportedUserId);
 
     if (!reporterUser || !reportedUser) {
-        return {success: false, error: "User not found"};
+        const returnObj = {success: false, error: "User not found"};
+        return returnObj;
     }
 
     report = new Report({
@@ -42,7 +44,8 @@ async function addReport(reportData){
     await reportedUser.save();
     await reporterUser.save();
 
-    return {success: true, report};
+    const returnObj = {success: true, report};
+    return returnObj;
 }
 
 //ChatGPT Usage: No
