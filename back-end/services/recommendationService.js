@@ -9,7 +9,8 @@ async function getRecommendedUsers(userId){
     let users = [];
 
     if (!user) { 
-        return { success: false, error: 'User not found' };
+        const returnObj = { success: false, error: 'User not found' };
+        return returnObj;
     }
     
     if(user.learningPreference === "Expert"){
@@ -46,7 +47,8 @@ async function getRecommendedUsers(userId){
         return !user.blockedUsers.includes(recommendedUser._id) && !recommendedUser.blockedUsers.includes(user._id)
     })
 
-    return { success: true, recommendedUsersList: recommendedUsers};
+    const returnObj = { success: true, recommendedUsersList: recommendedUsers};
+    return returnObj;
 }
 
 //ChatGPT Usage: No

@@ -37,11 +37,14 @@ class MockedOAuth2Client {
         default:
           throw new Error('Invalid token or audience');
       }
-      return { 
+      const returnObj ={ 
         getPayload: () => ({
           sub: 'mockedUserID', 
           email
-      })};    }
+      })};
+
+      return returnObj;    
+    }
   
     async getToken(authorizationCode) {
       if (authorizationCode === 'validAuthorizationCode') {
@@ -61,9 +64,12 @@ class MockedOAuth2Client {
 
     async refreshToken (refreshToken) {
       if(refreshToken === 'validRefreshToken'){
-        return {tokens:{
+        const tokens = {
           access_token: 'validAccessToken',
-        }}
+        }
+
+        const returnObj = {tokens};
+        return returnObj;
       }
     }
   }

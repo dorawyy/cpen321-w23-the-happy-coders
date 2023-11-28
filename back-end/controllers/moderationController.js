@@ -37,8 +37,8 @@ exports.getReports = async (req, res) => {
 // ChatGPT Usage: No
 // Route for admins to delete a report
 exports.deleteReport = async (req, res) => {
+    const adminId = req.params.adminId;
     try {
-        const adminId = req.params.adminId;
         if (await moderationService.isAdmin(adminId)) {
             const reportId = req.params.reportId;
             let report = await moderationService.deleteReport(reportId);
