@@ -14,7 +14,7 @@ async function createMatch(sourceUserId, targetUserId){
     }
 
     sourceUser.likedUsers.push(targetUserId);
-    updateIdealMatch(sourceUser)
+    await updateIdealMatch(sourceUser)
 
     // Check if target user likes source user and create match
     if(targetUser.likedUsers.includes(sourceUserId)){

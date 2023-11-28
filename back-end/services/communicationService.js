@@ -33,7 +33,13 @@ async function getChatrooms(userId){
 
     for(let chatroomId of chatroomIds){
         const chatroom = await Chatroom.findById(chatroomId);
-        chatrooms.push(chatroom);
+        const chatroomObj = chatroom.toObject();
+
+        const otherUser = (chatroom.user1Id == userId) ? await User.findById(chatroom.user2Id) : await User.findById(chatroom.user1Id);
+        
+        chatroomObj.displayName = user.displayName;
+        chatroomObj.otherUserName = otherUser.displayName;
+        chatrooms.push(chatroomObj);
     }
 
     return chatrooms;
@@ -53,7 +59,7 @@ async function createChatroom(user1, user2){
     const chatroom = await Chatroom.create({
         messages: [],
         user1Id: user1._id.toString(),
-        user2Id: user1._id.toString()
+        user2Id: user2._id.toString()
     })
 
     user1.chatroomIDs.push(chatroom._id)

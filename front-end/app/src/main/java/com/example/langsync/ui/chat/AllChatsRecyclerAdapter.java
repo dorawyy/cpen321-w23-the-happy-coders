@@ -29,6 +29,7 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private String userID;
 
     public ArrayList<JSONObject> messages = new ArrayList<>();
+    private String TAG = "AllChatsRecyclerAdapter";
 
     public AllChatsRecyclerAdapter(Context context, HashMap<String, JSONObject> chatrooms, String userId) {
         this.context = context;
@@ -86,12 +87,12 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                     context.startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.e("AllChatsRecyclerAdapter", "Error in getting chatroom id");
+                    Log.e(TAG, "Error in getting chatroom id");
                 }
             });
         } catch (JSONException ex) {
             ex.printStackTrace();
-            Log.e("AllChatsRecyclerAdapter", "Error in getting chatroom name");
+            Log.e(TAG, "Error in getting chatroom name");
         }
     }
 

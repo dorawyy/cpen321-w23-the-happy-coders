@@ -60,7 +60,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setSocket(){
         try {
-            socket = IO.socket("https://langsyncapp.canadacentral.cloudapp.azure.com");
+            socket = IO.socket(getString(R.string.base_url));
         } catch (URISyntaxException e) {
             Log.d(TAG, "Error connecting to socket");
             e.printStackTrace();
