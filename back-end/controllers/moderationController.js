@@ -58,8 +58,8 @@ exports.deleteReport = async (req, res) => {
 // ChatGPT Usage: No
 // Route for admins to ban a user
 exports.banUser = async (req, res) => {
+    const adminId = req.params.adminId;
     try {
-        const adminId = req.params.adminId;
         if (await moderationService.isAdmin(adminId)) {
             const userId = req.body.userId;
             const reportId = req.body.reportId;
