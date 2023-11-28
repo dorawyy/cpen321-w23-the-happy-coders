@@ -53,9 +53,9 @@ async function getEvents(hostUserId, invitedUserId) {
     try {
         var events;
         if (invitedUserId) {
-            events = await Event.find({ $or: [{ hostUserId: hostUserId, invitedUserId: invitedUserId }, { hostUserId: invitedUserId, invitedUserId: hostUserId }] });
+            events = await Event.find({ $or: [{ hostUserId,  invitedUserId }, { hostUserId: invitedUserId, invitedUserId: hostUserId }] });
         } else{
-            events = await Event.find({ $or: [{ hostUserId: hostUserId }, { invitedUserId: hostUserId }] });
+            events = await Event.find({ $or: [{  hostUserId }, { invitedUserId: hostUserId }] });
         }
         const eventsModified = []; 
         for (var i = 0; i < events.length; i++) {

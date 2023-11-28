@@ -40,7 +40,7 @@ class MockedOAuth2Client {
       return { 
         getPayload: () => ({
           sub: 'mockedUserID', 
-          email: email 
+          email
       })};    }
   
     async getToken(authorizationCode) {

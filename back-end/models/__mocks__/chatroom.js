@@ -91,9 +91,9 @@ Chatroom.findById = jest.fn().mockImplementation((id) =>{
 Chatroom.create = jest.fn().mockImplementation(({messages, user1Id, user2Id}) =>{
     let chatroom = new Chatroom({
         _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6b3'),
-        messages: messages,
-        user1Id: user1Id,
-        user2Id: user2Id
+        messages,
+        user1Id,
+        user2Id
      })
      mockedChats.push(chatroom)
 

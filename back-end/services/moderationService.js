@@ -42,7 +42,7 @@ async function addReport(reportData){
     await reportedUser.save();
     await reporterUser.save();
 
-    return {success: true, report: report};
+    return {success: true, report};
 }
 
 //ChatGPT Usage: No

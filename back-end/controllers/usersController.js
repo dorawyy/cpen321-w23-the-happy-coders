@@ -30,7 +30,7 @@ exports.getUser =  async (req, resp) => {
         if (user == null) {
             return resp.status(400).json({ success: false, error: 'Invalid user id' });
         }
-        return resp.status(200).json({ success: true, user: user });
+        return resp.status(200).json({ success: true, user });
 
     } catch (error) {
         return resp.status(500).json({ success: false, error: 'Error getting user' });
