@@ -13,8 +13,20 @@ describe('GET /chatrooms/:userId', () => {
     // Expected behaviour: return list of chatrooms
     // Expected output: [mockedChats[0]._id.toString()]
     // ChatGPT Usage: No
-    test('Get chatrooms for valid user', async () => {
+    test('Get chatrooms for valid user 0', async () => {
         const response = await request(app).get(`/chatrooms/${mockedUsers[0]._id}`);
+        expect(response.status).toBe(200);
+        const chatroomIds = response.body.chatroomList.map((chatroom) => chatroom._id);
+        expect(chatroomIds).toEqual([mockedChats[0]._id.toString()]);
+    });
+
+    // Input: valid userId
+    // Expected status code: 200
+    // Expected behaviour: return list of chatrooms
+    // Expected output: [mockedChats[1]._id.toString()]
+    // ChatGPT Usage: No
+    test('Get chatrooms for valid user 1', async () => {
+        const response = await request(app).get(`/chatrooms/${mockedUsers[1]._id}`);
         expect(response.status).toBe(200);
         const chatroomIds = response.body.chatroomList.map((chatroom) => chatroom._id);
         expect(chatroomIds).toEqual([mockedChats[0]._id.toString()]);

@@ -61,7 +61,7 @@ const mockUser1 ={
   matchedUsers: [],
   blockedUsers: [],
   likedUsers: ['5f9d88b9d4b4d4c6a0b0f6a0'],
-  chatroomIDs: [],
+  chatroomIDs: ['5f9d88b9d4b4d4c6a0b0f6a8'],
   badges: [],
   interests: {
     business: false,
@@ -94,6 +94,11 @@ const mockUser1 ={
       partner: 0.4,
     },
   },
+  tokens: {
+    accessToken: "validAccessToken",
+    refreshToken: "validRefreshToken",
+    expiresAt: Date.now() - 1000000,
+  }
 };
 
 const mockUser2 ={

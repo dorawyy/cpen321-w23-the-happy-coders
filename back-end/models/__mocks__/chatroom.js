@@ -9,6 +9,16 @@ class Chatroom {
         this.user2Id = obj.user2Id;
 
     }
+
+    toObject() {
+        const transformed = {
+            _id : this._id.toString(),
+            messages : this.messages,
+            user1Id : this.user1Id,
+            user2Id : this.user2Id,
+        }
+        return transformed ;
+    }
     
     // ChatGPT Usage: Partial
     save() {

@@ -56,7 +56,7 @@ dependencies {
     implementation("io.agora.rtc:full-sdk:4.0.1")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.squareup.picasso:picasso:2.71828")
-
+    implementation("com.github.sundeepk:compact-calendar-view:3.0.0")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
 

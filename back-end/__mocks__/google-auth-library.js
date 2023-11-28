@@ -47,14 +47,23 @@ class MockedOAuth2Client {
       if (authorizationCode === 'validAuthorizationCode') {
         return {
           tokens: {
-            access_token: 'mockedAccessToken',
-            refresh_token: 'mockedRefreshToken',
+            access_token: 'validAccessToken',
+            refresh_token: 'validRefreshToken',
+            expiry_date: Date.now() + 1000000,
           },
         };
       } else {
         throw new Error('Invalid authorization code');
       }
       // Mocked implementation of token retrieval
+    }
+
+    async refreshToken (refreshToken) {
+      if(refreshToken === 'validRefreshToken'){
+        return {tokens:{
+          access_token: 'validAccessToken',
+        }}
+      }
     }
   }
   

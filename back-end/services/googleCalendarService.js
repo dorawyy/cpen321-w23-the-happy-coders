@@ -2,11 +2,14 @@ const { google } = require('googleapis');
 const moment = require('moment');
 const { getGoogleClient } = require('./authenticationService');
 const { findUserByID } = require('./userService');
+const { Event } = require('../models/event');
+const { User } = require('../models/user');
 
-//ChatGPT Usage: No
+// ChatGPT Usage: No
 // Create new Google Calendar event
 async function createEvent(authCode, rawEvent) {
-    const clientResponse = await getGoogleClient(authCode);
+    const userId = rawEvent.hostUserId;
+    const clientResponse = await getGoogleClient(authCode, userId);
 
     if(!clientResponse.success) {
         return clientResponse;
@@ -29,11 +32,46 @@ async function createEvent(authCode, rawEvent) {
             sendNotifications: true,
         });
         console.log(`Event created: ${response.data.htmlLink}`);
+        const newEvent = new Event({
+            googleEventId: response.data.id,
+            hostUserId: rawEvent.hostUserId,
+            invitedUserId: rawEvent.invitedUserId,
+            startTime: event.start.dateTime,
+            endTime: event.end.dateTime,
+        })
+
+        newEvent.save();
         return { success: true, message: `Event created: ${response.data.htmlLink}` };
     } catch (error) {
         console.error('Error creating event:', error);
         return { success: false, error: 'Error creating event' };
     }
+    
+}
+
+async function getEvents(hostUserId, invitedUserId) {
+    try {
+        var events;
+        if (invitedUserId) {
+            events = await Event.find({ $or: [{ hostUserId: hostUserId, invitedUserId: invitedUserId }, { hostUserId: invitedUserId, invitedUserId: hostUserId }] });
+        } else{
+            events = await Event.find({ $or: [{ hostUserId: hostUserId }, { invitedUserId: hostUserId }] });
+        }
+        const eventsModified = []; 
+        for (var i = 0; i < events.length; i++) {
+            var event = events[i].toObject();
+            const otherUser = (event.hostUserId == hostUserId) ? 
+                await User.findById(event.invitedUserId) : 
+                await User.findById(event.hostUserId);
+            event.otherUserName = otherUser.displayName
+            eventsModified.push(event);
+        }
+
+        return { success: true, events: eventsModified };    
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+    
 }
 
 //ChatGPT Usage: No
@@ -74,4 +112,4 @@ async function generateLangSyncEventObject(rawEvent) {
     return { success: true, event };
 }
 
-module.exports = { createEvent };
+module.exports = { createEvent, getEvents };

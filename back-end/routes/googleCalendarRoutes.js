@@ -5,4 +5,8 @@ const googleCalendarController = require('../controllers/googleCalendarControlle
 // Creates a google calendar event
 router.post('', googleCalendarController.createEvent);
 
+router.get('/:hostUserId', googleCalendarController.getEvents);
+router.get('/:hostUserId/:invitedUserId', googleCalendarController.getEvents);
+
+
 module.exports = router;
