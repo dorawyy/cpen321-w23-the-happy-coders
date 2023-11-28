@@ -112,11 +112,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/how_old_are_you"
-            android:textSize="18sp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:text="@string/how_old_are_you"
+            android:textSize="18sp" />
         
         <TextView
             android:id="@+id/age"
@@ -136,8 +136,7 @@
             android:layout_margin="32dp"
             android:width="360dp"
             android:height="70dp"
-            android:paddingStart="36dp"
-            android:backgroundTint="#3289F4"
+            android:backgroundTint="@color/logo_color"
             android:fontFamily="@font/poppins_semibold"
             android:text="@string/complete_sign_up"
             android:textColor="@color/white"
@@ -147,8 +146,4 @@
             app:strokeWidth="1dp" />
             
     </LinearLayout>
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

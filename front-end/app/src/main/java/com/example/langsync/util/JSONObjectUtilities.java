@@ -4,7 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public final class JSONObjectUtilities {
 
@@ -25,6 +28,26 @@ public final class JSONObjectUtilities {
     sb.append(list.opt(list.length() - 1));
    }
    return sb.toString();
+  }
+
+  public static List<String> jsonArrayToList(JSONArray list){
+    List<String> array = new ArrayList<>();
+    for(int i = 0; i < list.length() ; i++){
+      array.add(list.opt(i).toString());
+    }
+    return array;
+  }
+
+  public static ArrayList<String> interestObjToList(JSONObject interestsObjects) throws JSONException{
+    ArrayList<String> array = new ArrayList<>();
+
+    for (Iterator<String> it = interestsObjects.keys(); it.hasNext(); ) {
+     String key = it.next();
+     if(interestsObjects.getBoolean(key) == true){
+      array.add(capitalizeFirstLetter(key));
+     }
+    }
+    return array;
   }
 
   // ChatGPT Usage: no
