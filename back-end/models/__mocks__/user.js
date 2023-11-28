@@ -24,6 +24,11 @@ class User {
         this.registered = obj.registered;
         this.idealMatch = obj.idealMatch ?? {};
         this.learningPreference = obj.learningPreference ?? "Both"; 
+        this.tokens = obj.tokens ?? {
+            accessToken: null,
+            refreshToken: null,
+            expiresAt: null,
+        };
 
     }
     // ChatGPT Usage: Partial
@@ -31,13 +36,12 @@ class User {
         if(this.email.includes("erroremail")){
             throw new Error('Error saving user');
         }
-
         const index = mockedUsers.findIndex(u => u._id.equals(this._id));
         if (index !== -1) {
-            mockedUsers[index] = {
-            ...mockedUsers[index],
-            ...this,
-            };
+            mockedUsers[index] = new User({
+                ...mockedUsers[index],
+                ...this,
+                });
         } else {
             mockedUsers.push(this);
         }
@@ -48,7 +52,7 @@ class User {
 // ChatGPT Usage: Partial
 User.find = jest.fn((query) => {
     if (!query) return { exec: () => mockedUsers };
-    const { $and, learningPreference, interestedLanguages, proficientLanguages, banned } = query;
+    const { $and, learningPreference, interestedLanguages, proficientLanguages } = query;
 
     const userId = $and.find((cond) => cond._id && cond._id.$ne)._id.$ne;
     const notInterestUsers = $and.find((cond) => cond._id && cond._id.$nin)._id.$nin;
