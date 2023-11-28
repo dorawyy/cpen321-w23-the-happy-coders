@@ -1,7 +1,6 @@
 const { Chatroom } = require("../models/chatroom");
 const { User } = require("../models/user");
 const OpenAI = require('openai');
-const userService = require("./userService")
 
 // ChatGPT Usage: No
 // Add message to database and send to OpenAI method if toggle is on

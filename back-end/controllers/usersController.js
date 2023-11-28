@@ -1,5 +1,4 @@
 require('dotenv').config();
-const { clear } = require('google-auth-library/build/src/auth/envDetect');
 const userServices = require('../services/userService');
 
 // ChatGPT Usage: No

@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../app'); // Adjust the path as needed
-const {User, mockedUsers} = require('../models/__mocks__/user.js');
-const {Chatroom, mockedChats} = require('../models/__mocks__/chatroom.js');
+const { mockedUsers} = require('../models/__mocks__/user.js');
+const { mockedChats} = require('../models/__mocks__/chatroom.js');
 
 jest.mock('../models/user');
 jest.mock('../models/chatroom');

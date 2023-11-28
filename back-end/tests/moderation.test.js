@@ -19,7 +19,6 @@ describe('GET /moderation/:adminId', () => {
     test('Valid adminId', async () => {
         const response = await request(app).get(`/moderation/${mockedUsers[0]._id}`);
         expect(response.statusCode).toBe(200);
-        const expectedReports = { success: true, reports: mockedReports };
         const receivedReports = response.body;
         // compare each received report with the expected report
         for (let i = 0; i < receivedReports.reports.length; i++) {
