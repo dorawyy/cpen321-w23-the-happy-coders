@@ -201,13 +201,13 @@ public class FormActivity extends AppCompatActivity {
                         .put(body)
                         .build();
 
-                client.newCall(request).enqueue(new okhttp3.Callback() {
+                client.newCall(request).enqueue(new Callback() {
                     @Override
-                    public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
                         e.printStackTrace();
                     }
                     @Override
-                    public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                         if (response.isSuccessful()) {
                             String serverResponse = Objects.requireNonNull(response.body()).string();
                             try {

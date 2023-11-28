@@ -228,7 +228,7 @@ public class CalendarActivity extends AppCompatActivity {
                         }
 
                         LocalDate currentDate = LocalDate.now();
-                        Date date = java.util.Date.from(currentDate.atStartOfDay()
+                        Date date = Date.from(currentDate.atStartOfDay()
                                 .atZone(java.time.ZoneId.systemDefault())
                                 .toInstant());
                         compactCalendarView.setCurrentDate(date);
