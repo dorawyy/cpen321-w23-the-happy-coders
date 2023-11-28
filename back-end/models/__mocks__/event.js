@@ -68,7 +68,7 @@ Event.find = jest.fn((query) => {
 
 
 
-mockedEvents = mockEvents.map((event) => new Event(event));
+const mockedEvents = mockEvents.map((event) => new Event(event));
 
   
 module.exports = { Event, mockedEvents };

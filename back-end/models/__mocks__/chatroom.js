@@ -25,7 +25,7 @@ class Chatroom {
         const index = mockedChats.findIndex(c => c._id.equals(this._id));
         if (index !== -1) {
             mockedChats[index] = {
-            ...mockedUsers[index],
+            ...mockedChats[index],
             ...this,
             };
         } else {

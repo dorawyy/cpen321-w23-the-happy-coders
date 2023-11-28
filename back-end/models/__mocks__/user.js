@@ -85,7 +85,7 @@ User.findOne = jest.fn().mockImplementation((query) =>{
     return user;
 })
 
-mockedUsers = mockUsers.map((user) => new User(user));
+const mockedUsers = mockUsers.map((user) => new User(user));
 
   
 module.exports = { User, mockedUsers };
