@@ -7,72 +7,83 @@
     android:layout_height="match_parent"
     tools:context=".VideoCallActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/langsync_form_logo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/langsync_logo"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-        <TextView
-            android:id="@+id/logo_text"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="@string/logo_text"
-            android:textColor="@color/black"
-            android:textSize="27sp"
-            android:layout_below="@+id/langsync_form_logo"
-            android:layout_centerHorizontal="true"
-            />
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/logo_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginRight="20dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="@string/logo_text"
+                android:textColor="@color/black"
+                android:textSize="27sp" />
+
+            <ImageView
+                android:id="@+id/langsync_form_logo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/langsync_logo" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/meeting_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
             android:fontFamily="@font/poppins_semibold"
             android:text="@string/video_call_text"
             android:textColor="@color/black"
-            android:textSize="24sp"
-            android:layout_below="@+id/logo_text"
-            android:layout_centerHorizontal="true"
-            />
+            android:textSize="24sp" />
 
         <FrameLayout
             android:id="@+id/local_video_view_container"
             android:layout_width="320dp"
             android:layout_height="240dp"
             android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
             android:layout_margin="6dp"
-            android:layout_below="@+id/meeting_text"
-            android:background="@android:color/darker_gray"
-            />
+            android:background="@android:color/darker_gray" />
 
         <FrameLayout
             android:id="@+id/remote_video_view_container"
             android:layout_width="320dp"
             android:layout_height="240dp"
-            android:layout_below="@+id/local_video_view_container"
             android:layout_centerHorizontal="true"
-            android:layout_margin="6dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="6dp"
             android:background="@android:color/darker_gray" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/LeaveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/remote_video_view_container"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10sp"
+            android:backgroundTint="@color/logo_color"
             android:onClick="leaveChannel"
             android:text="@string/video_call_leave"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/light_grey"
+            android:textColor="@color/white"
             android:textSize="20sp"
-            app:cornerRadius="0dp"/>
-    </RelativeLayout>
+            app:cornerRadius="0dp" />
+    </LinearLayout>
 </ScrollView>
