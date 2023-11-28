@@ -59,6 +59,7 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter msgRecyclerAdapter;
 
+    // ChatGPT Usage: no
     private void setSocket(){
         try {
             socket = IO.socket(getString(R.string.base_url));

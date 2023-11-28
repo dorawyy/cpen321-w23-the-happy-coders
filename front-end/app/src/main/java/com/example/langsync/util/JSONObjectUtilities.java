@@ -29,6 +29,7 @@ public final class JSONObjectUtilities {
    return sb.toString();
   }
 
+ // ChatGPT Usage: no
   public static List<String> jsonArrayToList(JSONArray list){
     List<String> array = new ArrayList<>();
     for(int i = 0; i < list.length() ; i++){
@@ -37,6 +38,7 @@ public final class JSONObjectUtilities {
     return array;
   }
 
+ // ChatGPT Usage: no
   public static ArrayList<String> interestObjToList(JSONObject interestsObjects) throws JSONException{
     ArrayList<String> array = new ArrayList<>();
 

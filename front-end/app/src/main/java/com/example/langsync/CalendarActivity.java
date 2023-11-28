@@ -38,18 +38,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class CalendarActivity extends AppCompatActivity {
-
-
     private TextView monthTextView;
     private CompactCalendarView compactCalendarView;
     private String otherUserId = null;
     private String userId;
     private String TAG = "CalendarView";
     private boolean isInitialCreation = true;
-
-
     private AuthenticationUtilities utilities = new AuthenticationUtilities(CalendarActivity.this);
 
+    // ChatGPT Usage: no
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +114,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     }
 
+    // ChatGPT Usage: no
     @Override
     protected void onResume() {
         super.onResume();
@@ -127,6 +125,7 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT Usage: no
     private void updateMonthTextView(){
         Date firstMonthDate = compactCalendarView.getFirstDayOfCurrentMonth();
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM, YYYY", Locale.ENGLISH);
@@ -135,22 +134,26 @@ public class CalendarActivity extends AppCompatActivity {
         updateEventsDisplay(firstMonthDate);
     }
 
+    // ChatGPT Usage: no
     private void goToNextMonth(){
         compactCalendarView.scrollRight();
         updateMonthTextView();
     }
 
+    // ChatGPT Usage: no
     private void goToPreviousMonth(){
         compactCalendarView.scrollLeft();
         updateMonthTextView();
     }
 
+    // ChatGPT Usage: no
     private void goToCalendarForm(){
         Intent intent = new Intent(getApplicationContext(), CalendarFormActivity.class);
         intent.putExtra("otherUserId", otherUserId);
         startActivity(intent);
     }
 
+    // ChatGPT Usage: no
     private void updateEventsDisplay(Date date){
         List<Event> events = compactCalendarView.getEvents(date);
         LinearLayout  scrollView = findViewById(R.id.scroll_view_layout); // Replace with your ScrollView's ID
@@ -186,13 +189,14 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT Usage: no
     private Date stringToDate(String dateStr) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         Date date = dateFormat.parse(dateStr);
         return date;
     }
 
-
+    // ChatGPT Usage: no
     private void getEvents(){
         compactCalendarView.removeAllEvents();
         OkHttpClient client = new OkHttpClient();
