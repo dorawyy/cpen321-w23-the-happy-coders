@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.langsync.CalendarActivity;
 import com.example.langsync.FormActivity;
 import com.example.langsync.LoginActivity;
 import com.example.langsync.R;
@@ -71,6 +72,12 @@ public class ProfileFragment extends Fragment {
         profileInterests = root.findViewById(R.id.profile_interests);
         Button editButton = root.findViewById(R.id.profile_edit_button);
         Button logoutButton = root.findViewById(R.id.logout_button);
+        ImageView eventsButton = root.findViewById(R.id.profile_events_button);
+
+        eventsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), CalendarActivity.class);
+            startActivity(intent);
+        });
 
         editButton.setOnClickListener(view -> {
             Intent intent = new Intent(requireActivity(), FormActivity.class);

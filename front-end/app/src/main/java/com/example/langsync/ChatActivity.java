@@ -52,6 +52,7 @@ public class ChatActivity extends AppCompatActivity {
     private CardView noMessageView;
     private EditText msgInput;
     private Socket socket;
+    private String otherUserName;
 
     boolean isAiOn = false;
 
@@ -126,7 +127,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String otherUserName = extras.getString("otherUserName");
+            otherUserName = extras.getString("otherUserName");
             otherUserId = extras.getString("otherUserId");
             chatroomId = extras.getString("chatroomId");
             chatHeaderName.setText(otherUserName);
@@ -163,6 +164,7 @@ public class ChatActivity extends AppCompatActivity {
         calendarInvite.setOnClickListener(v -> {
             Intent intent = new Intent(ChatActivity.this, CalendarActivity.class);
             intent.putExtra("otherUserId", otherUserId);
+            intent.putExtra("otherUserName", otherUserName);
             startActivity(intent);
         });
 

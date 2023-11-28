@@ -1,200 +1,257 @@
 package com.example.langsync;
 
-
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.text.Layout;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.langsync.ui.chat.AllChatsRecyclerAdapter;
 import com.example.langsync.util.AuthenticationUtilities;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
+import com.google.android.material.button.MaterialButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
+import java.util.Objects;
 
-import okhttp3.MediaType;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
+import okhttp3.Response;
 
-// Timepicker logic adapted from https://www.youtube.com/watch?v=c6c1giRekB4&ab_channel=CodeWithCal
 public class CalendarActivity extends AppCompatActivity {
-    private Spinner durationSpinner;
-    private Button dateButton;
-    private Button timeButton;
-    private Integer minute; 
-    private Integer hour; 
-    private Integer day;
-    private Integer month; 
-    private Integer year;
-    private final String TAG = "CalendarActivity";
-    private final AuthenticationUtilities utilities = new AuthenticationUtilities(CalendarActivity.this);
-    private String invitedUserId;
 
-    // ChatGPT usage: No
+    private TextView nextMonthButton;
+    private TextView previousMonthButton;
+    private TextView monthTextView;
+    private CompactCalendarView compactCalendarView;
+    private String otherUserId = null;
+    private String userId;
+    private String TAG = "CalendarView";
+    private boolean isInitialCreation = true;
+
+
+    private AuthenticationUtilities utilities = new AuthenticationUtilities(CalendarActivity.this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        userId = sharedPreferences.getString("loggedUserId", null);
+
+        compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
+        compactCalendarView.setFirstDayOfWeek(Calendar.MONDAY);
+
+        MaterialButton scheduleMeetingButton = findViewById(R.id.schedule_meeting_button);
+        TextView partnerName = findViewById(R.id.partner_name);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            invitedUserId = extras.getString("otherUserId");
+           try {
+               otherUserId = extras.getString("otherUserId");
+               String otherUserName = extras.getString("otherUserName");
+               partnerName.setText("with " + otherUserName);
+               scheduleMeetingButton.setText("Schedule a session with " + otherUserName);
+               scheduleMeetingButton.setOnClickListener(v -> {
+                   goToCalendarForm();
+               });
+           } catch (Exception e){
+               scheduleMeetingButton.setVisibility(View.GONE);
+               partnerName.setVisibility(View.GONE);
+           }
+        } else{
+            scheduleMeetingButton.setVisibility(View.GONE);
+            partnerName.setVisibility(View.GONE);
         }
-        timeButton = findViewById(R.id.time_button);
-        dateButton = findViewById(R.id.date_button);
-        durationSpinner = findViewById(R.id.duration_spinner);
-        Button createEventButton = findViewById(R.id.create_event_button);
 
-        // Set up a listener for the create event button
-        createEventButton.setOnClickListener(v -> {
-            if(year == null || month == null || day == null || minute == null || hour == null) {
-                utilities.showToast(getString(R.string.select_all_meeting_details));
-                return;
-            }
+        getEvents();
 
-            OkHttpClient client = new OkHttpClient();
+        nextMonthButton = findViewById(R.id.next_month_button);
+        previousMonthButton = findViewById(R.id.previous_month_button);
+        monthTextView = findViewById(R.id.month_text_view);
+        updateMonthTextView();
 
-            JSONObject bodyObject;
-            try {
-                bodyObject = generateCreateEventRequestBody();
-            } catch (JSONException e) {
-                utilities.showToast(getString(R.string.meeting_error));
-                return;
-            }
-            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-            RequestBody body = RequestBody.create(bodyObject.toString(), JSON);
-            Request request = new Request.Builder()
-                    .url(getString(R.string.base_url) + "events/")
-                    .post(body)
-                    .build();
-
-            client.newCall(request).enqueue(new okhttp3.Callback() {
-                @Override
-                public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
-                    e.printStackTrace();
-                    utilities.showToast(getString(R.string.meeting_error));
-                }
-                @Override
-                public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        utilities.showToast(getString(R.string.meeting_successful));
-                        finish();
-                    } else {
-                        Log.d(TAG, "onResponse: " + response.body().string());
-                        utilities.showToast(getString(R.string.meeting_error));
-                    }
-                }
-            });
+        nextMonthButton.setOnClickListener(v -> {
+            goToNextMonth();
         });
 
-        // Populate the duration spinner with options
-        ArrayAdapter<CharSequence> durationAdapter = ArrayAdapter.createFromResource(this,
-                R.array.duration_options, android.R.layout.simple_spinner_item);
-        durationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        durationSpinner.setAdapter(durationAdapter);
+        previousMonthButton.setOnClickListener(v -> {
+            goToPreviousMonth();
+        });
+
+
+        // define a listener to receive callbacks when certain events happen.
+        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+                List<Event> events = compactCalendarView.getEvents(dateClicked);
+                updateEventsDisplay(dateClicked);
+                Log.d(TAG, "Day was clicked: " + dateClicked + " with events " + events);
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                Log.d(TAG, "Month was scrolled to: " + firstDayOfNewMonth);
+                updateMonthTextView();
+            }
+        });
+
+
     }
 
-    // ChatGPT usage: No
-    public void popTimePicker(View view) {
-        TimePickerDialog.OnTimeSetListener onTimeSetListener = (timePicker, selectedHour, selectedMinute) -> {
-            hour = selectedHour;
-            minute = selectedMinute;
-            timeButton.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-        };
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                onTimeSetListener,
-                hour == null ? 0 : hour,
-                minute == null ? 0 : minute,
-                true);
-
-        timePickerDialog.setTitle(getString(R.string.select_time) +" (" +  TimeZone.getDefault().getID() + ")");
-        timePickerDialog.show();
-    }
-
-    // ChatGPT usage: No
-    public void popDatePicker(View view) {
-        DatePickerDialog.OnDateSetListener onDateSetListener = (datePicker, selectedYear, selectedMonth, selectedDay) -> {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(year, month, day);
-
-            SimpleDateFormat formatter = new SimpleDateFormat("d MMM yyyy");
-            String formattedDate = formatter.format(calendar.getTime());
-            dateButton.setText(formattedDate);
-        };
-        Calendar calendar = Calendar.getInstance();
-        int defaultDay = calendar.get(Calendar.DAY_OF_MONTH);
-        int defaultMonth = calendar.get(Calendar.MONTH);
-        int defaultYear = calendar.get(Calendar.YEAR);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, onDateSetListener, defaultYear, defaultMonth, defaultDay);
-        datePickerDialog.setTitle("Select Date");
-        datePickerDialog.show();
-    }
-
-    // ChatGPT usage: Partial
-    private JSONObject generateCreateEventRequestBody() throws JSONException {
-        String selectedDuration = durationSpinner.getSelectedItem().toString().replace(" minutes", "");
-        String timeZone = TimeZone.getDefault().getID();
-
-        ZoneId zoneId = ZoneId.of(timeZone);
-        ZonedDateTime zonedDateTime = ZonedDateTime.of(year, month + 1, day, hour, minute, 0, 0, zoneId);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
-
-        String datetime = zonedDateTime.format(formatter);
-
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String hostUserId = sharedPreferences.getString("loggedUserId", null);
-
-        Log.d(TAG, "datetime: " + datetime);
-        Log.d(TAG, "Timezone: " + timeZone);
-
-        JSONObject object = new JSONObject();
-
-        JSONObject event = new JSONObject();
-        try {
-            event.put("startTime", datetime);
-            event.put("hostUserId", hostUserId);
-            event.put("invitedUserId", invitedUserId);
-            event.put("durationMinutes", selectedDuration);
-            event.put("timeZone", timeZone);
-        } catch (JSONException e) {
-            e.printStackTrace();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isInitialCreation) {
+            getEvents();
+        } else {
+            isInitialCreation = false;
         }
+    }
 
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(CalendarActivity.this);
-        String authCode = acct.getServerAuthCode();
+    private void updateMonthTextView(){
+        Date firstMonthDate = compactCalendarView.getFirstDayOfCurrentMonth();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM, YYYY", Locale.ENGLISH);
+        String monthString = dateFormat.format(firstMonthDate);
+        monthTextView.setText(monthString);
+        updateEventsDisplay(firstMonthDate);
+    }
 
-        try {
-            object.put("authCode", authCode);
-            object.put("event", event);
-        } catch (JSONException e) {
-            e.printStackTrace();
+    private void goToNextMonth(){
+        compactCalendarView.scrollRight();
+        updateMonthTextView();
+    }
+
+    private void goToPreviousMonth(){
+        compactCalendarView.scrollLeft();
+        updateMonthTextView();
+    }
+
+    private void goToCalendarForm(){
+        Intent intent = new Intent(getApplicationContext(), CalendarFormActivity.class);
+        intent.putExtra("otherUserId", otherUserId);
+        startActivity(intent);
+    }
+
+    private void updateEventsDisplay(Date date){
+        List<Event> events = compactCalendarView.getEvents(date);
+        LinearLayout  scrollView = findViewById(R.id.scroll_view_layout); // Replace with your ScrollView's ID
+
+        scrollView.removeAllViews(); // Clear previous views
+
+        if (events != null && !events.isEmpty()) {
+            for (Event event : events) {
+                JSONObject eventObj = (JSONObject) event.getData();
+                View eventItemView = getLayoutInflater().inflate(R.layout.event_item, null);
+
+                TextView partnerTextView = eventItemView.findViewById(R.id.event_partner);
+                TextView startTimeTextView = eventItemView.findViewById(R.id.event_time);
+                try {
+                    String partnerName = eventObj.getString("otherUserName");
+                    String eventStartTimeRaw = eventObj.getString("startTime");
+                    Date eventDate = stringToDate(eventStartTimeRaw);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("h:mma, d MMMM yyyy", Locale.ENGLISH);
+                    String eventStartTime = dateFormat.format(eventDate);
+                    partnerTextView.setText(partnerName);
+                    startTimeTextView.setText(eventStartTime);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                scrollView.addView(eventItemView);
+            }
+        } else {
+            // Display a message or handle the case when there are no events
+            TextView noEventsTextView = new TextView(this);
+            noEventsTextView.setText("No events for this date.");
+            scrollView.addView(noEventsTextView);
         }
+    }
 
-        return object;
+    private Date stringToDate(String dateStr) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        Date date = dateFormat.parse(dateStr);
+        return date;
+    }
+
+
+    private void getEvents(){
+        compactCalendarView.removeAllEvents();
+        OkHttpClient client = new OkHttpClient();
+        String params = otherUserId != null ? userId + "/" + otherUserId : userId;
+        Request request = new Request.Builder()
+                .url(getString(R.string.base_url) + "events/" + params)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.d(TAG, "Error getting events");
+                Log.d(TAG, Objects.requireNonNull(e.getMessage()));
+                utilities.showToast("Error getting events");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()){
+                    try {
+                        JSONObject responseBody = new JSONObject(response.body().string());
+                        JSONArray eventsArray = new JSONArray(responseBody.getString("events"));
+                        Log.d(TAG, responseBody.toString());
+                        for(int i = 0; i < eventsArray.length(); i++) {
+                            JSONObject eventObj =  eventsArray.getJSONObject(i);
+                            String eventStartTime = eventObj.getString("startTime");
+                            Date eventDate = stringToDate(eventStartTime);
+                            Event ev = new Event(Color.GREEN, eventDate.getTime(), eventObj);
+                            compactCalendarView.addEvent(ev);
+                        }
+
+                        LocalDate currentDate = LocalDate.now();
+                        Date date = java.util.Date.from(currentDate.atStartOfDay()
+                                .atZone(java.time.ZoneId.systemDefault())
+                                .toInstant());
+                        compactCalendarView.setCurrentDate(date);
+                        runOnUiThread(() -> {
+                            updateEventsDisplay(date);
+                        });
+                    } catch(Exception e) {
+                        Log.d(TAG, e.toString());
+                        utilities.showToast(getString(R.string.error_get_events));
+                    }
+                }else{
+                    Log.d(TAG, "Response not successfull");
+                    utilities.showToast(getString(R.string.error_get_events));
+                }
+            }
+        });
     }
 }

@@ -25,15 +25,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/profile_name"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:textSize="28sp"
-                    android:fontFamily="@font/poppins_semibold"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/profile_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="28sp"
+                        android:fontFamily="@font/poppins_semibold"/>
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/profile_events_button"
+                        android:layout_weight="1"
+                        android:src="@drawable/baseline_calendar_month_24"/>
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/profile_image"
