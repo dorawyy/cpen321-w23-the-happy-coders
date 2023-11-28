@@ -55,7 +55,7 @@ public final class JSONObjectUtilities {
 
    for (Iterator<String> it = interestsObjects.keys(); it.hasNext(); ) {
     String key = it.next();
-    if(interestsObjects.getBoolean(key) == true){
+    if(interestsObjects.getBoolean(key)){
      array.put(capitalizeFirstLetter(key));
     }
    }
