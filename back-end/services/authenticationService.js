@@ -35,7 +35,7 @@ async function retrieveAccessToken(authorizationCode, userId) {
         console.log(user);
 
         if (!user) {
-            const returnObj = { success: false, error: 'Error finding user' };
+            const returnObj = { success: false, error: 'Error finding host or invited user' };
             return returnObj;
         }
 
@@ -67,7 +67,7 @@ async function retrieveAccessToken(authorizationCode, userId) {
         return returnObj;
     } catch (error) {
         console.error('Error retrieving or updating tokens:', error);
-        const returnObj = { success: false, error: 'Error retrieving or updating tokens' };
+        const returnObj = { success: false,  error: error.message };
         return returnObj;
     }
 }
