@@ -40,8 +40,7 @@ import okhttp3.Response;
 
 public class CalendarActivity extends AppCompatActivity {
 
-    private TextView nextMonthButton;
-    private TextView previousMonthButton;
+
     private TextView monthTextView;
     private CompactCalendarView compactCalendarView;
     private String otherUserId = null;
@@ -86,8 +85,8 @@ public class CalendarActivity extends AppCompatActivity {
 
         getEvents();
 
-        nextMonthButton = findViewById(R.id.next_month_button);
-        previousMonthButton = findViewById(R.id.previous_month_button);
+        TextView nextMonthButton = findViewById(R.id.next_month_button);
+        TextView previousMonthButton = findViewById(R.id.previous_month_button);
         monthTextView = findViewById(R.id.month_text_view);
         updateMonthTextView();
 

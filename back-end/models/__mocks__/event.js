@@ -44,21 +44,21 @@ Event.find = jest.fn((query) => {
     if (!query) return mockedEvents;
     const { $or } = query;
     let filteredEvents;
-    if(Object.keys($or[0]).length == 1){
+    if(Object.keys($or[0]).length === 1){
         const userId = $or[0].hostUserId;
         console.log(userId);
         console.log(mockedEvents);
         filteredEvents = mockedEvents.filter((event) => {
-            return event.hostUserId == userId || event.invitedUserId == userId;
+            return event.hostUserId === userId || event.invitedUserId === userId;
         }) 
     }else{
         const userId1 = $or[0].hostUserId;
         const userId2 = $or[1].hostUserId;
         filteredEvents = mockedEvents.filter((event) => {
-            return (event.hostUserId == userId1 && event.invitedUserId == userId2) || (event.hostUserId == userId2 && event.invitedUserId == userId1);
+            return (event.hostUserId === userId1 && event.invitedUserId === userId2) || (event.hostUserId === userId2 && event.invitedUserId === userId1);
         })
 
-        if(userId1 == "throwEventErrorId" || userId2 == "throwEventErrorId"){
+        if(userId1 === "throwEventErrorId" || userId2 === "throwEventErrorId"){
             throw new Error("Error while fetching events");
         }
     }

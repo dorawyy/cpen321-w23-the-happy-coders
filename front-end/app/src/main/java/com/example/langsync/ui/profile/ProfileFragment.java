@@ -49,7 +49,6 @@ public class ProfileFragment extends Fragment {
     private TextView profileName;
     private TextView profileInterests;
     private ImageView profileImage;
-    private GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "ProfileFragment";
 
 
@@ -154,7 +153,7 @@ public class ProfileFragment extends Fragment {
 
     // ChatGPT usage: No
     private void signOut() {
-        mGoogleSignInClient  = GoogleSignIn.getClient(requireContext(), GoogleSignInOptions.DEFAULT_SIGN_IN);
+        GoogleSignInClient mGoogleSignInClient  = GoogleSignIn.getClient(requireContext(), GoogleSignInOptions.DEFAULT_SIGN_IN);
 
         mGoogleSignInClient.signOut().addOnCompleteListener(requireActivity(),
                 task -> {
