@@ -107,6 +107,10 @@ public class VideoCallActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
+                runOnUiThread(() -> {
+                    Toast.makeText(getApplicationContext(), "ERROR: Getting video token, try again", Toast.LENGTH_LONG).show();
+                    finish();
+                });
             }
 
             @Override
