@@ -5,6 +5,7 @@ const userServices = require('../services/userService');
 //ChatGPT Usage: No
 exports.handleLogin = async (req, res) => {
     const idToken = req.body.idToken;
+    const authCode = req.body.authCode;
 
     const verificationResult = await authenticationServices.verifyGoogleToken(idToken);
 
@@ -13,6 +14,7 @@ exports.handleLogin = async (req, res) => {
         const payload = verificationResult.ticket.getPayload();
         const result = await userServices.findUserByEmail(payload.email);
         if (result.success) {
+            await authenticationServices.retrieveAccessToken(authCode, result.user._id);
             res.status(200).json({ success: true, userId: result.user._id });
         }else{
             res.status(401).json(result);
@@ -44,11 +46,13 @@ exports.handleAdminLogin = async (req, res) => {
 exports.handleSignup = async (req, res) => {
 
     const idToken = req.body.idToken;
+    const authCode = req.body.authCode;
     const verificationResult = await authenticationServices.verifyGoogleToken(idToken);
 
     if (verificationResult.success) {
         const result = await userServices.findUnregistredOrCreateUser(verificationResult.ticket);
         if (result.success) {
+            await authenticationServices.retrieveAccessToken(authCode, result.user._id);
             res.status(200).json({ success: true, userId: result.user._id });
         } else {
             res.status(401).json({ success: false, error: result.error });
