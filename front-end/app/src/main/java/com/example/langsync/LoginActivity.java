@@ -111,9 +111,11 @@ public class LoginActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             String idToken = account.getIdToken();
+            String authCode = account.getServerAuthCode();
 
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), "{" +
-                    "\"idToken\": \"" + idToken + "\"" +
+                    "\"idToken\": \"" + idToken + "\"," +
+                    "\"authCode\": \"" + authCode + "\"" +
                     "}");
 
             String url = getString(R.string.base_url) + "authentication/login/";

@@ -27,7 +27,7 @@ const mockEvent2 = {
     _id: new ObjectId('5f9d88b9d4b4d4c6a0b0f6e2'),
     invitedUserId: mockUsers[7]._id,
     hostUserId: mockUsers[5]._id,
-    googleEventId: "3",
+    googleEventId: "invalidGoogleEventId",
     startTime: "2020-12-20T16:00:00.000Z",
     endTime: "2020-12-20T16:30:00.000Z",
 }

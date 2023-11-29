@@ -91,9 +91,11 @@ public class SignupActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             String idToken = account.getIdToken();
+            String authCode = account.getServerAuthCode();
 
             RequestBody requestBody = RequestBody.create( "{" +
-                    "\"idToken\": \"" + idToken + "\"" +
+                    "\"idToken\": \"" + idToken + "\"," +
+                    "\"authCode\": \"" + authCode + "\"" +
                     "}", MediaType.parse("application/json"));
 
             String url = getString(R.string.base_url) + "authentication/signup/";

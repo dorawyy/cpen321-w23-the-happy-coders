@@ -125,7 +125,7 @@
             android:textAlignment="center"
             android:padding="10dp"
             android:textSize="17dp"
-            android:text="An event will be created in your google calendar and and invitation will be sent to the other user" />
+            android:text="An event will be created in your Google calendar and and invitation will be send to the other user" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

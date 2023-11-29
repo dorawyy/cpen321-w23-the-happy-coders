@@ -39,7 +39,7 @@
     <string name="meeting_time">Meeting Time</string>
     <string name="select_time">Select Time</string>
     <string name="meeting_duration">Meeting Duration</string>
-    <string name="create_event">Create event</string>
+    <string name="create_event">Create session</string>
     <string name="meeting_error">Create Meeting failed. Please try again.</string>
     <string name="meeting_successful">Meeting created</string>
     <string name="select_all_meeting_details">Please, select all meeting details</string>
@@ -54,6 +54,7 @@
     <string name="logout">Logout</string>
     <string name="logout_success">Logout successfully</string>
     <string name="error_get_events">Error getting events</string>
+    <string name="error_delete_events">Error deleting event, try again</string>
     <string-array name="duration_options">
         <item>15 minutes</item>
         <item>30 minutes</item>

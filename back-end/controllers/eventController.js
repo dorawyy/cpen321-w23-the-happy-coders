@@ -1,12 +1,12 @@
 const { User } = require('../models/user');
-const googleCalendarService = require('../services/googleCalendarService');
+const eventService = require('../services/eventService');
 
 //ChatGPT Usage: No
 exports.createEvent = async (req, res) => {
     const authCode = req.body.authCode;
     const event = req.body.event;
     
-    const verificationResult = await googleCalendarService.createEvent(authCode, event);
+    const verificationResult = await eventService.createEvent(authCode, event);
     if (verificationResult.success) {
         res.status(200).json({ success: true, message: "Event Created" });
     } else {
@@ -14,6 +14,7 @@ exports.createEvent = async (req, res) => {
     }
 }
 
+// ChatGPT Usage: No
 exports.getEvents = async (req, res) => {
     const hostUserId = req.params.hostUserId;
     const invitedUserId = req.params.invitedUserId;
@@ -31,12 +32,26 @@ exports.getEvents = async (req, res) => {
 
     var verificationResult;
     if (invitedUserId) {
-        verificationResult = await googleCalendarService.getEvents(hostUserId, invitedUserId);
+        verificationResult = await eventService.getEvents(hostUserId, invitedUserId);
     } else {
-        verificationResult = await googleCalendarService.getEvents(hostUserId, null);
+        verificationResult = await eventService.getEvents(hostUserId, null);
     }
     if (verificationResult.success) {
         res.status(200).json({ success: true, events: verificationResult.events });
+    } else {
+        res.status(401).json({ success: false, error: verificationResult.error });
+    }
+}
+
+// ChatGPT Usage: No
+exports.deleteEvent = async (req, res) => {
+    const authCode = req.body.authCode;
+    const userId = req.body.userId;
+    const eventId = req.params.eventId;
+
+    const verificationResult = await eventService.deleteEvent(authCode, userId, eventId);
+    if (verificationResult.success) {
+        res.status(200).json({ success: true, message: verificationResult.message});
     } else {
         res.status(401).json({ success: false, error: verificationResult.error });
     }

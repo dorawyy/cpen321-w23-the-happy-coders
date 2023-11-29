@@ -10,46 +10,58 @@ jest.mock('../models/user');
 
 
 describe('POST /authentication/login', () => {
-     // Input: valid idToken
+     // Input: valid idToken, valid authCode
     // Expected status code: 200
     // Expected behaviour: return success message
     // Expected output: { success: true, userId: mockedUsers[0]._id.toString() }
     // ChatGPT Usage: No
     test('Login with registered user', async () => {
-        const response = await request(app).post('/authentication/login').send({idToken: 'validTokenRegisteredMockUser0'});
+        const response = await request(app).post('/authentication/login').send({
+            idToken: 'validTokenRegisteredMockUser0',
+            authCode: 'validAuthCode'
+        });
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual({success: true, userId: mockedUsers[0]._id.toString()});
     });
 
-    // Input: invalid idToken
+    // Input: invalid idToken, valid authCode
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: { success: false, error: 'Token verification failed' }
     // ChatGPT Usage: No
     test('Test login with invalid Token', async () => {
-        const response = await request(app).post('/authentication/login').send({idToken: 'invalidToken'});
+        const response = await request(app).post('/authentication/login').send({
+            idToken: 'invalidToken',
+            authCode: 'validAuthCode'
+        });
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, error: 'Token verification failed'});
     });
 
-    // Input: valid idToken for unregistered user
+    // Input: valid idToken for unregistered user, valid authCode
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: { success: false, error: 'User not registered' }
     // ChatGPT Usage: No
     test('Try login with unregistered user', async () => {
-        const response = await request(app).post('/authentication/login').send({idToken: 'validTokenUnregisteredUser'});
+        const response = await request(app).post('/authentication/login').send({
+            idToken: 'validTokenUnregisteredUser',
+            authCode: 'validAuthCode',
+        });
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, error: 'User not registered'});
     });
 
-    // Input: valid idToken for banned user
+    // Input: valid idToken for banned user, valid authCode
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: {success: false, error: "User banned"}
     // ChatGPT Usage: No
     test('Try login with banned user', async () => {
-        const response = await request(app).post('/authentication/login').send({idToken: 'validTokenBannedMockUser7'});
+        const response = await request(app).post('/authentication/login').send({
+            idToken: 'validTokenBannedMockUser7',
+            authCode: 'validAuthCode'
+        });
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, error: "User banned"});
     });
@@ -143,14 +155,17 @@ describe('POST /authentication/signup', () => {
     test('Unregistered user', async () => {
         expect(User.findOne({email: unregisteredUser.email})).toBeNull();
 
-        const response = await request(app).post('/authentication/signup').send({idToken: 'validTokenUnregisteredUser'});
+        const response = await request(app).post('/authentication/signup').send({
+            idToken: 'validTokenUnregisteredUser',
+            authCode: 'validAuthCode'
+        });
         expect(response.statusCode).toBe(200);
         expect(response.body.success).toEqual(true);
 
         expect(User.findOne({email: unregisteredUser.email})).not.toBeNull();
     });
 
-    // Input: valid idToken for user not registered but already tried once and is on db
+    // Input: valid idToken for user not registered but already tried once and is on db, valid authCode
     // Expected status code: 200
     // Expected behaviour: return success message
     // Expected output: {success: true, userId: mockedUsers[8]._id.toString() }
@@ -158,40 +173,52 @@ describe('POST /authentication/signup', () => {
     test('Unregistered user that already tried to register once', async () => {
         expect(User.findOne({email: mockedUsers[8].email})).not.toBeNull();
 
-        const response = await request(app).post('/authentication/signup').send({idToken: 'validTokenUnregisteredAlreadyInDbMockedUser8'});
+        const response = await request(app).post('/authentication/signup').send({
+            idToken: 'validTokenUnregisteredAlreadyInDbMockedUser8',
+            authCode: 'validAuthCode'
+        });
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual( {success: true, userId: mockedUsers[8]._id.toString() });
     });
 
-    // Input: invalid idToken
+    // Input: invalid idToken, valid authCode
     // Expected status code: 401
     // Expected behaviour: return error message and not create user
     // Expected output: {success: false, error: "Token verification failed"}
     // ChatGPT Usage: No
     test('Invalid Token', async () => {
-        const response = await request(app).post('/authentication/signup').send({idToken: 'invalidToken'});
+        const response = await request(app).post('/authentication/signup').send({
+            idToken: 'invalidToken',
+            authCode: 'validAuthCode'
+        });
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, error: 'Token verification failed'});
     });
 
-    // Input: valid idToken for  user already registered
+    // Input: valid idToken for  user already registered, valid authCode
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: {success: false, error: "User already registered"}
     // ChatGPT Usage: No
     test('Registered user', async () => {
-        const response = await request(app).post('/authentication/signup').send({idToken: 'validTokenRegisteredMockUser0'});
+        const response = await request(app).post('/authentication/signup').send({
+            idToken: 'validTokenRegisteredMockUser0',
+            authCode: 'validAuthCode'
+        });
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, "error": "User already registered"});
     });
 
-    // Input: valid idToken for  user that will throw error on save (hard coded in mock)
+    // Input: valid idToken for  user that will throw error on save (hard coded in mock), valid authCode
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: {success: false, error: "Error saving user"}
     // ChatGPT Usage: No
     test('Error when saving user', async () => {
-        const response = await request(app).post('/authentication/signup').send({idToken: 'validTokenErrorOnSave'});
+        const response = await request(app).post('/authentication/signup').send({
+            idToken: 'validTokenErrorOnSave',
+            authCode: 'validAuthCode'
+        });
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, error: "Error saving user"});
     });
