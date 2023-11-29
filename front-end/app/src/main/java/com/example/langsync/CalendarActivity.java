@@ -167,19 +167,28 @@ public class CalendarActivity extends AppCompatActivity {
 
                 TextView partnerTextView = eventItemView.findViewById(R.id.event_partner);
                 TextView startTimeTextView = eventItemView.findViewById(R.id.event_time);
+                LinearLayout mainCardSection = eventItemView.findViewById(R.id.event_item_main_content);
                 try {
                     String partnerName = eventObj.getString("otherUserName");
                     String eventStartTimeRaw = eventObj.getString("startTime");
+                    String chatroomId = eventObj.getString("chatroomId");
+
                     Date eventDate = stringToDate(eventStartTimeRaw);
                     SimpleDateFormat dateFormat = new SimpleDateFormat("h:mma, d MMMM yyyy", Locale.ENGLISH);
                     String eventStartTime = dateFormat.format(eventDate);
+
                     partnerTextView.setText(partnerName);
                     startTimeTextView.setText(eventStartTime);
+                    mainCardSection.setOnClickListener(v -> {
+                        Intent intent = new Intent(CalendarActivity.this, VideoCallActivity.class);
+                        intent.putExtra(getString(R.string.channel_key), chatroomId);
+                        startActivity(intent);
+                    });
+
+                    scrollView.addView(eventItemView);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                scrollView.addView(eventItemView);
             }
         } else {
             // Display a message or handle the case when there are no events

@@ -4,6 +4,7 @@ const { getGoogleClient } = require('./authenticationService');
 const { findUserByID } = require('./userService');
 const { Event } = require('../models/event');
 const { User } = require('../models/user');
+const { Chatroom } = require('../models/chatroom');
 
 // ChatGPT Usage: No
 // Create new Google Calendar event
@@ -31,13 +32,23 @@ async function createEvent(authCode, rawEvent) {
             resource: event,
             sendNotifications: true,
         });
-        console.log(`Event created: ${response.data.htmlLink}`);
+        console.log("Findinf chatroom")
+        const chatroom = await Chatroom.findOne({ 
+            $or: [{ user1Id: rawEvent.hostUserId, user2Id: rawEvent.invitedUserId },
+            { user1Id: rawEvent.invitedUserId, user2Id: rawEvent.hostUserId }]
+        });
+
+        if(!chatroom) {
+            return { success: false, error: 'Error connecting users' };
+        }
+        
         const newEvent = new Event({
             googleEventId: response.data.id,
             hostUserId: rawEvent.hostUserId,
             invitedUserId: rawEvent.invitedUserId,
             startTime: event.start.dateTime,
             endTime: event.end.dateTime,
+            chatroomId: chatroom._id.toString(),
         })
 
         newEvent.save();

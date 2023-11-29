@@ -7,6 +7,7 @@ const eventSchema = new mongoose.Schema({
     googleEventId: String,
     startTime: Date,
     endTime: Date,
+    chatroomId: String,
 });
 
 const Event = mongoose.model('Event', eventSchema);

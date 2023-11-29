@@ -9,6 +9,7 @@ jest.mock('googleapis');
 jest.mock('google-auth-library');
 jest.mock('../models/user');
 jest.mock('../models/event');
+jest.mock('../models/chatroom');
 
 describe('GET /events/:hostUserId', () => {
     // Input:  valid hostUserId (mockUser[5])
@@ -171,6 +172,27 @@ describe('POST /events', () => {
 
         expect(response.status).toBe(401);
         expect(response.body).toEqual({ success: false, error: 'Error finding host or invited user' });
+    });
+
+    // Input: valid authCode, invalid event as users does not have chatroom between them
+    // Expected status code: 401
+    // Expected behaviour: return error message
+    // Expected output: { success: false, erro: 'Error connecting users' }
+    // ChatGPT Usage: No
+    test('Creating event with users who does not have a chatroom between them', async () => {
+
+        const response = await request(app).post('/events').send({
+            "authCode": "validAuthorizationCode",
+            "event": {
+                invitedUserId: mockedUsers[1]._id,
+                hostUserId: mockedUsers[8]._id,
+                startTime: "2020-10-20T16:00:00.000Z",
+                durationMinutes: "30"
+            }
+        })
+
+        expect(response.status).toBe(401);
+        expect(response.body).toEqual({ success: false, error: 'Error connecting users' });
     });
 
     // Input: valid authCode, invalid event due to invalid invitedUserId

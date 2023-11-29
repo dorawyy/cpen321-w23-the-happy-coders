@@ -100,5 +100,19 @@ Chatroom.create = jest.fn().mockImplementation(({messages, user1Id, user2Id}) =>
      return chatroom;
  })
 
+ Chatroom.findOne = jest.fn().mockImplementation((query) =>{
+  if (!query) return mockedChats[0];
+  
+  const { $or } = query;
+  for(let i = 0; i < $or.length; i++){
+      const { user1Id, user2Id } = $or[i];
+      let chatroom = mockedChats.find((chatroom) => chatroom.user1Id === user1Id && chatroom.user2Id === user2Id);
+      if(chatroom){
+          return chatroom;
+      }
+  }
+  return null;
+ });
+
 module.exports = { Chatroom, mockedChats };
   
