@@ -50,12 +50,12 @@
             android:layout_height="250dp"
             app:compactCalendarTargetHeight="250dp"
             app:compactCalendarTextSize="12sp"
-            app:compactCalendarBackgroundColor="#ffffff"
-            app:compactCalendarTextColor="#000"
+            app:compactCalendarBackgroundColor="@color/white"
+            app:compactCalendarTextColor="@color/black"
             app:compactCalendarCurrentSelectedDayBackgroundColor="@color/logo_color"
             app:compactCalendarCurrentSelectedDayTextColor="@color/white"
             app:compactCalendarCurrentDayBackgroundColor="@color/light_grey"
-            app:compactCalendarMultiEventIndicatorColor="#fff"
+            app:compactCalendarMultiEventIndicatorColor="@color/logo_color"
             />
         <LinearLayout
             android:layout_width="match_parent"
@@ -115,6 +115,7 @@
             android:id="@+id/schedule_meeting_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="10dp"
             android:width="360dp"
             android:height="70dp"
