@@ -23,12 +23,7 @@ class User {
         this.banned = obj.banned ?? false;
         this.registered = obj.registered;
         this.idealMatch = obj.idealMatch ?? {};
-        this.learningPreference = obj.learningPreference ?? "Both"; 
-        this.tokens = obj.tokens ?? {
-            accessToken: null,
-            refreshToken: null,
-            expiresAt: null,
-        };
+        this.learningPreference = obj.learningPreference ?? "Both";
 
     }
     // ChatGPT Usage: Partial
