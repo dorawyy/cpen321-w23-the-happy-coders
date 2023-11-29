@@ -82,7 +82,7 @@ public class CalendarActivity extends AppCompatActivity {
         userId = sharedPreferences.getString("loggedUserId", null);
 
         compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
-        compactCalendarView.setFirstDayOfWeek(Calendar.MONDAY);
+        compactCalendarView.setFirstDayOfWeek(Calendar.SUNDAY);
 
         MaterialButton scheduleMeetingButton = findViewById(R.id.schedule_meeting_button);
         TextView partnerName = findViewById(R.id.partner_name);
@@ -214,7 +214,7 @@ public class CalendarActivity extends AppCompatActivity {
                     String eventEndTimeRaw = eventObj.getString("endTime");
                     String eventId = eventObj.getString("_id");
 
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("h:mma, d MMMM yyyy", Locale.ENGLISH);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
                     Date eventStartDate = stringToDate(eventStartTimeRaw);
                     Date eventEndDate = stringToDate(eventEndTimeRaw);
                     String eventStartTime = dateFormat.format(eventStartDate);

@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Starts at: "
+                android:text="Starts: "
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -52,19 +52,14 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ends at: "
+                android:text="End: "
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp" />
 
             <TextView
                 android:id="@+id/event_end_time"
@@ -72,7 +67,6 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
-
         </LinearLayout>
     </LinearLayout>
 
@@ -83,7 +77,4 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="15dp"
         android:src="@drawable/ic_trash" />
-
-
-
 </LinearLayout>
