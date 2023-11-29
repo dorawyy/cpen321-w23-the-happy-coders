@@ -32,7 +32,7 @@ async function createEvent(authCode, rawEvent) {
             resource: event,
             sendNotifications: true,
         });
-        console.log("Findinf chatroom")
+        
         const chatroom = await Chatroom.findOne({ 
             $or: [{ user1Id: rawEvent.hostUserId, user2Id: rawEvent.invitedUserId },
             { user1Id: rawEvent.invitedUserId, user2Id: rawEvent.hostUserId }]
@@ -41,7 +41,7 @@ async function createEvent(authCode, rawEvent) {
         if(!chatroom) {
             return { success: false, error: 'Error connecting users' };
         }
-        
+
         const newEvent = new Event({
             googleEventId: response.data.id,
             hostUserId: rawEvent.hostUserId,
@@ -60,6 +60,7 @@ async function createEvent(authCode, rawEvent) {
     
 }
 
+// ChatGPT Usage: No
 async function getEvents(hostUserId, invitedUserId) {
     try {
         var events;
@@ -83,6 +84,33 @@ async function getEvents(hostUserId, invitedUserId) {
         return { success: false, error: error.message };
     }
     
+}
+
+// ChatGPT Usage: No
+async function deleteEvent(authCode, userId, eventId) {
+    const clientResponse = await getGoogleClient(authCode, userId);
+
+    if(!clientResponse.success) {
+        return clientResponse;
+    }
+
+    const auth = clientResponse.auth;
+    const event = await Event.findById(eventId);
+    const googleId = event.googleEventId;
+
+    await Event.findByIdAndDelete(eventId);
+
+    try {
+        const calendar = google.calendar({ version: 'v3', auth });
+        await calendar.events.delete({
+            calendarId: 'primary',
+            eventId: googleId,
+        });
+    } catch (error) {
+        return { success: true, message: `Event deleted: error deleting on google` };
+    }
+
+    return { success: true, message: `Event deleted` };
 }
 
 //ChatGPT Usage: No
@@ -123,4 +151,4 @@ async function generateLangSyncEventObject(rawEvent) {
     return { success: true, event };
 }
 
-module.exports = { createEvent, getEvents };
+module.exports = { createEvent, getEvents, deleteEvent };

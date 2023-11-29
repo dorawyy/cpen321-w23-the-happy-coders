@@ -39,7 +39,7 @@ describe('GET /events/:hostUserId', () => {
     test('Getting events for invalid hostUserId', async () => {
 
         const response = await request(app).get(`/events/errorId`);
-        console.log(response.body)
+
         expect(response.status).toBe(401);  
         expect(response.body).toEqual({ success: false, error: 'Error finding host or invited user' });
     });
@@ -69,7 +69,6 @@ describe('GET /events/:hostUserId/:invitedUserId', () => {
     test('Try get events for invalid invitedUserId', async () => {
         const response = await request(app).get(`/events/${mockedUsers[5]._id}/errorId`);
         
-        console.log(response.body);
         expect(response.status).toBe(401);
         expect(response.body).toEqual({ success: false, error: 'Error finding host or invited user' });
     });
@@ -82,7 +81,6 @@ describe('GET /events/:hostUserId/:invitedUserId', () => {
     test('Try get events for invalid invitedUserId', async () => {
         const response = await request(app).get(`/events/${mockedUsers[5]._id}/throwEventErrorId`);
         
-        console.log(response.body);
         expect(response.status).toBe(401);
         expect(response.body).toEqual({ success: false, error: 'Error while fetching events' });
     });
@@ -257,4 +255,54 @@ describe('POST /events', () => {
         expect(response.status).toBe(401);
         expect(response.body).toEqual({ success: false, error: 'Error creating event' });
     });
+});
+
+describe('DELETE /events/:eventId', () => {
+    // Input: valid authCode, valid userId, valid eventId
+    // Expected status code: 200
+    // Expected behaviour: return success message
+    // Expected output: { success: true, message: 'Event deleted' }
+    // ChatGPT Usage: No
+    test('Succesfully delete event', async () => {
+
+        const response = await request(app).delete(`/events/${mockedEvents[0]._id}`).send({
+            "authCode": "validAuthorizationCode",
+            "userId": mockedUsers[5]._id
+        })
+
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual({ success: true, message: 'Event deleted' });
+    });
+
+    // Input: valid authCode, valid userId, invalid eventId
+    // Expected status code: 401
+    // Expected behaviour: return error message
+    // Expected output: { success: false, error: 'Invalid authorization code' }
+    // ChatGPT Usage: No
+    test('Delete event fails due to invalid authorization code', async () => {
+
+        const response = await request(app).delete(`/events/${mockedEvents[1]._id}`).send({
+            "authCode": "invalidAuthorizationCode",
+            "userId": mockedUsers[4]._id
+        })
+
+        expect(response.status).toBe(401);
+        expect(response.body).toEqual({ success: false, error: 'Invalid authorization code' });
+    });
+
+    // Input: valid authCode, valid userId, valid eventId (But with invalid googleEventId, this is hardcoded in our mock to throw an error when deleting from calendar)
+    // Expected status code: 200
+    // Expected behaviour: return success message
+    // Expected output: { success: true, message: 'Event deleted: error deleting on google' }
+    test('Delete event succeds but google fails', async () => {
+        const response = await request(app).delete(`/events/${mockedEvents[2]._id}`).send({
+            "authCode": "validAuthorizationCode",
+            "userId": mockedUsers[5]._id
+        })
+
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual({ success: true, message: 'Event deleted: error deleting on google' });
+    })
+
+    
 });

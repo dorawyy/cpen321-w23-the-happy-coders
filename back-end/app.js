@@ -4,7 +4,7 @@ var app = express();
 const agoraTokenRoutes = require('./routes/agoraTokenRoutes');
 const usersRoutes = require('./routes/usersRoutes');
 const authenticationRoutes = require('./routes/authenticationRoutes');
-const googleCalendarRoutes = require('./routes/googleCalendarRoutes');
+const eventRoutes = require('./routes/eventRoutes');
 const matchingRoutes = require('./routes/matchingRoutes');
 const communicationRoutes = require('./routes/communicationRoutes');
 const recommendationRoutes = require('./routes/recommendationRoutes');
@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 app.use('/agoraToken', agoraTokenRoutes);
 app.use("/users", usersRoutes);
 app.use("/authentication", authenticationRoutes);
-app.use("/events", googleCalendarRoutes);
+app.use("/events", eventRoutes);
 app.use("/matches", matchingRoutes);
 app.use("/chatrooms", communicationRoutes);
 app.use("/recommendations", recommendationRoutes);

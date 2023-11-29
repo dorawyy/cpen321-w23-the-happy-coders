@@ -45,13 +45,14 @@ Event.find = jest.fn((query) => {
     if (!query) return mockedEvents;
     const { $or } = query;
     let filteredEvents;
+
     if(Object.keys($or[0]).length === 1){
         const userId = $or[0].hostUserId;
-        console.log(userId);
-        console.log(mockedEvents);
+
         filteredEvents = mockedEvents.filter((event) => {
             return event.hostUserId === userId || event.invitedUserId === userId;
-        }) 
+        });
+
     }else{
         const userId1 = $or[0].hostUserId;
         const userId2 = $or[1].hostUserId;
@@ -67,6 +68,21 @@ Event.find = jest.fn((query) => {
     return  filteredEvents;
 });
 
+// ChatGPT Usage: No
+Event.findByIdAndDelete = jest.fn((eventId) => {
+    const index = mockedEvents.findIndex(u => u._id.equals(eventId));
+    if (index !== -1) {
+        mockedEvents.splice(index, 1);
+    }
+});
+
+// ChatGPT Usage: No
+Event.findById = jest.fn((eventId) => {
+    const index = mockedEvents.findIndex(u => u._id.equals(eventId));
+    if (index !== -1) {
+        return mockedEvents[index];
+    }
+});
 
 
 const mockedEvents = mockEvents.map((event) => new Event(event));

@@ -32,7 +32,6 @@ async function retrieveAccessToken(authorizationCode, userId) {
     let access_token;
     try {
         const user = await User.findById(userId);
-        console.log(user);
 
         if (!user) {
             const returnObj = { success: false, error: 'Error finding host or invited user' };

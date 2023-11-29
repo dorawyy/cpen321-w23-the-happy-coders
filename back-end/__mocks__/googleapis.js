@@ -13,6 +13,12 @@ const mockGoogleApis = {
             }
             return { data: { htmlLink: 'mockLink' } };
           }),
+          delete: jest.fn().mockImplementation(({eventId}) =>{
+            if (eventId === "invalidGoogleEventId") {
+              throw new Error('Error deleting event');
+            }
+            return;
+          })
         },
       })),
 

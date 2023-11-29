@@ -1,6 +1,7 @@
 package com.example.langsync;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -10,15 +11,19 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.langsync.util.AuthenticationUtilities;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -30,11 +35,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Comparator;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class CalendarActivity extends AppCompatActivity {
@@ -43,6 +51,7 @@ public class CalendarActivity extends AppCompatActivity {
     private String otherUserId = null;
     private String userId;
     private String TAG = "CalendarView";
+    private Date selectedDate;
     private boolean isInitialCreation = true;
     private AuthenticationUtilities utilities = new AuthenticationUtilities(CalendarActivity.this);
 
@@ -79,7 +88,7 @@ public class CalendarActivity extends AppCompatActivity {
             partnerName.setVisibility(View.GONE);
         }
 
-        getEvents();
+        getEvents(getTodayDate());
 
         TextView nextMonthButton = findViewById(R.id.next_month_button);
         TextView previousMonthButton = findViewById(R.id.previous_month_button);
@@ -94,13 +103,12 @@ public class CalendarActivity extends AppCompatActivity {
             goToPreviousMonth();
         });
 
-
-        // define a listener to receive callbacks when certain events happen.
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
                 List<Event> events = compactCalendarView.getEvents(dateClicked);
                 updateEventsDisplay(dateClicked);
+                selectedDate = dateClicked;
                 Log.d(TAG, "Day was clicked: " + dateClicked + " with events " + events);
             }
 
@@ -110,8 +118,6 @@ public class CalendarActivity extends AppCompatActivity {
                 updateMonthTextView();
             }
         });
-
-
     }
 
     // ChatGPT Usage: no
@@ -119,7 +125,7 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (!isInitialCreation) {
-            getEvents();
+            getEvents(selectedDate);
         } else {
             isInitialCreation = false;
         }
@@ -161,24 +167,50 @@ public class CalendarActivity extends AppCompatActivity {
         scrollView.removeAllViews(); // Clear previous views
 
         if (events != null && !events.isEmpty()) {
+            // Sort events by start time before displaying
+            events.sort(Comparator.comparing(event -> {
+                JSONObject eventObj = (JSONObject) event.getData();
+                try {
+                    String eventStartTimeRaw = eventObj.getString("startTime");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mma, d MMMM yyyy", Locale.ENGLISH);
+                    Date eventStartDate = stringToDate(eventStartTimeRaw);
+                    return dateFormat.format(eventStartDate);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return "";
+                }
+            }));
+
             for (Event event : events) {
                 JSONObject eventObj = (JSONObject) event.getData();
                 View eventItemView = getLayoutInflater().inflate(R.layout.event_item, null);
 
                 TextView partnerTextView = eventItemView.findViewById(R.id.event_partner);
-                TextView startTimeTextView = eventItemView.findViewById(R.id.event_time);
+                TextView startTimeTextView = eventItemView.findViewById(R.id.event_start_time);
+                TextView endTimeTextView = eventItemView.findViewById(R.id.event_end_time);
+                ImageView deleteButton = eventItemView.findViewById(R.id.delete_event_button);
                 LinearLayout mainCardSection = eventItemView.findViewById(R.id.event_item_main_content);
                 try {
                     String partnerName = eventObj.getString("otherUserName");
                     String eventStartTimeRaw = eventObj.getString("startTime");
                     String chatroomId = eventObj.getString("chatroomId");
+                    String eventEndTimeRaw = eventObj.getString("endTime");
+                    String eventId = eventObj.getString("_id");
 
-                    Date eventDate = stringToDate(eventStartTimeRaw);
                     SimpleDateFormat dateFormat = new SimpleDateFormat("h:mma, d MMMM yyyy", Locale.ENGLISH);
-                    String eventStartTime = dateFormat.format(eventDate);
+                    Date eventStartDate = stringToDate(eventStartTimeRaw);
+                    Date eventEndDate = stringToDate(eventEndTimeRaw);
+                    String eventStartTime = dateFormat.format(eventStartDate);
+                    String eventEndTime = dateFormat.format(eventEndDate);
 
-                    partnerTextView.setText(partnerName);
                     startTimeTextView.setText(eventStartTime);
+                    endTimeTextView.setText(eventEndTime);
+                    partnerTextView.setText(partnerName);
+
+                    deleteButton.setOnClickListener(v -> {
+                        deleteEvent(eventId, partnerName);
+                    });
+
                     mainCardSection.setOnClickListener(v -> {
                         Intent intent = new Intent(CalendarActivity.this, VideoCallActivity.class);
                         intent.putExtra(getString(R.string.channel_key), chatroomId);
@@ -193,9 +225,88 @@ public class CalendarActivity extends AppCompatActivity {
         } else {
             // Display a message or handle the case when there are no events
             TextView noEventsTextView = new TextView(this);
-            noEventsTextView.setText("No events for this date.");
+            noEventsTextView.setText("No sessions for this date.");
+            noEventsTextView.setTextSize(25);
+            noEventsTextView.setPadding(40, 20, 0,0);
+
             scrollView.addView(noEventsTextView);
         }
+    }
+
+    // ChatGPT Usage: no
+    private void deleteEvent(String eventId, String partnerName){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
+        builder.setTitle("Delete event with " + partnerName);
+        builder.setMessage("If you created this meeting, it will be deleted on both users calendars.\nOtherwise, you will reject the invite.");
+        builder.setCancelable(true);
+        builder.setPositiveButton("Delete", (dialog, which) -> {
+            deleteEventRequest(eventId);
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.cancel();
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    // ChatGPT Usage: No
+    private void deleteEventRequest(String eventId){
+        JSONObject bodyObject;
+
+        try {
+            bodyObject = getDeleteRequestBody();
+        }catch (Exception e){
+            utilities.showToast(getString(R.string.error_delete_events));
+            return;
+        }
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(bodyObject.toString(), JSON);
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(getString(R.string.base_url) + "events/" + eventId)
+                .delete(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.d(TAG, "Error deleting event");
+                utilities.showToast(getString(R.string.error_delete_events));
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()){
+                    try {
+                        JSONObject responseBody = new JSONObject(response.body().string());
+                        String message = responseBody.getString("message");
+                        utilities.showToast(message);
+                    } catch(Exception e) {
+                        Log.d(TAG, e.toString());
+                        utilities.showToast("Event deleted");
+                    }
+                    getEvents(selectedDate);
+                }else{
+                    Log.d(TAG, "Response not successfull");
+                    utilities.showToast(getString(R.string.error_get_events));
+                }
+            }
+        });
+    }
+
+    // ChatGPT Usage: no
+    private JSONObject getDeleteRequestBody() throws JSONException {
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(CalendarActivity.this);
+        String authCode = acct.getServerAuthCode();
+
+        JSONObject body = new JSONObject();
+
+        body.put("userId", userId);
+        body.put("authCode", authCode);
+
+        return body;
     }
 
     // ChatGPT Usage: no
@@ -205,8 +316,9 @@ public class CalendarActivity extends AppCompatActivity {
         return date;
     }
 
+    // displayDate: date to be displayed after getting users
     // ChatGPT Usage: no
-    private void getEvents(){
+    private void getEvents(Date displayDate){
         compactCalendarView.removeAllEvents();
         OkHttpClient client = new OkHttpClient();
         String params = otherUserId != null ? userId + "/" + otherUserId : userId;
@@ -239,13 +351,10 @@ public class CalendarActivity extends AppCompatActivity {
                             compactCalendarView.addEvent(ev);
                         }
 
-                        LocalDate currentDate = LocalDate.now();
-                        Date date = Date.from(currentDate.atStartOfDay()
-                                .atZone(java.time.ZoneId.systemDefault())
-                                .toInstant());
-                        compactCalendarView.setCurrentDate(date);
+                        compactCalendarView.setCurrentDate(displayDate);
+                        selectedDate = displayDate;
                         runOnUiThread(() -> {
-                            updateEventsDisplay(date);
+                            updateEventsDisplay(displayDate);
                         });
                     } catch(Exception e) {
                         Log.d(TAG, e.toString());
@@ -257,5 +366,13 @@ public class CalendarActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private Date getTodayDate(){
+        LocalDate currentDate = LocalDate.now();
+        Date today = Date.from(currentDate.atStartOfDay()
+                .atZone(java.time.ZoneId.systemDefault())
+                .toInstant());
+        return today;
     }
 }
