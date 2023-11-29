@@ -4,6 +4,7 @@ package com.example.langsync;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,12 +13,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.langsync.util.AuthenticationUtilities;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,12 +59,20 @@ public class CalendarFormActivity extends AppCompatActivity {
     private final String TAG = "CalendarActivity";
     private final AuthenticationUtilities utilities = new AuthenticationUtilities(CalendarFormActivity.this);
     private String invitedUserId;
+    private GoogleSignInClient mGoogleSignInClient;
 
     // ChatGPT usage: No
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar_form);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestServerAuthCode(getString(R.string.server_client_id))
+                .requestScopes(new Scope("https://www.googleapis.com/auth/calendar"))
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -67,6 +85,38 @@ public class CalendarFormActivity extends AppCompatActivity {
 
         // Set up a listener for the create event button
         createEventButton.setOnClickListener(v -> {
+            createEvent();
+        });
+
+        // Populate the duration spinner with options
+        ArrayAdapter<CharSequence> durationAdapter = ArrayAdapter.createFromResource(this,
+                R.array.duration_options, android.R.layout.simple_spinner_item);
+        durationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        durationSpinner.setAdapter(durationAdapter);
+    }
+
+    // ChatGPT usage: No
+    ActivityResultLauncher<Intent> createEventLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == RESULT_OK) {
+                Intent data = result.getData();
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                handleCreateEvent(task);
+            }
+        }
+    });
+
+    private void createEvent(){
+        Intent createEventIntent = mGoogleSignInClient.getSignInIntent();
+        createEventLauncher.launch(createEventIntent);
+    }
+
+    private void handleCreateEvent(@NonNull Task<GoogleSignInAccount> task){
+        try {
+            GoogleSignInAccount account = task.getResult(ApiException.class);
+            String authCode = account.getServerAuthCode();
+
             if(year == null || month == null || day == null || minute == null || hour == null) {
                 utilities.showToast(getString(R.string.select_all_meeting_details));
                 return;
@@ -76,7 +126,7 @@ public class CalendarFormActivity extends AppCompatActivity {
 
             JSONObject bodyObject;
             try {
-                bodyObject = generateCreateEventRequestBody();
+                bodyObject = generateCreateEventRequestBody(authCode);
             } catch (JSONException e) {
                 utilities.showToast(getString(R.string.meeting_error));
                 return;
@@ -105,13 +155,9 @@ public class CalendarFormActivity extends AppCompatActivity {
                     }
                 }
             });
-        });
-
-        // Populate the duration spinner with options
-        ArrayAdapter<CharSequence> durationAdapter = ArrayAdapter.createFromResource(this,
-                R.array.duration_options, android.R.layout.simple_spinner_item);
-        durationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        durationSpinner.setAdapter(durationAdapter);
+        }catch (Exception e){
+            utilities.showToast(getString(R.string.meeting_error));
+        }
     }
 
     // ChatGPT usage: No
@@ -156,7 +202,7 @@ public class CalendarFormActivity extends AppCompatActivity {
     }
 
     // ChatGPT usage: Partial
-    private JSONObject generateCreateEventRequestBody() throws JSONException {
+    private JSONObject generateCreateEventRequestBody(String authCode) throws JSONException {
         String selectedDuration = durationSpinner.getSelectedItem().toString().replace(" minutes", "");
         String timeZone = TimeZone.getDefault().getID();
 
@@ -184,9 +230,6 @@ public class CalendarFormActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(CalendarFormActivity.this);
-        String authCode = acct.getServerAuthCode();
 
         try {
             object.put("authCode", authCode);

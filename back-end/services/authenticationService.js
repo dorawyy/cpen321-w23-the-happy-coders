@@ -28,40 +28,13 @@ async function verifyGoogleToken(idToken) {
 
 //ChatGPT Usage: No
 // Retrieves the access token and refresh token from the authorization code
-async function retrieveAccessToken(authorizationCode, userId) {
+async function retrieveAccessToken(authorizationCode) {
     let access_token;
     try {
-        const user = await User.findById(userId);
+        const { tokens } = await client.getToken(authorizationCode);
+        
+        access_token = tokens.access_token;
 
-        if (!user) {
-            const returnObj = { success: false, error: 'Error finding host or invited user' };
-            return returnObj;
-        }
-
-        // Check if user has tokens saved and if they are not expired
-        if (user.tokens && user.tokens.accessToken  && user.tokens.expiresAt > Date.now()) {
-            console.log("Using saved token");
-            access_token = user.tokens.accessToken;
-        } else if(user.tokens && user.tokens.refreshToken ){
-             // If tokens are expired
-            const { tokens } = await client.refreshToken(user.tokens.refreshToken);
-            console.log("Refreshing token");
-            // Update user's access token and expiration date
-            user.tokens.accessToken = tokens.access_token;
-            user.tokens.expiresAt = tokens.expiry_date; 
-            access_token = tokens.access_token;
-        }else{
-            // If this is the first sign in, retrieve tokens from authorization code
-            const { tokens } = await client.getToken(authorizationCode);
-            console.log("Getting token");
-            // Save the tokens to the user document
-            user.tokens.accessToken = tokens.access_token;
-            user.tokens.refreshToken = tokens.refresh_token;
-            user.tokens.expiresAt = tokens.expiry_date;
-            access_token = tokens.access_token;
-        }
-
-        await user.save();
         const returnObj = { success: true, access_token };
         return returnObj;
     } catch (error) {
@@ -74,7 +47,7 @@ async function retrieveAccessToken(authorizationCode, userId) {
 //ChatGPT Usage: No
 // Use authorization code to get new authorized Google Client
 async function getGoogleClient(authCode, userId ){
-    const tokensResponse = await retrieveAccessToken(authCode, userId);
+    const tokensResponse = await retrieveAccessToken(authCode);
 
     if(!tokensResponse.success) {
         return tokensResponse;

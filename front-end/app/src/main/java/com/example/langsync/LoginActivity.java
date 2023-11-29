@@ -54,8 +54,6 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
-                .requestServerAuthCode(getString(R.string.server_client_id))
-                .requestScopes(new Scope("https://www.googleapis.com/auth/calendar"))
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -111,11 +109,9 @@ public class LoginActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             String idToken = account.getIdToken();
-            String authCode = account.getServerAuthCode();
 
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), "{" +
-                    "\"idToken\": \"" + idToken + "\"," +
-                    "\"authCode\": \"" + authCode + "\"" +
+                    "\"idToken\": \"" + idToken + "\"" +
                     "}");
 
             String url = getString(R.string.base_url) + "authentication/login/";

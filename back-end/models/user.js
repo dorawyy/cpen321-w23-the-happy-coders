@@ -145,20 +145,6 @@ const userSchema = new mongoose.Schema({
                 partner: 1.0
             }
         }
-    },
-    tokens:{
-        accessToken: {
-            type: String,
-            required: false,
-        },
-        refreshToken: {
-            type: String,
-            required: false,
-        },
-        expiresAt: {
-            type: Number,
-            required: false,
-        }
     }
 });
 

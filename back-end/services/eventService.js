@@ -9,8 +9,7 @@ const { Chatroom } = require('../models/chatroom');
 // ChatGPT Usage: No
 // Create new Google Calendar event
 async function createEvent(authCode, rawEvent) {
-    const userId = rawEvent.hostUserId;
-    const clientResponse = await getGoogleClient(authCode, userId);
+    const clientResponse = await getGoogleClient(authCode);
 
     if(!clientResponse.success) {
         return clientResponse;
@@ -32,7 +31,7 @@ async function createEvent(authCode, rawEvent) {
             resource: event,
             sendNotifications: true,
         });
-        
+
         const chatroom = await Chatroom.findOne({ 
             $or: [{ user1Id: rawEvent.hostUserId, user2Id: rawEvent.invitedUserId },
             { user1Id: rawEvent.invitedUserId, user2Id: rawEvent.hostUserId }]
@@ -87,8 +86,8 @@ async function getEvents(hostUserId, invitedUserId) {
 }
 
 // ChatGPT Usage: No
-async function deleteEvent(authCode, userId, eventId) {
-    const clientResponse = await getGoogleClient(authCode, userId);
+async function deleteEvent(authCode, eventId) {
+    const clientResponse = await getGoogleClient(authCode);
 
     if(!clientResponse.success) {
         return clientResponse;

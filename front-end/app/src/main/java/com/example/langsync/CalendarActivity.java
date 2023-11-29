@@ -1,5 +1,9 @@
 package com.example.langsync;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +24,11 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
@@ -52,14 +61,22 @@ public class CalendarActivity extends AppCompatActivity {
     private String userId;
     private String TAG = "CalendarView";
     private Date selectedDate;
+    private String selectedEventId;
     private boolean isInitialCreation = true;
     private AuthenticationUtilities utilities = new AuthenticationUtilities(CalendarActivity.this);
-
+    private GoogleSignInClient mGoogleSignInClient;
     // ChatGPT Usage: no
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestServerAuthCode(getString(R.string.server_client_id))
+                .requestScopes(new Scope("https://www.googleapis.com/auth/calendar"))
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         userId = sharedPreferences.getString("loggedUserId", null);
@@ -249,61 +266,85 @@ public class CalendarActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    // ChatGPT Usage: No
+    //ChatGPT Usage: no
     private void deleteEventRequest(String eventId){
-        JSONObject bodyObject;
+        Intent deleteEventIntent = mGoogleSignInClient.getSignInIntent();
+        selectedEventId = eventId;
+        deleteEventIntent.putExtra("eventId", eventId);
+        deleteEventLauncher.launch(deleteEventIntent);
+    }
 
-        try {
-            bodyObject = getDeleteRequestBody();
-        }catch (Exception e){
-            utilities.showToast(getString(R.string.error_delete_events));
-            return;
+    ActivityResultLauncher<Intent> deleteEventLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == RESULT_OK) {
+                Intent data = result.getData();
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                handleDeleteEvent(task);
+            }
         }
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(bodyObject.toString(), JSON);
+    });
 
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(getString(R.string.base_url) + "events/" + eventId)
-                .delete(body)
-                .build();
+    //ChatGPT Usage: no
+    private void handleDeleteEvent(@NonNull Task<GoogleSignInAccount> task){
+        try {
+            GoogleSignInAccount account = task.getResult(ApiException.class);
+            String authCode = account.getServerAuthCode();
+            String eventId = selectedEventId;
+            Log.d(TAG,"EventId: " + eventId);
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.d(TAG, "Error deleting event");
+            JSONObject bodyObject;
+
+            try {
+                bodyObject = getDeleteRequestBody(authCode);
+            }catch (Exception e){
                 utilities.showToast(getString(R.string.error_delete_events));
-                e.printStackTrace();
+                return;
             }
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(bodyObject.toString(), JSON);
+            Log.d(TAG, "Body: " + bodyObject.toString());
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(getString(R.string.base_url) + "events/" + eventId)
+                    .delete(body)
+                    .build();
 
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()){
-                    try {
-                        JSONObject responseBody = new JSONObject(response.body().string());
-                        String message = responseBody.getString("message");
-                        utilities.showToast(message);
-                    } catch(Exception e) {
-                        Log.d(TAG, e.toString());
-                        utilities.showToast("Event deleted");
-                    }
-                    getEvents(selectedDate);
-                }else{
-                    Log.d(TAG, "Response not successfull");
-                    utilities.showToast(getString(R.string.error_get_events));
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    Log.d(TAG, "Error deleting event");
+                    utilities.showToast(getString(R.string.error_delete_events));
+                    e.printStackTrace();
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if(response.isSuccessful()){
+                        try {
+                            JSONObject responseBody = new JSONObject(response.body().string());
+                            String message = responseBody.getString("message");
+                            utilities.showToast(message);
+                        } catch(Exception e) {
+                            Log.d(TAG, e.toString());
+                            utilities.showToast("Event deleted");
+                        }
+                        getEvents(selectedDate);
+                    }else{
+                        Log.d(TAG, "Response not successfull");
+                        utilities.showToast(getString(R.string.error_delete_events));
+                    }
+                }
+            });
+        } catch(Exception e){
+            utilities.showToast(getString(R.string.error_delete_events));
+        }
     }
 
     // ChatGPT Usage: no
-    private JSONObject getDeleteRequestBody() throws JSONException {
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(CalendarActivity.this);
-        String authCode = acct.getServerAuthCode();
-
+    private JSONObject getDeleteRequestBody(String authCode) throws JSONException {
         JSONObject body = new JSONObject();
 
-        body.put("userId", userId);
         body.put("authCode", authCode);
 
         return body;

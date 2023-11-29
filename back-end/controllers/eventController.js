@@ -46,10 +46,9 @@ exports.getEvents = async (req, res) => {
 // ChatGPT Usage: No
 exports.deleteEvent = async (req, res) => {
     const authCode = req.body.authCode;
-    const userId = req.body.userId;
     const eventId = req.params.eventId;
 
-    const verificationResult = await eventService.deleteEvent(authCode, userId, eventId);
+    const verificationResult = await eventService.deleteEvent(authCode, eventId);
     if (verificationResult.success) {
         res.status(200).json({ success: true, message: verificationResult.message});
     } else {

@@ -10,7 +10,7 @@ jest.mock('../models/user');
 
 
 describe('POST /authentication/login', () => {
-     // Input: valid idToken, valid authCode
+     // Input: valid idToken
     // Expected status code: 200
     // Expected behaviour: return success message
     // Expected output: { success: true, userId: mockedUsers[0]._id.toString() }
@@ -18,13 +18,12 @@ describe('POST /authentication/login', () => {
     test('Login with registered user', async () => {
         const response = await request(app).post('/authentication/login').send({
             idToken: 'validTokenRegisteredMockUser0',
-            authCode: 'validAuthCode'
         });
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual({success: true, userId: mockedUsers[0]._id.toString()});
     });
 
-    // Input: invalid idToken, valid authCode
+    // Input: invalid idToken
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: { success: false, error: 'Token verification failed' }
@@ -32,13 +31,12 @@ describe('POST /authentication/login', () => {
     test('Test login with invalid Token', async () => {
         const response = await request(app).post('/authentication/login').send({
             idToken: 'invalidToken',
-            authCode: 'validAuthCode'
         });
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, error: 'Token verification failed'});
     });
 
-    // Input: valid idToken for unregistered user, valid authCode
+    // Input: valid idToken for unregistered user
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: { success: false, error: 'User not registered' }
@@ -46,13 +44,12 @@ describe('POST /authentication/login', () => {
     test('Try login with unregistered user', async () => {
         const response = await request(app).post('/authentication/login').send({
             idToken: 'validTokenUnregisteredUser',
-            authCode: 'validAuthCode',
         });
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, error: 'User not registered'});
     });
 
-    // Input: valid idToken for banned user, valid authCode
+    // Input: valid idToken for banned user
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: {success: false, error: "User banned"}
@@ -60,7 +57,6 @@ describe('POST /authentication/login', () => {
     test('Try login with banned user', async () => {
         const response = await request(app).post('/authentication/login').send({
             idToken: 'validTokenBannedMockUser7',
-            authCode: 'validAuthCode'
         });
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, error: "User banned"});
@@ -157,7 +153,6 @@ describe('POST /authentication/signup', () => {
 
         const response = await request(app).post('/authentication/signup').send({
             idToken: 'validTokenUnregisteredUser',
-            authCode: 'validAuthCode'
         });
         expect(response.statusCode).toBe(200);
         expect(response.body.success).toEqual(true);
@@ -165,7 +160,7 @@ describe('POST /authentication/signup', () => {
         expect(User.findOne({email: unregisteredUser.email})).not.toBeNull();
     });
 
-    // Input: valid idToken for user not registered but already tried once and is on db, valid authCode
+    // Input: valid idToken for user not registered but already tried once and is on db
     // Expected status code: 200
     // Expected behaviour: return success message
     // Expected output: {success: true, userId: mockedUsers[8]._id.toString() }
@@ -175,13 +170,12 @@ describe('POST /authentication/signup', () => {
 
         const response = await request(app).post('/authentication/signup').send({
             idToken: 'validTokenUnregisteredAlreadyInDbMockedUser8',
-            authCode: 'validAuthCode'
         });
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual( {success: true, userId: mockedUsers[8]._id.toString() });
     });
 
-    // Input: invalid idToken, valid authCode
+    // Input: invalid idToken
     // Expected status code: 401
     // Expected behaviour: return error message and not create user
     // Expected output: {success: false, error: "Token verification failed"}
@@ -189,13 +183,12 @@ describe('POST /authentication/signup', () => {
     test('Invalid Token', async () => {
         const response = await request(app).post('/authentication/signup').send({
             idToken: 'invalidToken',
-            authCode: 'validAuthCode'
         });
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, error: 'Token verification failed'});
     });
 
-    // Input: valid idToken for  user already registered, valid authCode
+    // Input: valid idToken for  user already registered
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: {success: false, error: "User already registered"}
@@ -203,13 +196,12 @@ describe('POST /authentication/signup', () => {
     test('Registered user', async () => {
         const response = await request(app).post('/authentication/signup').send({
             idToken: 'validTokenRegisteredMockUser0',
-            authCode: 'validAuthCode'
         });
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, "error": "User already registered"});
     });
 
-    // Input: valid idToken for  user that will throw error on save (hard coded in mock), valid authCode
+    // Input: valid idToken for  user that will throw error on save (hard coded in mock)
     // Expected status code: 401
     // Expected behaviour: return error message
     // Expected output: {success: false, error: "Error saving user"}
@@ -217,7 +209,6 @@ describe('POST /authentication/signup', () => {
     test('Error when saving user', async () => {
         const response = await request(app).post('/authentication/signup').send({
             idToken: 'validTokenErrorOnSave',
-            authCode: 'validAuthCode'
         });
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({success: false, error: "Error saving user"});
