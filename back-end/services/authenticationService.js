@@ -1,5 +1,6 @@
 const { OAuth2Client } = require('google-auth-library');
 const { google } = require('googleapis');
+const {User} = require('../models/user');
 require('dotenv').config();
 
 const client = new OAuth2Client({
@@ -66,4 +67,21 @@ async function getGoogleClient(authCode, userId ){
     return response;
 }
 
-module.exports = { verifyGoogleToken, retrieveAccessToken, getGoogleClient };
+//ChatGPT Usage: No
+// Use authorization code to get new authorized Google Client
+async function verifyUser(idToken, userId ){
+    const verificationResponse = await verifyGoogleToken(idToken);
+    const user = await User.findById(userId);
+    let response;
+    
+    if(!verificationResponse.success || verificationResponse.ticket.getPayload().email !== user.email) {
+        response = {success: false, error: "Error authenticating user"};
+    }else{
+        response = {success: true};
+    }
+
+    return response;
+}
+
+
+module.exports = { verifyGoogleToken, retrieveAccessToken, getGoogleClient, verifyUser };

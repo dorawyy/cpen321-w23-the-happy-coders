@@ -1,5 +1,5 @@
 const communicationService = require('../services/communicationService'); 
-
+const authenticationService = require('../services/authenticationService');
 // ChatGPT Usage: No
 exports.sendMessage = async(req,res) =>{
     let message;
@@ -21,10 +21,16 @@ exports.sendMessage = async(req,res) =>{
 
 // ChatGPT Usage: No
 exports.getChatrooms = async(req,res) =>{
-    let chatrooms;
+    const idToken = req.params.idToken;
+    const sourceUserId = req.params.userId;
     try{
-        const sourceUserId = req.params.userId;
-        chatrooms = await communicationService.getChatrooms(sourceUserId);
+        const chatrooms = await communicationService.getChatrooms(sourceUserId);
+
+        const verificationResponse = await authenticationService.verifyUser(idToken, sourceUserId);
+        if(!verificationResponse.success) {
+            return res.status(401).json({error:verificationResponse.error});
+        }
+        
         return res.status(200).json({chatroomList: chatrooms});
     }
     catch(err){

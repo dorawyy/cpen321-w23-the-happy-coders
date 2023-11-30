@@ -6,53 +6,65 @@ const { mockedChats} = require('../models/__mocks__/chatroom.js');
 jest.mock('../models/user');
 jest.mock('../models/chatroom');
 jest.mock('openai');
-describe('GET /chatrooms/:userId', () => {
+jest.mock('google-auth-library');
 
-    // Input: valid userId
+describe('GET /chatrooms/all/:userId/:idToken', () => {
+
+    // Input: valid userId, valid idToken
     // Expected status code: 200
     // Expected behaviour: return list of chatrooms
     // Expected output: [mockedChats[0]._id.toString()]
     // ChatGPT Usage: No
     test('Get chatrooms for valid user 0', async () => {
-        const response = await request(app).get(`/chatrooms/${mockedUsers[0]._id}`);
+        const response = await request(app).get(`/chatrooms/all/${mockedUsers[0]._id}/validTokenRegisteredMockUser0`);
         expect(response.status).toBe(200);
         const chatroomIds = response.body.chatroomList.map((chatroom) => chatroom._id);
         expect(chatroomIds).toEqual([mockedChats[0]._id.toString()]);
     });
 
-    // Input: valid userId
+    // Input: valid userId, valid idToken
     // Expected status code: 200
     // Expected behaviour: return list of chatrooms
     // Expected output: [mockedChats[1]._id.toString()]
     // ChatGPT Usage: No
     test('Get chatrooms for valid user 1', async () => {
-        const response = await request(app).get(`/chatrooms/${mockedUsers[1]._id}`);
+        const response = await request(app).get(`/chatrooms/all/${mockedUsers[1]._id}/validTokenRegisteredMockUser1`);
         expect(response.status).toBe(200);
         const chatroomIds = response.body.chatroomList.map((chatroom) => chatroom._id);
         expect(chatroomIds).toEqual([mockedChats[0]._id.toString()]);
     });
 
-    // Input: invalid userId
+    // Input: invalid userId, valid idToken
     // Expected status code: 500
     // Expected behaviour: return error message
     // Expected output: {error: "Error getting chatrooms"}
     // ChatGPT Usage: No
     test('Get chatrooms for invalid user', async () => {
-        const response = await request(app).get(`/chatrooms/1`);
+        const response = await request(app).get(`/chatrooms/all/1/validToken`);
         expect(response.status).toBe(500);
         expect(response.body.error).toEqual("Error getting chatrooms");
     });
 
-    // Input: valid userId
+    // Input: valid userId, valid idToken
     // Expected status code: 200
     // Expected behaviour: return empty list
     // Expected output: []
     // ChatGPT Usage: No
     test('Get chatrooms for user with no chatrooms', async () => {
-        const response = await request(app).get(`/chatrooms/${mockedUsers[5]._id}`);
+        const response = await request(app).get(`/chatrooms/all/${mockedUsers[5]._id}/validTokenRegisteredMockUser5`);
         expect(response.status).toBe(200);
         const chatroomIds = response.body.chatroomList.map((chatroom) => chatroom._id);
         expect(chatroomIds).toEqual([]);
+    });
+
+    // Input: valid userId, invalid idToken
+    // Expected status code: 401
+    // Expected behaviour: return error message
+    // Expected output: {error: "Error authenticating user"}    
+    test("Try to get chatrooms with invalid idToken", async () => {
+        const response = await request(app).get(`/chatrooms/all/${mockedUsers[0]._id}/invalidToken`);
+        expect(response.status).toBe(401);
+        expect(response.body.error).toEqual("Error authenticating user");
     });
 });
 

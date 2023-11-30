@@ -16,6 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.langsync.R;
 import com.example.langsync.databinding.FragmentAllChatsBinding;
+import com.example.langsync.util.AuthenticationUtilities;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +49,8 @@ public class AllChatsFragment extends Fragment {
     public static String currentChatroom;
     private String userId;
     private CardView noChats;
+    private View root;
+    private AuthenticationUtilities utilities;
 
     // ChatGPT Usage: No
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -49,14 +59,45 @@ public class AllChatsFragment extends Fragment {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         userId = sharedPreferences.getString("loggedUserId", null);
 
-
         binding = FragmentAllChatsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        root = binding.getRoot();
         noChats = root.findViewById(R.id.no_chats);
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
+                .build();
+
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
+        Task<GoogleSignInAccount> task = mGoogleSignInClient.silentSignIn();
+        if (task.isSuccessful()) {
+            // There's immediate result available.
+            GoogleSignInAccount signInAccount = task.getResult();
+            getChats(signInAccount.getIdToken());
+        } else {
+            task.addOnCompleteListener(new OnCompleteListener<GoogleSignInAccount>() {
+                @Override
+                public void onComplete(Task<GoogleSignInAccount> task) {
+                    try {
+                        GoogleSignInAccount signInAccount = task.getResult(ApiException.class);
+                        getChats(signInAccount.getIdToken());
+                    } catch (ApiException apiException) {
+                        // You can get from apiException.getStatusCode() the detailed error code
+                        // e.g. GoogleSignInStatusCodes.SIGN_IN_REQUIRED means user needs to take
+                        // explicit action to finish sign-in;
+                        // Please refer to GoogleSignInStatusCodes Javadoc for details
+                        utilities.showToast("Error getting chats, try again");
+                    }
+                }
+            });
+        }
+
+        return root;
+    }
+
+    private void getChats(String idToken){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(getString(R.string.base_url) + "chatrooms/" + userId)
+                .url(getString(R.string.base_url) + "chatrooms/all/" + userId + "/" + idToken)
                 .get()
                 .build();
 
@@ -102,8 +143,6 @@ public class AllChatsFragment extends Fragment {
                 }
             }
         });
-
-        return root;
     }
 
     // ChatGPT Usage: No

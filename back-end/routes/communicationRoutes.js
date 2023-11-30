@@ -3,7 +3,7 @@ const router = express.Router();
 const communicationController = require('../controllers/communicationController'); 
 
 // Gets all the chatrooms associated with a user id
-router.get('/:userId', communicationController.getChatrooms); 
+router.get('/all/:userId/:idToken', communicationController.getChatrooms); 
 
 // Sends message to chatroom
 router.post('/:id/messages', communicationController.sendMessage); 

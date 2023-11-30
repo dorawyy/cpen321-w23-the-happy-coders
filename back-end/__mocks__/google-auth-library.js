@@ -25,6 +25,12 @@ class MockedOAuth2Client {
         case 'validTokenRegisteredMockUser0':
           email = mockedUsers[0].email;
           break;
+        case 'validTokenRegisteredMockUser1':
+            email = mockedUsers[1].email;
+            break;
+        case 'validTokenRegisteredMockUser5':
+          email = mockedUsers[5].email;
+          break;
         case 'validTokenBannedMockUser7':
           email = mockedUsers[7].email;
           break;
