@@ -73,12 +73,9 @@ public class AdminReports extends AppCompatActivity {
                     }
                     runOnUiThread(() -> {
                         reportsRecyclerView = findViewById(R.id.reports_recycler_view);
-
                         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                         reportsRecyclerView.setLayoutManager(layoutManager);
-
                         RecyclerView.Adapter chatRecyclerAdapter = new ReportsRecyclerAdapter(AdminReports.this, getApplicationContext(), reports, adminId);
-
                         reportsRecyclerView.setAdapter(chatRecyclerAdapter);
                     });
                 } catch (Exception e) {

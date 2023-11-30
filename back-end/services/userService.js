@@ -140,7 +140,6 @@ async function findAdminOrCreate(email) {
 
     admin.admin = true;
     await admin.save();
-    
     return {success: true, user: admin};
 }
 

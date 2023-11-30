@@ -32,13 +32,12 @@
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/ban_user"
+                android:id="@+id/admin_ban_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
                 android:backgroundTint="@color/red"
                 android:fontFamily="@font/poppins_semibold"
-                android:src="@drawable/baseline_remove_circle_24"
                 android:text="Ban User" />
 
             <ImageView

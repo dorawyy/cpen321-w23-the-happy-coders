@@ -27,6 +27,7 @@ async function addReport(reportData){
     report = new Report({
         reporterUserId,
         reportedUserId,
+        reportedUserName: reportedUser.displayName,
         chatRoomId,
         reportMessage
     });
