@@ -9,6 +9,7 @@ const matchingRoutes = require('./routes/matchingRoutes');
 const communicationRoutes = require('./routes/communicationRoutes');
 const recommendationRoutes = require('./routes/recommendationRoutes');
 const moderationRoutes = require('./routes/moderationRoutes');
+const badgeRoutes = require('./routes/badgeRoutes');
 
 
 

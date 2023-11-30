@@ -1,0 +1,1 @@
+router.get('/:badgeId', eventController.getEvents);
