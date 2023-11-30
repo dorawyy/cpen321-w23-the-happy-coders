@@ -130,19 +130,6 @@ public class ChatActivity extends AppCompatActivity {
                     Log.d(TAG, "Error creating message object");
                 }
         });
-
-        socket.on("noTyping", args -> {
-            try {
-                if(messages.get(messages.size() - 1).getBoolean("loading")) {
-                    messages.remove(messages.size() - 1);
-                    runOnUiThread(() -> {
-                        msgRecyclerAdapter.notifyDataSetChanged();
-                    });
-                }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-        });
     }
 
     // ChatGPT Usage: No
@@ -171,7 +158,7 @@ public class ChatActivity extends AppCompatActivity {
         msgInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                Log.d(TAG,"Typing");
             }
 
             @Override
@@ -182,7 +169,7 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                Log.d(TAG,"Typing");
             }
         });
 

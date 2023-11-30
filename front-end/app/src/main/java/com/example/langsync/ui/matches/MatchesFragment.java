@@ -55,8 +55,8 @@ public class MatchesFragment extends Fragment {
     private TextView matchInterests;
     private ImageView matchProfileImage;
 
-    private ImageView matchBadge, sessionBadge;
-
+    private ImageView matchBadge;
+    private ImageView sessionBadge;
     private String userId;
 
     // ChatGPT Usage: No
