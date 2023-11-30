@@ -250,6 +250,7 @@ public class MatchesFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        matches.clear();
         binding = null;
     }
 }
