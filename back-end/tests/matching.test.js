@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../app'); // Adjust the path as needed
+const app = require('../app');
 const {User, mockedUsers} = require('../models/__mocks__/user.js');
 
 jest.mock('../models/user');

@@ -1,5 +1,4 @@
 const {Badge} = require('../models/badge');
-const {User} = require('../models/user');
 
 async function assignMatchBadge(user, type)
 {

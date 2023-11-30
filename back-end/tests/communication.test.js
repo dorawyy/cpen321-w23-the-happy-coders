@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../app'); // Adjust the path as needed
+const app = require('../app');
 const { mockedUsers} = require('../models/__mocks__/user.js');
 const { mockedChats} = require('../models/__mocks__/chatroom.js');
 

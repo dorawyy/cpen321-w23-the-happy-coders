@@ -1,5 +1,3 @@
-const request = require('supertest');
-const app = require('../app'); // Adjust the path as needed
 const { mockedBadges} = require('../models/__mocks__/badge.js');
 const { mockedUsers } = require('../models/__mocks__/user.js');
 const badgeService = require('../services/badgeService.js');
