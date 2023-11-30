@@ -48,10 +48,10 @@
         android:layout_marginBottom="8dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reports_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/reports_recycler_view"
-        tools:listitem="@layout/report_item"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        tools:listitem="@layout/report_item" />
 
 </LinearLayout>

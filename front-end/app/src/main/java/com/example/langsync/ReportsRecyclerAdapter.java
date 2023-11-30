@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,13 +50,13 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         private TextView reportedUser; 
         private TextView reason;
         private ImageView removeReport;
-        private ImageView banUser;
+        private Button banUser;
         public ReportsViewHolder(View itemView) {
             super(itemView);
             reportedUser = itemView.findViewById(R.id.reported_user);
             reason = itemView.findViewById(R.id.reported_reason);
             removeReport = itemView.findViewById(R.id.remove_report);
-            banUser = itemView.findViewById(R.id.ban_user);
+            banUser = itemView.findViewById(R.id.admin_ban_user);
         }
     }
 
@@ -83,7 +84,7 @@ public class ReportsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
         JSONObject report = reports.get(i);
         try {
-            vh.reportedUser.setText(report.getString("reportedUserId"));
+            vh.reportedUser.setText(report.getString("reportedUserName"));
             vh.reason.setText(report.getString("reportMessage"));
             vh.banUser.setOnClickListener(v -> {
                 OkHttpClient client = new OkHttpClient();
