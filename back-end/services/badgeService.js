@@ -7,7 +7,7 @@ async function assignMatchBadge(user, type)
     let milestones = [1, 5, 10]
 
     if(milestones.includes(badgeLength)){
-        try{
+     
             const badge = await Badge.findOne({count: badgeLength, type});
             if(badgeLength === 10){
                 const removeBadge = await Badge.findOne({count: 5, type});
@@ -23,26 +23,10 @@ async function assignMatchBadge(user, type)
             }
 
             user.badges.push(badge._id);
-        }
-        catch(err){
-            console.log(err);
-        }
     }
 
     await user.save();
-    return;
+    return true;
 }
 
-async function getBadgeIcon(userId) {
-    const user = await User.findById(userId);
-    let badgeIds = user.badges;
-    let badgeIcons = [];
-    badgeIds.forEach(id => {
-        let badge = Badge.findById(id);
-        badgeIcons.push(badge.icon);
-    });
-
-   return badgeIcons;
-}
-
-module.exports = {assignMatchBadge, getBadgeIcon};
+module.exports = {assignMatchBadge};

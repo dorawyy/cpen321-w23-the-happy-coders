@@ -9,7 +9,6 @@ const matchingRoutes = require('./routes/matchingRoutes');
 const communicationRoutes = require('./routes/communicationRoutes');
 const recommendationRoutes = require('./routes/recommendationRoutes');
 const moderationRoutes = require('./routes/moderationRoutes');
-const badgeRoutes = require('./routes/badgeRoutes');
 
 
 
@@ -28,6 +27,5 @@ app.use("/matches", matchingRoutes);
 app.use("/chatrooms", communicationRoutes);
 app.use("/recommendations", recommendationRoutes);
 app.use("/moderation", moderationRoutes);
-app.use("/badges", badgeRoutes);
 
 module.exports = app;

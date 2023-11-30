@@ -39,15 +39,15 @@ class Badge {
 
     const mockBadge4 = new Badge({
         _id: new ObjectId('5f6d88b9d4b4d4c6a0b0f6b5'),
-        icon: "gold_session_badge",
-        count: 10,
+        icon: "silver_session_badge",
+        count: 5,
         type: "Lesson"
     });
 
     const mockBadge5 = new Badge({
         _id: new ObjectId('5f6d88b9d4b4d4c6a0b0f6b6'),
-        icon: "gold_session_badge",
-        count: 10,
+        icon: "bronze_session_badge",
+        count: 1,
         type: "Lesson"
     });
 
@@ -62,10 +62,11 @@ class Badge {
     Badge.findOne = jest.fn().mockImplementation((query) =>{
         if (!query) return mockedBadges[0];
         const {count, type} = query;
-        if(count == -1){
+
+        if(count === -1){
             throw new Error('Error finding badge');
         }
-        
+
         let badge = mockedBadges.find((badge) => badge.count == count && badge.type == type);
 
         return badge;

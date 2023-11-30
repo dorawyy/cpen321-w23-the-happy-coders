@@ -2,43 +2,40 @@ const request = require('supertest');
 const app = require('../app'); // Adjust the path as needed
 const { mockedBadges} = require('../models/__mocks__/badge.js');
 const { mockedUsers } = require('../models/__mocks__/user.js');
+const badgeService = require('../services/badgeService.js');
 
 jest.mock('../models/badge');
 jest.mock('../models/user');
 
-describe('GET /badges/:userId', () => {
-
-    // Input: valid userId with badges
-    // Expected status code: 200
-    // Expected behaviour: return list badge icons
-    // Expected output: [mockedBadges[0].icon, mockedBadges[1].icon]
+describe('Assigning badges to users', () => {
+    // Input: valid userId with 5 lessons
+    // Expected behaviour: silver badge is assigned to mockedUsers[8] 
+    // Expected output: true
     // ChatGPT Usage: No
-    test('Get badge icons for valid user with badges', async () => {
-        const response = await request(app).get(`/badges/${mockedUsers[0]._id}`);
-        expect(response.status).toBe(200);
-        expect(response.body.icons).toEqual([mockedBadges[0].icon, mockedBadges[1].icon]);
+    test('Assigning silver badge to user', async () => {
+        let response = await badgeService.assignMatchBadge(mockedUsers[8], "Lesson");
+        expect(response).toBe(true);
+        expect(mockedUsers[8].badges).toContainEqual(mockedBadges[4]._id);
     });
 
-    // Input: valid userId with no badges
-    // Expected status code: 200
-    // Expected behaviour: return list badge icons
-    // Expected output: [mockedBadges[0].icon, mockedBadges[1].icon]
+    // Input: valid userId with 1 lesson
+    // Expected behaviour: bronze badge is assigned to mockedUsers[7] 
+    // Expected output: true
     // ChatGPT Usage: No
-    test('Get badge icons for valid user with no badges', async () => {
-        const response = await request(app).get(`/badges/${mockedUsers[1]._id}`);
-        expect(response.status).toBe(200);
-        expect(response.body.icons).toEqual([]);
+    test('Assigning bronze badge to user', async () => {
+        await badgeService.assignMatchBadge(mockedUsers[7], "Lesson");
+        expect(response).toBe(true);
+        expect(mockedUsers[7].badges).toContainEqual(mockedBadges[5]._id);
     });
 
-    // Input: invalid userId with no badges
-    // Expected status code: 500
-    // Expected behaviour: return error message
-    // Expected output: {error: "Error getting badge icons"}
+    // Input: valid userId with 10 lessons
+    // Expected behaviour: gold badge is assigned to mockedUsers[6] 
+    // Expected output: true
     // ChatGPT Usage: No
-    test('Get badge icons for invalid user', async () => {
-        const response = await request(app).get(`/badges/1`);
-        expect(response.status).toBe(500);
-        expect(response.body).toEqual({error: "Error getting badge icons"});
+    test('Get chatrooms for valid user 0', async () => {
+        await badgeService.assignMatchBadge(mockedUsers[6], "Lesson");
+        expect(response).toBe(true);
+        expect(mockedUsers[6].badges).toContainEqual(mockedBadges[3]._id);
     });
 });
 

@@ -278,7 +278,7 @@ const mockUser5 = {
   },
   admin: false,
   banned: false,
-  lessonCount: 0,
+  lessonCount: -1,
   idealMatch: {
     age: 30,
     interests: {
@@ -313,7 +313,7 @@ const mockUser6 = {
   blockedUsers: [],
   likedUsers: [],
   chatroomIDs: [],
-  badges: [],
+  badges: ['5f6d88b9d4b4d4c6a0b0f6b5'],
   interests: {
     business: false,
     sports: false,
@@ -327,7 +327,7 @@ const mockUser6 = {
   },
   admin: false,
   banned: false,
-  lessonCount: 0,
+  lessonCount: 10,
   idealMatch: {
     age: 30,
     interests: {
@@ -377,7 +377,7 @@ const mockUser7 = {
   },
   admin: false,
   banned: true,
-  lessonCount: 0,
+  lessonCount: 1,
   idealMatch: {
     age: 30,
     interests: {
@@ -413,7 +413,7 @@ const mockUser8 = {
   blockedUsers: [],
   likedUsers: [],
   chatroomIDs: [],
-  badges: [],
+  badges: ['5f6d88b9d4b4d4c6a0b0f6b6'],
   interests: {
     business: false,
     sports: false,
@@ -427,7 +427,7 @@ const mockUser8 = {
   },
   admin: false,
   banned: false,
-  lessonCount: 0,
+  lessonCount: 5,
   idealMatch: {
     age: 0,
     interests: {
