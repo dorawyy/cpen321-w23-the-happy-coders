@@ -38,7 +38,8 @@ async function assignMatchBadge(user, type)
             console.log(err);
         }
     }
-    user.save();
+    await user.save();
+    return;
 }
 
 async function getBadgeIcon(badgeIds) {

@@ -19,7 +19,7 @@ async function sendMessage(chatroomId, content, sourceUserId, learningSession){
     }
 
     await chatroom.save();
-    response = { sourceUserId, content}; 
+    response = {sourceUserId, content}; 
     return response; 
 }
 
