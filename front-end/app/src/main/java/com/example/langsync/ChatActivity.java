@@ -3,6 +3,8 @@ package com.example.langsync;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -62,7 +64,7 @@ public class ChatActivity extends AppCompatActivity {
     // ChatGPT Usage: no
     private void setSocket(){
         try {
-            socket = IO.socket(getString(R.string.base_url));
+            socket = IO.socket("https://10.0.2.2:443");
         } catch (URISyntaxException e) {
             Log.d(TAG, "Error connecting to socket");
             e.printStackTrace();
@@ -86,6 +88,7 @@ public class ChatActivity extends AppCompatActivity {
                 try {
                     messageObj.put("sourceUserId", userId);
                     messageObj.put("content", message);
+                    messageObj.put("loading", false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d(TAG, "Error creating message object");
@@ -103,6 +106,8 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        socket.emit("leaveChatroom", chatroomId, userId);
+        Log.d(TAG, "Leaving chatroom");
         socket.disconnect();
     }
 
@@ -119,6 +124,25 @@ public class ChatActivity extends AppCompatActivity {
 
         noMessageView = findViewById(R.id.no_messages);
         msgInput = findViewById(R.id.msg_input);
+
+        msgInput.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                socket.emit("typing", chatroomId, userId);
+                Log.d(TAG, "Typing: " + s.toString());
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                socket.emit("typing", chatroomId, userId);
+                Log.d(TAG, "Typing: " + s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                socket.emit("typing", chatroomId, userId);
+                Log.d(TAG, "Typing: " + s.toString());
+            }
+        });
+
         TextView chatHeaderName = findViewById(R.id.chat_header_name);
         SwitchCompat toggleAi = findViewById(R.id.ai_switch);
 
@@ -255,7 +279,7 @@ public class ChatActivity extends AppCompatActivity {
                         JSONObject json = new JSONObject(response.body().string());
                         JSONArray msgArr = json.getJSONArray("messages");
                         for (int i = 0; i < msgArr.length(); i++) {
-                            messages.add(msgArr.getJSONObject(i));
+                            messages.add(msgArr.getJSONObject(i).put("loading", false));
                         }
                         Log.d(TAG, "Messages: " + messages.toString());
 
@@ -336,6 +360,7 @@ public class ChatActivity extends AppCompatActivity {
                         }
                         message.put("sourceUserId", userId);
                         message.put("content", msgText);
+                        message.put("loading", false);
                         messages.add(message);
                         if (isAiOn) {
                             Log.d(TAG, "Sending message to AI");
