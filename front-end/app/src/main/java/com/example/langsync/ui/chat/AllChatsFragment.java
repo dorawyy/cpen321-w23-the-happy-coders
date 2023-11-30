@@ -81,10 +81,6 @@ public class AllChatsFragment extends Fragment {
                         GoogleSignInAccount signInAccount = task.getResult(ApiException.class);
                         getChats(signInAccount.getIdToken());
                     } catch (ApiException apiException) {
-                        // You can get from apiException.getStatusCode() the detailed error code
-                        // e.g. GoogleSignInStatusCodes.SIGN_IN_REQUIRED means user needs to take
-                        // explicit action to finish sign-in;
-                        // Please refer to GoogleSignInStatusCodes Javadoc for details
                         utilities.showToast("Error getting chats, try again");
                     }
                 }

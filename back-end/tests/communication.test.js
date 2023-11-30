@@ -66,6 +66,16 @@ describe('GET /chatrooms/all/:userId/:idToken', () => {
         expect(response.status).toBe(401);
         expect(response.body.error).toEqual("Error authenticating user");
     });
+
+     // Input: valid userId, valid idToken, but not relative to same user
+    // Expected status code: 401
+    // Expected behaviour: return error message
+    // Expected output: {error: "Error authenticating user"}    
+    test("Try to get chatrooms with another user idToken", async () => {
+        const response = await request(app).get(`/chatrooms/all/${mockedUsers[0]._id}/validTokenRegisteredMockUser5`);
+        expect(response.status).toBe(401);
+        expect(response.body.error).toEqual("Error authenticating user");
+    });
 });
 
 
