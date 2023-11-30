@@ -2,7 +2,7 @@ const { User } = require("../models/user");
 
 const userService = require("./userService")
 const communicationService = require("./communicationService")
-const badgeService = require("./badgesService")
+const badgeService = require("./badgeService")
 
 // ChatGPT Usage: No
 // Check if targetUser likes sourceUser and matches
