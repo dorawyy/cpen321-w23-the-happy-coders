@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.langsync.ChatActivity;
 import com.example.langsync.R;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,7 +69,13 @@ public class AllChatsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         try {
             vh.chat_name.setText(chat.getString("otherUserName"));
 //            vh.chat_last_message.setText(chat.getJSONObject("messages").);
-//            vh.chat_profile_pic.setImageBitmap((Bitmap) chat.get("profilePic"));
+            try {
+                String profilePicUrl = chat.getString("otherUserPicture");
+                Picasso.get().load(profilePicUrl).into(vh.chat_profile_pic);
+            }catch(Exception e){
+                e.printStackTrace();
+                Log.d(TAG, "Error setting profile user for chat item");
+            }
 
             vh.itemView.setOnClickListener(v -> {
                 try {
