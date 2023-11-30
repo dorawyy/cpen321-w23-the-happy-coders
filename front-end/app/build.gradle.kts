@@ -47,6 +47,7 @@ dependencies {
     implementation("io.socket:socket.io-client:2.0.0") {
         exclude("org.json","json")
     }
+    implementation("com.github.bumptech.glide:glide:4.12.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha01")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha01")

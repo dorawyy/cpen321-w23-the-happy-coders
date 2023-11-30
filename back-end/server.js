@@ -23,6 +23,7 @@ io.on('connection', (socket) => {
     console.log('a user connected');
 
     socket.on('joinChatroom', (roomId, userId) => {
+        console.log("joining chatroom");
         socket.userId = userId
         socket.join(roomId);
     });
@@ -38,6 +39,11 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('A user disconnected.');
+    });
+
+    socket.on('typing', (roomId, userId) => {
+        console.log("typing");
+        socket.to(roomId).emit('typing', userId);
     });
 });
 
