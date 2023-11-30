@@ -86,13 +86,11 @@
                     <ImageView
                         android:layout_width="120dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/bronze_match_badge"
                         android:id="@+id/matching_badge"
                         />
                     <ImageView
                         android:layout_width="120dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/bronze_match_badge"
                         android:id="@+id/session_badge"
                         />
                 </LinearLayout>
