@@ -62,7 +62,7 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView.Adapter msgRecyclerAdapter;
 
     // ChatGPT Usage: no
-    private void setSocket(){
+    private void setSocket() {
         try {
             socket = IO.socket("https://langsyncapp.canadacentral.cloudapp.azure.com");
         } catch (URISyntaxException e) {
@@ -81,11 +81,18 @@ public class ChatActivity extends AppCompatActivity {
         socket.on("message", args -> {
             JSONObject data = (JSONObject) args[0];
             String userId = data.optString("userId");
+            Log.d(TAG, "Messages: " + messages);
             if (!userId.equals(this.userId)) {
                 String message = data.optString("message");
                 Log.d(TAG, "Message received: " + message + " from " + userId);
                 JSONObject messageObj = new JSONObject();
                 try {
+                    if(messages.get(messages.size() - 1).getBoolean("loading")) {
+                        messages.remove(messages.size() - 1);
+                        runOnUiThread(() -> {
+                            msgRecyclerAdapter.notifyDataSetChanged();
+                        });
+                    }
                     messageObj.put("sourceUserId", userId);
                     messageObj.put("content", message);
                     messageObj.put("loading", false);
@@ -93,11 +100,42 @@ public class ChatActivity extends AppCompatActivity {
                     e.printStackTrace();
                     Log.d(TAG, "Error creating message object");
                 }
+                Log.d(TAG, "Messages: " + messages);
                 runOnUiThread(() -> {
                     messages.add(messageObj);
                     recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
                     msgRecyclerAdapter.notifyDataSetChanged();
                 });
+            }
+        });
+
+        socket.on("typing", args -> {
+            JSONObject messageObj = new JSONObject();
+                try {
+                    if(!messages.get(messages.size() - 1).getBoolean("loading")) {
+                        messageObj.put("loading", true);
+                        runOnUiThread(() -> {
+                            messages.add(messageObj);
+                            recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
+                            msgRecyclerAdapter.notifyDataSetChanged();
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d(TAG, "Error creating message object");
+                }
+        });
+
+        socket.on("noTyping", args -> {
+            try {
+                if(messages.get(messages.size() - 1).getBoolean("loading")) {
+                    messages.remove(messages.size() - 1);
+                    runOnUiThread(() -> {
+                        msgRecyclerAdapter.notifyDataSetChanged();
+                    });
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
         });
     }
@@ -125,21 +163,21 @@ public class ChatActivity extends AppCompatActivity {
         noMessageView = findViewById(R.id.no_messages);
         msgInput = findViewById(R.id.msg_input);
 
-        msgInput.addTextChangedListener(new TextWatcher(){
+        msgInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                socket.emit("typing", chatroomId, userId);
-                Log.d(TAG, "Typing: " + s.toString());
+
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                socket.emit("typing", chatroomId, userId);
-                Log.d(TAG, "Typing: " + s.toString());
+                if (!msgInput.getText().toString().isEmpty())
+                    socket.emit("typing", chatroomId, userId);
             }
+
             @Override
             public void afterTextChanged(Editable s) {
-                socket.emit("typing", chatroomId, userId);
-                Log.d(TAG, "Typing: " + s.toString());
+
             }
         });
 
@@ -214,7 +252,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     // ChatGPT Usage: No
-    private void sendReport (String reason) {
+    private void sendReport(String reason) {
         OkHttpClient client = new OkHttpClient();
         JSONObject jsonObject = new JSONObject();
         AuthenticationUtilities auth = new AuthenticationUtilities(ChatActivity.this);
@@ -241,6 +279,7 @@ public class ChatActivity extends AppCompatActivity {
                 auth.showToast("Error sending report");
                 e.printStackTrace();
             }
+
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
@@ -322,6 +361,17 @@ public class ChatActivity extends AppCompatActivity {
             jsonObject.put("sourceUserId", userId);
             jsonObject.put("content", msgInput.getText().toString());
             jsonObject.put("learningSession", isAiOn);
+            if(isAiOn) {
+                messages.add(jsonObject.put("loading", false));
+                messages.add(new JSONObject().put("loading", true));
+                runOnUiThread(() -> {
+                    if (messages.size() > 1)
+                        recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
+                    Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
+                    msgRecyclerAdapter.notifyDataSetChanged();
+                });
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
             Log.d(TAG, "Error creating message object");
@@ -358,18 +408,18 @@ public class ChatActivity extends AppCompatActivity {
                                 noMessageView.setVisibility(View.GONE);
                             });
                         }
-                        message.put("sourceUserId", userId);
-                        message.put("content", msgText);
-                        message.put("loading", false);
-                        messages.add(message);
                         if (isAiOn) {
                             Log.d(TAG, "Sending message to AI");
                             socket.emit("sendMessage", chatroomId, "6541a9947cce981c74b03ecb", messageObj.getString("content"));
                         } else {
+                            message.put("sourceUserId", userId);
+                            message.put("content", msgText);
+                            message.put("loading", false);
+                            messages.add(message);
                             Log.d(TAG, "Not sending message to AI");
                         }
                         runOnUiThread(() -> {
-                            if(messages.size() > 1)
+                            if (messages.size() > 1)
                                 recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
                             Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
                             msgRecyclerAdapter.notifyDataSetChanged();
