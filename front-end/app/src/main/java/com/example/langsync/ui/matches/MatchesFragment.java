@@ -55,8 +55,6 @@ public class MatchesFragment extends Fragment {
     private TextView matchInterests;
     private ImageView matchProfileImage;
 
-    private ImageView matchBadge;
-    private ImageView sessionBadge;
     private String userId;
 
     // ChatGPT Usage: No
@@ -217,8 +215,8 @@ public class MatchesFragment extends Fragment {
     }
 
     private void setBadges(JSONArray badges) throws JSONException {
-        matchBadge = matchCard.findViewById(R.id.matching_badge);
-        sessionBadge = matchCard.findViewById(R.id.session_badge);
+        ImageView matchBadge = matchCard.findViewById(R.id.matching_badge);
+        ImageView sessionBadge = matchCard.findViewById(R.id.session_badge);
 
         ArrayList<String> badgeIds = new ArrayList<>();
         badgeIds.add(getResources().getString(R.string.bronze_match_badge_id));
