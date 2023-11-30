@@ -31,7 +31,7 @@ async function assignMatchBadge(user, type)
     else if(user.matchedUsers.length == 1)
     {
         try{
-            const badge = await Badge.findOne({count: 5, type: type});
+            const badge = await Badge.findOne({count: 1, type: type});
             user.badges.push(badge._id);
         }
         catch(err){
