@@ -47,13 +47,15 @@ public class MatchesFragment extends Fragment {
     private ImageView langsyncSpinner;
 
     ArrayList<JSONObject> matches = new ArrayList<>();
-    private TextView matchName; 
+    private TextView matchName;
     private TextView noMatchesText;
     private TextView interestedLanguages;
     private TextView proficientLanguages;
     private TextView matchAge;
     private TextView matchInterests;
     private ImageView matchProfileImage;
+
+    private ImageView matchBadge, sessionBadge;
 
     private String userId;
 
@@ -79,7 +81,7 @@ public class MatchesFragment extends Fragment {
         matchProfileImage = root.findViewById(R.id.match_img);
 
         dislikeMatch = root.findViewById(R.id.dislike_match);
-        dislikeMatch.setOnClickListener(v ->  matchCardAnim(-1));
+        dislikeMatch.setOnClickListener(v -> matchCardAnim(-1));
         likeMatch = root.findViewById(R.id.like_match);
         likeMatch.setOnClickListener(v -> matchCardAnim(1));
 
@@ -104,48 +106,48 @@ public class MatchesFragment extends Fragment {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()){
-                        try {
-                            JSONObject responseBody = new JSONObject(response.body().string());
-                            JSONArray recommendedUsersList = responseBody.getJSONArray("recommendedUsersList");
-                            for (int i = 0; i < recommendedUsersList.length(); i++) {
-                                Log.d(TAG, recommendedUsersList.getJSONObject(i).toString());
-                                matches.add(recommendedUsersList.getJSONObject(i));
-                            }
-                            requireActivity().runOnUiThread(() -> {
-                                matchName = matchCard.findViewById(R.id.match_name);
-                                if (!matches.isEmpty()) {
-                                    try {
-                                        JSONObject match = matches.get(0);
-                                        fillMatchInformation(match);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                        Log.d(TAG, "Error setting match info");
-                                    }
-                                    langsyncSpinner.clearAnimation();
-                                    loadingView.setVisibility(View.GONE);
-                                    langsyncSpinner.setVisibility(View.GONE);
-                                } else {
-                                    langsyncSpinner.clearAnimation();
-                                    matchName.setText("");
-                                    interestedLanguages.setText("");
-                                    proficientLanguages.setText("");
-                                    matchAge.setText("");
-                                    matchInterests.setText("");
-                                    matchProfileImage.setImageResource(R.drawable.placeholder_match_img_foreground);
-                                    matchCard.setVisibility(View.GONE);
-                                    likeMatch.setVisibility(View.GONE);
-                                    dislikeMatch.setVisibility(View.GONE);
-                                    noMatchesText.setVisibility(View.VISIBLE);
-                                    loadingView.setVisibility(View.VISIBLE);
-                                    langsyncSpinner.setVisibility(View.VISIBLE);
-                                }
-                            });
-                        } catch (JSONException | IOException e) {
-                            Log.d(TAG, "Error getting recommendations");
-                            Log.d(TAG, e.toString());
-                            e.printStackTrace();
+                if (response.isSuccessful()) {
+                    try {
+                        JSONObject responseBody = new JSONObject(response.body().string());
+                        JSONArray recommendedUsersList = responseBody.getJSONArray("recommendedUsersList");
+                        for (int i = 0; i < recommendedUsersList.length(); i++) {
+                            Log.d(TAG, recommendedUsersList.getJSONObject(i).toString());
+                            matches.add(recommendedUsersList.getJSONObject(i));
                         }
+                        requireActivity().runOnUiThread(() -> {
+                            matchName = matchCard.findViewById(R.id.match_name);
+                            if (!matches.isEmpty()) {
+                                try {
+                                    JSONObject match = matches.get(0);
+                                    fillMatchInformation(match);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Log.d(TAG, "Error setting match info");
+                                }
+                                langsyncSpinner.clearAnimation();
+                                loadingView.setVisibility(View.GONE);
+                                langsyncSpinner.setVisibility(View.GONE);
+                            } else {
+                                langsyncSpinner.clearAnimation();
+                                matchName.setText("");
+                                interestedLanguages.setText("");
+                                proficientLanguages.setText("");
+                                matchAge.setText("");
+                                matchInterests.setText("");
+                                matchProfileImage.setImageResource(R.drawable.placeholder_match_img_foreground);
+                                matchCard.setVisibility(View.GONE);
+                                likeMatch.setVisibility(View.GONE);
+                                dislikeMatch.setVisibility(View.GONE);
+                                noMatchesText.setVisibility(View.VISIBLE);
+                                loadingView.setVisibility(View.VISIBLE);
+                                langsyncSpinner.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    } catch (JSONException | IOException e) {
+                        Log.d(TAG, "Error getting recommendations");
+                        Log.d(TAG, e.toString());
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -168,7 +170,7 @@ public class MatchesFragment extends Fragment {
                         fillMatchInformation(match);
                     }
                 }
-                if(matches.isEmpty()) {
+                if (matches.isEmpty()) {
                     matchName.setText("");
                     interestedLanguages.setText("");
                     proficientLanguages.setText("");
@@ -187,14 +189,14 @@ public class MatchesFragment extends Fragment {
         });
     }
 
-    private void fillMatchInformation( JSONObject match) throws JSONException {
+    private void fillMatchInformation(JSONObject match) throws JSONException {
         JSONArray interestedLanguagesObj = match.getJSONArray("interestedLanguages");
         JSONArray proficientLanguagesObj = match.getJSONArray("proficientLanguages");
         JSONObject matchInterestsObj = match.getJSONObject("interests");
         String pictureUrl = null;
         try {
             pictureUrl = match.getString("picture");
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.d(TAG, "User has no profile picture");
         }
 
@@ -204,15 +206,57 @@ public class MatchesFragment extends Fragment {
         proficientLanguages.setText(JSONObjectUtilities.jsonArrayToString(proficientLanguagesObj));
         matchInterests.setText(JSONObjectUtilities.getInterestsString(matchInterestsObj));
 
-        if(pictureUrl != null && !pictureUrl.isEmpty()){
+        setBadges(match.getJSONArray("badges"));
+
+        if (pictureUrl != null && !pictureUrl.isEmpty()) {
             Picasso.get().load(pictureUrl).into(matchProfileImage);
-        }else{
+        } else {
             matchProfileImage.setImageResource(R.drawable.placeholder_match_img_foreground);
         }
     }
 
+    private void setBadges(JSONArray badges) throws JSONException {
+        matchBadge = matchCard.findViewById(R.id.matching_badge);
+        sessionBadge = matchCard.findViewById(R.id.session_badge);
+
+        ArrayList<String> badgeIds = new ArrayList<>();
+        badgeIds.add(getResources().getString(R.string.bronze_match_badge_id));
+        badgeIds.add(getResources().getString(R.string.silver_match_badge_id));
+        badgeIds.add(getResources().getString(R.string.gold_match_badge_id));
+        badgeIds.add(getResources().getString(R.string.bronze_session_badge_id));
+        badgeIds.add(getResources().getString(R.string.silver_session_badge_id));
+        badgeIds.add(getResources().getString(R.string.gold_session_badge_id));
+
+        if (badges.length() == 0) {
+            matchBadge.setVisibility(View.GONE);
+            sessionBadge.setVisibility(View.GONE);
+            return;
+        }
+
+        if (badgeIds.get(0).equals(badges.get(0))) {
+            matchBadge.setImageResource(R.drawable.bronze_match_badge);
+        } else if (badgeIds.get(1).equals(badges.get(0))) {
+            matchBadge.setImageResource(R.drawable.silver_match_badge);
+        } else if (badgeIds.get(2).equals(badges.get(0))) {
+            matchBadge.setImageResource(R.drawable.gold_match_badge);
+        } else {
+            matchBadge.setVisibility(View.GONE);
+        }
+
+        if (badgeIds.get(3).equals(badges.get(1))) {
+            sessionBadge.setImageResource(R.drawable.bronze_session_badge);
+        } else if (badgeIds.get(4).equals(badges.get(1))) {
+            sessionBadge.setImageResource(R.drawable.silver_session_badge);
+        } else if (badgeIds.get(5).equals(badges.get(1))) {
+            sessionBadge.setImageResource(R.drawable.gold_session_badge);
+        } else {
+            sessionBadge.setVisibility(View.GONE);
+        }
+
+    }
+
     // ChatGPT Usage: No
-    private void createMatch(){
+    private void createMatch() {
         OkHttpClient client = new OkHttpClient();
 
         JSONObject jsonObject = new JSONObject();
@@ -237,9 +281,10 @@ public class MatchesFragment extends Fragment {
                 Log.d(TAG, e.toString());
                 e.printStackTrace();
             }
+
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     Log.d(TAG, "Match created");
                 }
             }
