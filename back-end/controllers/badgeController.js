@@ -1,4 +1,5 @@
 const badgeService = require('../services/badgeService');
+
 // ChatGPT Usage: No
 exports.getBadges = async(req,res) =>{
     try{
