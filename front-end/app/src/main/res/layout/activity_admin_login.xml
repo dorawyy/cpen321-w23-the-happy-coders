@@ -11,6 +11,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="Enter Access Code"
+        android:inputType="textPassword"
         android:padding="16dp"
         android:background="@drawable/style_button"
         app:layout_constraintBottom_toBottomOf="parent"
