@@ -138,6 +138,8 @@ async function findAdminOrCreate(email) {
         return {success: false, error: 'User banned'};
     }
 
+    admin.admin = true;
+    await admin.save();
     return {success: true, user: admin};
 }
 

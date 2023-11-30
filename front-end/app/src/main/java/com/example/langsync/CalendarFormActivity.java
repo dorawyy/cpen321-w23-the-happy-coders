@@ -103,6 +103,8 @@ public class CalendarFormActivity extends AppCompatActivity {
                 Intent data = result.getData();
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                 handleCreateEvent(task);
+            }else{
+                utilities.showToast("To create event you must grant Google Calendar access");
             }
         }
     });

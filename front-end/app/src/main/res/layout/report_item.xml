@@ -6,46 +6,46 @@
     android:background="@drawable/style_button"
     android:padding="8dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:fontFamily="@font/poppins_semibold"
-                android:text="Reported User"
-                android:id="@+id/reported_user"
-                android:layout_weight="1"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="16dp"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ban_user"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="16dp"
-                android:src="@drawable/baseline_remove_circle_24"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/remove_report"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="16dp"
-                android:src="@drawable/baseline_delete_24"/>
+            android:textSize="25sp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Reported User"
+            android:id="@+id/reported_user">
 
-        </LinearLayout>
+        </TextView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:fontFamily="@font/poppins"
             android:text="Reported Reason"
-            android:id="@+id/reported_reason"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="10dp"
+            android:id="@+id/reported_reason">
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/admin_ban_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:backgroundTint="@color/red"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Ban User" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:id="@+id/remove_report"
+                android:src="@drawable/ic_trash"/>
+
+    </LinearLayout>
 
 </LinearLayout>

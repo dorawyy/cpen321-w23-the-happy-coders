@@ -281,6 +281,8 @@ public class CalendarActivity extends AppCompatActivity {
                 Intent data = result.getData();
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                 handleDeleteEvent(task);
+            }else{
+                utilities.showToast("To delete event you must grant Google Calendar access");
             }
         }
     });
