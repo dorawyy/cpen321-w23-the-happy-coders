@@ -2,8 +2,9 @@ const badgeService = require('../services/badgeService');
 
 // ChatGPT Usage: No
 exports.getBadges = async(req,res) =>{
+    let icons;
     try{
-        const icons = await badgeService.getBadgeIcon(req.params.userId);
+        icons = await badgeService.getBadgeIcon(req.params.userId);
         return res.status(200).json({icons});
     }
     catch(err){
