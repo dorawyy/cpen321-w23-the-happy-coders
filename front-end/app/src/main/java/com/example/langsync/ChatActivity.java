@@ -87,7 +87,7 @@ public class ChatActivity extends AppCompatActivity {
                 Log.d(TAG, "Message received: " + message + " from " + userId);
                 JSONObject messageObj = new JSONObject();
                 try {
-                    if(messages.get(messages.size() - 1).getBoolean("loading")) {
+                    if(messages.size() > 0 && messages.get(messages.size() - 1).getBoolean("loading")) {
                         messages.remove(messages.size() - 1);
                         runOnUiThread(() -> {
                             msgRecyclerAdapter.notifyDataSetChanged();
@@ -112,11 +112,16 @@ public class ChatActivity extends AppCompatActivity {
         socket.on("typing", args -> {
             JSONObject messageObj = new JSONObject();
                 try {
-                    if(!messages.get(messages.size() - 1).getBoolean("loading")) {
+                    if(messages.size() == 0 || !messages.get(messages.size() - 1).getBoolean("loading")) {
                         messageObj.put("loading", true);
                         runOnUiThread(() -> {
+                            if(messages.size() == 0){
+                                createRecyclerView();
+                            }
                             messages.add(messageObj);
-                            recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
+                            if (msgRecyclerAdapter.getItemCount() > 0) {
+                                recyclerView.smoothScrollToPosition(msgRecyclerAdapter.getItemCount() - 1);
+                            }
                             msgRecyclerAdapter.notifyDataSetChanged();
                         });
                     }
