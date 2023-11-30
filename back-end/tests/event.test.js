@@ -10,6 +10,7 @@ jest.mock('google-auth-library');
 jest.mock('../models/user');
 jest.mock('../models/event');
 jest.mock('../models/chatroom');
+jest.mock('../models/badge');
 
 describe('GET /events/:hostUserId', () => {
     // Input:  valid hostUserId (mockUser[5])

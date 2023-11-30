@@ -28,6 +28,7 @@ const mockUser0 = {
   },
   admin: true,
   banned: false,
+  lessonCount: 0,
   idealMatch: {
     age: 30,
     interests: {
@@ -76,6 +77,7 @@ const mockUser1 ={
   },
   admin: false,
   banned: false,
+  lessonCount: 4,
   idealMatch: {
     age: 28,
     interests: {
@@ -129,6 +131,7 @@ const mockUser2 ={
   },
   admin: false,
   banned: false,
+  lessonCount: 2,
   idealMatch: {
     age: 25,
     interests: {
@@ -177,6 +180,7 @@ const mockUser3 = {
   },
   admin: false,
   banned: false,
+  lessonCount: 0,
   idealMatch: {
     age: 30,
     interests: {
@@ -225,6 +229,7 @@ const mockUser4 = {
   },
   admin: false,
   banned: false,
+  lessonCount: 0,
   idealMatch: {
     age: 30,
     interests: {
@@ -273,6 +278,7 @@ const mockUser5 = {
   },
   admin: false,
   banned: false,
+  lessonCount: 0,
   idealMatch: {
     age: 30,
     interests: {
@@ -321,6 +327,7 @@ const mockUser6 = {
   },
   admin: false,
   banned: false,
+  lessonCount: 0,
   idealMatch: {
     age: 30,
     interests: {
@@ -370,6 +377,7 @@ const mockUser7 = {
   },
   admin: false,
   banned: true,
+  lessonCount: 0,
   idealMatch: {
     age: 30,
     interests: {
@@ -419,6 +427,7 @@ const mockUser8 = {
   },
   admin: false,
   banned: false,
+  lessonCount: 0,
   idealMatch: {
     age: 0,
     interests: {

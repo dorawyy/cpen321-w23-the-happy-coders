@@ -2,7 +2,9 @@ const {Badge} = require('../models/badge');
 
 async function assignMatchBadge(user, type)
 {
-    if(user.matchedUsers.length == 10)
+    
+    const badgeLength = type == "Match" ? user.matchedUsers.length : user.lessonCount;
+    if(badgeLength == 10)
     {
         try{
             const badge = await Badge.findOne({count: 10, type: type});
@@ -15,7 +17,7 @@ async function assignMatchBadge(user, type)
         }
 
     }
-    else if(user.matchedUsers.length == 5)
+    else if(badgeLength == 5)
     {
         try{
             const badge = await Badge.findOne({count: 5, type: type});
@@ -28,7 +30,7 @@ async function assignMatchBadge(user, type)
             console.log(err);
         }
     }
-    else if(user.matchedUsers.length == 1)
+    else if(badgeLength == 1)
     {
         try{
             const badge = await Badge.findOne({count: 1, type: type});

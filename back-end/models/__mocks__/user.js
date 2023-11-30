@@ -21,10 +21,10 @@ class User {
         this.interests = obj.interests ?? {};
         this.admin = obj.admin ?? false;
         this.banned = obj.banned ?? false;
+        this.lessonCount = obj.lessonCount ?? 0;
         this.registered = obj.registered;
         this.idealMatch = obj.idealMatch ?? {};
         this.learningPreference = obj.learningPreference ?? "Both";
-
     }
     // ChatGPT Usage: Partial
     save() {

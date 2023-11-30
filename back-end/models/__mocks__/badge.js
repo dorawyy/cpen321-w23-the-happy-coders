@@ -34,21 +34,21 @@ class Badge {
         _id: new ObjectId('5f6d88b9d4b4d4c6a0b0f6b4'),
         icon: "gold_session_badge",
         count: 10,
-        type: "Session"
+        type: "Lesson"
     });
 
     const mockBadge4 = new Badge({
         _id: new ObjectId('5f6d88b9d4b4d4c6a0b0f6b5'),
         icon: "gold_session_badge",
         count: 10,
-        type: "Session"
+        type: "Lesson"
     });
 
     const mockBadge5 = new Badge({
         _id: new ObjectId('5f6d88b9d4b4d4c6a0b0f6b6'),
         icon: "gold_session_badge",
         count: 10,
-        type: "Session"
+        type: "Lesson"
     });
 
     const mockedBadges = [mockBadge0, mockBadge1, mockBadge2, mockBadge3, mockBadge4, mockBadge5];  
