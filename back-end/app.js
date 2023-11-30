@@ -28,5 +28,6 @@ app.use("/matches", matchingRoutes);
 app.use("/chatrooms", communicationRoutes);
 app.use("/recommendations", recommendationRoutes);
 app.use("/moderation", moderationRoutes);
+app.use("/badges", badgeRoutes);
 
 module.exports = app;

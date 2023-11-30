@@ -14,7 +14,7 @@ const mockUser0 = {
   blockedUsers: [],
   likedUsers: [new ObjectId('5f9d88b9d4b4d4c6a0b0f6a3')],
   chatroomIDs: ['5f9d88b9d4b4d4c6a0b0f6a8'],
-  badges: [],
+  badges: ['5f6d88b9d4b4d4c6a0b0f6b1', '5f6d88b9d4b4d4c6a0b0f6b2'],
   interests: {
     business: true,
     sports: false,
@@ -28,7 +28,7 @@ const mockUser0 = {
   },
   admin: true,
   banned: false,
-  lessonCount: 0,
+  lessonCount: 9,
   idealMatch: {
     age: 30,
     interests: {
@@ -166,7 +166,7 @@ const mockUser3 = {
   blockedUsers: [],
   likedUsers: [],
   chatroomIDs: [],
-  badges: [],
+  badges: ["errorId"],
   interests: {
     business: true,
     sports: false,

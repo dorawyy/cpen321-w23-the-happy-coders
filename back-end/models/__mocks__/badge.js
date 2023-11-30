@@ -52,9 +52,20 @@ class Badge {
     });
 
     const mockedBadges = [mockBadge0, mockBadge1, mockBadge2, mockBadge3, mockBadge4, mockBadge5];  
+
+    Badge.findById = jest.fn().mockImplementation((id) => {
+        let badge = mockedBadges.find((badge) => badge._id == id);
+
+        return badge;
+    })
+
     Badge.findOne = jest.fn().mockImplementation((query) =>{
         if (!query) return mockedBadges[0];
         const {count, type} = query;
+        if(count == -1){
+            throw new Error('Error finding badge');
+        }
+        
         let badge = mockedBadges.find((badge) => badge.count == count && badge.type == type);
 
         return badge;
