@@ -38,6 +38,7 @@ async function getChatrooms(userId){
         
         chatroomObj.displayName = user.displayName;
         chatroomObj.otherUserName = otherUser.displayName;
+        chatroomObj.otherUserPicture = otherUser.picture;
         chatrooms.push(chatroomObj);
     }
 
