@@ -119,6 +119,7 @@ public class MatchesFragment extends Fragment {
                             if (!matches.isEmpty()) {
                                 try {
                                     JSONObject match = matches.get(0);
+                                    Log.d(TAG, match.toString());
                                     fillMatchInformation(match);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -227,27 +228,35 @@ public class MatchesFragment extends Fragment {
         badgeIds.add(getResources().getString(R.string.silver_session_badge_id));
         badgeIds.add(getResources().getString(R.string.gold_session_badge_id));
 
-        if (badges.length() == 0) {
+        Log.d(TAG, "Badges: " + badges.toString());
+        Log.d(TAG, "BadgeIds: " + badgeIds);
+
+        ArrayList<String> badgesList = new ArrayList<>();
+        for (int i = 0; i < badges.length(); i++) {
+            badgesList.add(badges.getString(i));
+        }
+
+        if (badgesList.size() == 0) {
             matchBadge.setVisibility(View.GONE);
             sessionBadge.setVisibility(View.GONE);
             return;
         }
 
-        if (badgeIds.get(0).equals(badges.get(0)) || badgeIds.get(0).equals(badges.get(1))) {
+        if (badgesList.contains(badgeIds.get(0))) {
             matchBadge.setImageResource(R.drawable.bronze_match_badge);
-        } else if (badgeIds.get(1).equals(badges.get(0)) || badgeIds.get(1).equals(badges.get(1))) {
+        } else if (badgesList.contains(badgeIds.get(1))) {
             matchBadge.setImageResource(R.drawable.silver_match_badge);
-        } else if (badgeIds.get(2).equals(badges.get(0)) || badgeIds.get(2).equals(badges.get(1))) {
+        } else if (badgesList.contains(badgeIds.get(2))) {
             matchBadge.setImageResource(R.drawable.gold_match_badge);
         } else {
             matchBadge.setVisibility(View.GONE);
         }
 
-        if (badgeIds.get(3).equals(badges.get(0)) || badgeIds.get(3).equals(badges.get(1))) {
+        if (badgesList.contains(badgeIds.get(3))) {
             sessionBadge.setImageResource(R.drawable.bronze_session_badge);
-        } else if (badgeIds.get(4).equals(badges.get(0)) || badgeIds.get(4).equals(badges.get(1))) {
+        } else if (badgesList.contains(badgeIds.get(4))) {
             sessionBadge.setImageResource(R.drawable.silver_session_badge);
-        } else if (badgeIds.get(5).equals(badges.get(0)) || badgeIds.get(5).equals(badges.get(1))) {
+        } else if (badgesList.contains(badgeIds.get(5))) {
             sessionBadge.setImageResource(R.drawable.gold_session_badge);
         } else {
             sessionBadge.setVisibility(View.GONE);
