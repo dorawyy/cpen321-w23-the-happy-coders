@@ -233,21 +233,21 @@ public class MatchesFragment extends Fragment {
             return;
         }
 
-        if (badgeIds.get(0).equals(badges.get(0))) {
+        if (badgeIds.get(0).equals(badges.get(0)) || badgeIds.get(0).equals(badges.get(1))) {
             matchBadge.setImageResource(R.drawable.bronze_match_badge);
-        } else if (badgeIds.get(1).equals(badges.get(0))) {
+        } else if (badgeIds.get(1).equals(badges.get(0)) || badgeIds.get(1).equals(badges.get(1))) {
             matchBadge.setImageResource(R.drawable.silver_match_badge);
-        } else if (badgeIds.get(2).equals(badges.get(0))) {
+        } else if (badgeIds.get(2).equals(badges.get(0)) || badgeIds.get(2).equals(badges.get(1))) {
             matchBadge.setImageResource(R.drawable.gold_match_badge);
         } else {
             matchBadge.setVisibility(View.GONE);
         }
 
-        if (badgeIds.get(3).equals(badges.get(1))) {
+        if (badgeIds.get(3).equals(badges.get(0)) || badgeIds.get(3).equals(badges.get(1))) {
             sessionBadge.setImageResource(R.drawable.bronze_session_badge);
-        } else if (badgeIds.get(4).equals(badges.get(1))) {
+        } else if (badgeIds.get(4).equals(badges.get(0)) || badgeIds.get(4).equals(badges.get(1))) {
             sessionBadge.setImageResource(R.drawable.silver_session_badge);
-        } else if (badgeIds.get(5).equals(badges.get(1))) {
+        } else if (badgeIds.get(5).equals(badges.get(0)) || badgeIds.get(5).equals(badges.get(1))) {
             sessionBadge.setImageResource(R.drawable.gold_session_badge);
         } else {
             sessionBadge.setVisibility(View.GONE);
