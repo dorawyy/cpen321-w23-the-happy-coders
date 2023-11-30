@@ -55,9 +55,10 @@
     <string name="logout_success">Logout successfully</string>
     <string name="error_get_events">Error getting events</string>
     <string name="error_delete_events">Error deleting event, try again</string>
-    <string name="gold_match_badge_id">5f6d88b9d4b4d4c6a0b0f6b1</string>
+    <string name="gold_match_badge_id">5f6d88b9d4b4d4c6a0b0f6b3</string>
     <string name="silver_match_badge_id">5f6d88b9d4b4d4c6a0b0f6b2</string>
-    <string name="bronze_match_badge_id">5f6d88b9d4b4d4c6a0b0f6b3</string>
+    <string name="bronze_match_badge_id">5f6d88b9d4b4d4c6a0b0f6b1</string>
+    
     <string name="gold_session_badge_id">5f6d88b9d4b4d4c6a0b0f6b4</string>
     <string name="silver_session_badge_id">5f6d88b9d4b4d4c6a0b0f6b5</string>
     <string name="bronze_session_badge_id">5f6d88b9d4b4d4c6a0b0f6b6</string>
