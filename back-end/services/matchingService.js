@@ -2,6 +2,7 @@ const { User } = require("../models/user");
 
 const userService = require("./userService")
 const communicationService = require("./communicationService")
+const badgeService = require("./badgesService")
 
 // ChatGPT Usage: No
 // Check if targetUser likes sourceUser and matches
@@ -23,6 +24,7 @@ async function createMatch(sourceUserId, targetUserId){
         await sourceUser.save();
         await targetUser.save();
         await communicationService.createChatroom(sourceUser, targetUser);
+        await badgeService.assignMatchBadge(sourceUser, 'Matches');
         return true;
     }
 

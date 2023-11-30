@@ -51,6 +51,7 @@ async function createEvent(authCode, rawEvent) {
         })
 
         newEvent.save();
+
         return { success: true, message: `Event created: ${response.data.htmlLink}` };
     } catch (error) {
         console.error('Error creating event:', error);
