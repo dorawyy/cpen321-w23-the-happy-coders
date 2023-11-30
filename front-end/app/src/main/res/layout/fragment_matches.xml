@@ -75,17 +75,26 @@
                     android:orientation="horizontal"
                     android:gravity="center_horizontal"
                     android:layout_marginBottom="4dp">
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/bronze_match_badge"
-                        />
-                    <ImageView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="10dp"
+                        android:textColor="#000000"
+                        android:textSize="22sp"
+                        android:fontFamily="@font/poppins"
+                        android:text="Badges:"
+                        android:layout_marginRight="30dp"
+                        android:id="@+id/match_badge_txt"/>
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="50dp"
                         android:src="@drawable/bronze_match_badge"
+                        android:id="@+id/matching_badge"
+                        />
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/bronze_match_badge"
+                        android:id="@+id/session_badge"
                         />
                 </LinearLayout>
                 <LinearLayout
