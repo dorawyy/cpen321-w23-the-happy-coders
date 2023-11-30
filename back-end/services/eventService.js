@@ -5,6 +5,7 @@ const { findUserByID } = require('./userService');
 const { Event } = require('../models/event');
 const { User } = require('../models/user');
 const { Chatroom } = require('../models/chatroom');
+const badgeService = require('./badgeService');
 
 // ChatGPT Usage: No
 // Create new Google Calendar event
@@ -51,6 +52,12 @@ async function createEvent(authCode, rawEvent) {
         })
 
         newEvent.save();
+
+        const user = await User.findById(rawEvent.hostUserId);
+
+        user.lessonCount += 1;
+        await badgeService.assignMatchBadge(user, 'Lesson');
+
         return { success: true, message: `Event created: ${response.data.htmlLink}` };
     } catch (error) {
         console.error('Error creating event:', error);

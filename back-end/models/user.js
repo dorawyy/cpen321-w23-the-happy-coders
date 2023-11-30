@@ -124,6 +124,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         default: false
     },
+    lessonCount: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     idealMatch:{
         type: idealMatchSchema,
         required: true,
