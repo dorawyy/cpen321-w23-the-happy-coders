@@ -8,14 +8,18 @@ async function assignMatchBadge(user, type)
 
     if(milestones.includes(badgeLength)){
         try{
-            const badge = await Badge.findOne({count: badgeLength, type: type});
-            if(badgeLength == 10){
-                const removeBadge = await Badge.findOne({count: 5, type: type});
-                user.badges = user.badges.filter((id) => {id != removeBadge._id});
+            const badge = await Badge.findOne({count: badgeLength, type});
+            if(badgeLength === 10){
+                const removeBadge = await Badge.findOne({count: 5, type});
+                user.badges = user.badges.filter((id) => {
+                    return id != removeBadge._id
+                });
             }
-            else if(badgeLength == 5){
-                const removeBadge = await Badge.findOne({count: 1, type: type});
-                user.badges = user.badges.filter((id) => {id != removeBadge._id});
+            else if(badgeLength === 5){
+                const removeBadge = await Badge.findOne({count: 1, type});
+                user.badges = user.badges.filter((id) => {
+                    return id != removeBadge._id
+                });
             }
 
             user.badges.push(badge._id);
