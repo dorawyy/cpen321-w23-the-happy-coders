@@ -64,7 +64,7 @@ public class ChatActivity extends AppCompatActivity {
     // ChatGPT Usage: no
     private void setSocket(){
         try {
-            socket = IO.socket("https://10.0.2.2:443");
+            socket = IO.socket("https://langsyncapp.canadacentral.cloudapp.azure.com");
         } catch (URISyntaxException e) {
             Log.d(TAG, "Error connecting to socket");
             e.printStackTrace();
