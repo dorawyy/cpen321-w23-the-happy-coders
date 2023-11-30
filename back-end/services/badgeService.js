@@ -1,10 +1,8 @@
-const e = require('express');
 const {Badge} = require('../models/badge');
 const {User} = require('../models/user');
 
 async function assignMatchBadge(user, type)
 {
-    
     const badgeLength = type == "Match" ? user.matchedUsers.length : user.lessonCount;
     let milestones = [1, 5, 10]
 
