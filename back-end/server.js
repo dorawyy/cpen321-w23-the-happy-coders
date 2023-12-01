@@ -47,7 +47,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('openAIStart', (roomId) => {
-        socket.to(roomId).emit('openAIStart', userId);
+        socket.to(roomId).emit('openAIStart');
     });
 });
 
