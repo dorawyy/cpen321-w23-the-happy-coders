@@ -24,8 +24,8 @@ async function createMatch(sourceUserId, targetUserId){
         await sourceUser.save();
         await targetUser.save();
         await communicationService.createChatroom(sourceUser, targetUser);
-        await badgeService.assignMatchBadge(sourceUser, 'Match');
-        await badgeService.assignMatchBadge(targetUser, 'Match');
+        await badgeService.assignBadge(sourceUser, 'Match');
+        await badgeService.assignBadge(targetUser, 'Match');
         return true;
     }
 

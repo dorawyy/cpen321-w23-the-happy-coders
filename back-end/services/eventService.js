@@ -56,7 +56,7 @@ async function createEvent(authCode, rawEvent) {
         const user = await User.findById(rawEvent.hostUserId);
 
         user.lessonCount += 1;
-        await badgeService.assignMatchBadge(user, 'Lesson');
+        await badgeService.assignBadge(user, 'Lesson');
 
         return { success: true, message: `Event created: ${response.data.htmlLink}` };
     } catch (error) {

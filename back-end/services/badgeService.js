@@ -1,12 +1,11 @@
 const {Badge} = require('../models/badge');
 
-async function assignMatchBadge(user, type)
+async function assignBadge(user, type)
 {
     const badgeLength = type == "Match" ? user.matchedUsers.length : user.lessonCount;
     let milestones = [1, 5, 10]
 
     if(milestones.includes(badgeLength)){
-     
             const badge = await Badge.findOne({count: badgeLength, type});
             if(badgeLength === 10){
                 const removeBadge = await Badge.findOne({count: 5, type});
@@ -20,7 +19,6 @@ async function assignMatchBadge(user, type)
                     return id != removeBadge._id
                 });
             }
-
             user.badges.push(badge._id);
     }
 
@@ -28,4 +26,4 @@ async function assignMatchBadge(user, type)
     return true;
 }
 
-module.exports = {assignMatchBadge};
+module.exports = {assignBadge};

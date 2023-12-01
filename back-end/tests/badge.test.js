@@ -11,7 +11,7 @@ describe('Assigning badges to users', () => {
     // Expected output: true
     // ChatGPT Usage: No
     test('Assigning silver badge to user', async () => {
-        let response = await badgeService.assignMatchBadge(mockedUsers[8], "Lesson");
+        let response = await badgeService.assignBadge(mockedUsers[8], "Lesson");
         expect(response).toBe(true);
         expect(mockedUsers[8].badges).toContainEqual(mockedBadges[4]._id);
     });
@@ -21,7 +21,7 @@ describe('Assigning badges to users', () => {
     // Expected output: true
     // ChatGPT Usage: No
     test('Assigning bronze badge to user', async () => {
-        let response = await badgeService.assignMatchBadge(mockedUsers[7], "Lesson");
+        let response = await badgeService.assignBadge(mockedUsers[7], "Lesson");
         expect(response).toBe(true);
         expect(mockedUsers[7].badges).toContainEqual(mockedBadges[5]._id);
     });
@@ -31,7 +31,7 @@ describe('Assigning badges to users', () => {
     // Expected output: true
     // ChatGPT Usage: No
     test('Get chatrooms for valid user 0', async () => {
-        let response = await badgeService.assignMatchBadge(mockedUsers[6], "Lesson");
+        let response = await badgeService.assignBadge(mockedUsers[6], "Lesson");
         expect(response).toBe(true);
         expect(mockedUsers[6].badges).toContainEqual(mockedBadges[3]._id);
     });
