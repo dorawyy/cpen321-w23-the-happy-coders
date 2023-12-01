@@ -149,7 +149,7 @@ async function createAdmin(email) {
     let adminData = {
         email,
         admin: true,
-        registered: true,
+        registered: false,
         displayName: "Admin",
         picture: ""
     }
