@@ -101,7 +101,7 @@ async function openAIMessage(message) {
             { role: "assistant", content: "The correct sentence is: 'Bonjour, je m'appelle Pierre'." },
             { role: "user", content: formattedMessage },
     ],
-        model: "gpt-3.5-turbo",
+        model: "gpt-4",
     }
     const openai = new OpenAI({
         apiKey: process.env.OPENAIKEY
