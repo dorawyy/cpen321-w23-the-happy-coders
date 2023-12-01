@@ -7,6 +7,7 @@ jest.mock('../models/report');
 const { mockedUsers } = require('../models/__mocks__/user');    
 const { mockedReports } = require('../models/__mocks__/mockedReports');
 const { ObjectId } = require('mongodb');
+const { UserRefreshClient } = require('google-auth-library');
 
 
 describe('GET /moderation/:adminId', () => {
@@ -68,8 +69,8 @@ describe('POST /moderation/', () => {
     test('Valid report', async () => {
         const response = await request(app).post('/moderation/').send(
             {
-                reporterUserId: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a6'),
-                reportedUserId: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a7'),
+                reporterUserId: mockedUsers[3]._id,
+                reportedUserId: mockedUsers[5]._id,
                 chatRoomId: new ObjectId('5f9d88b9d4b4d4c6a0b0f7f9'),
                 reportMessage: 'Literally jail them',
             }
@@ -99,7 +100,7 @@ describe('POST /moderation/', () => {
         const response = await request(app).post('/moderation').send(
             {
                 reporterUserId: 'invalidId',
-                reportedUserId: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a7'),
+                reportedUserId: mockedUsers[3]._id,
                 chatRoomId: new ObjectId('5f9d88b9d4b4d4c6a0b0f7f9'),
                 reportMessage: 'Why be mean?',
             }
@@ -117,7 +118,7 @@ describe('POST /moderation/', () => {
     test('Invalid reportedUserId', async () => {
         const response = await request(app).post('/moderation').send(
             {
-                reporterUserId: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a6'),
+                reporterUserId: mockedUsers[3]._id,
                 reportedUserId: 'invalidId',
                 chatRoomId: new ObjectId('5f9d88b9d4b4d4c6a0b0f7f9'),
                 reportMessage: 'Why be mean?',
@@ -137,7 +138,7 @@ describe('POST /moderation/', () => {
         const response = await request(app).post('/moderation').send(
             {
                 reporterUserId: 'errorId',
-                reportedUserId: new ObjectId('5f9d88b9d4b4d4c6a0b0f6a7'),
+                reportedUserId: mockedUsers[3]._id,
                 chatRoomId: new ObjectId('5f9d88b9d4b4d4c6a0b0f7f9'),
                 reportMessage: 'Why be mean?',
             }
