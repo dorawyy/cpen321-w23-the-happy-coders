@@ -130,6 +130,10 @@ public class ChatActivity extends AppCompatActivity {
                     Log.d(TAG, "Error creating message object");
                 }
         });
+
+        socket.on("openAIStart", args -> {
+            Toast.makeText(ChatActivity.this, "AI language assistant is now on.", Toast.LENGTH_SHORT).show();
+        });
     }
 
     // ChatGPT Usage: No
@@ -178,6 +182,9 @@ public class ChatActivity extends AppCompatActivity {
 
         toggleAi.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isAiOn = isChecked;
+            if(isChecked){
+                socket.emit("openAIStart", chatroomId);
+            }
         });
 
         Bundle extras = getIntent().getExtras();
