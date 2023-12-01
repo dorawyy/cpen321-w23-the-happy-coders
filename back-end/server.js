@@ -45,6 +45,10 @@ io.on('connection', (socket) => {
         console.log("typing");
         socket.to(roomId).emit('typing', userId);
     });
+
+    socket.on('openAIStart', (roomId) => {
+        socket.to(roomId).emit('openAIStart', userId);
+    });
 });
 
 async function run() {
