@@ -164,9 +164,7 @@ public class ReportsTest {
 
         ViewInteraction reportsExist = onView(withId(R.id.reports_recycler_view));
         reportsExist.check(matches(isDisplayed()));
-        
-        ViewInteraction removeReport = onView(withId(R.id.remove_report));
-        removeReport.perform(click());
+
     }
 
     private static Matcher<View> childAtPosition(

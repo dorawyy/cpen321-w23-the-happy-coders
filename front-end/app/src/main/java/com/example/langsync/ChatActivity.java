@@ -132,7 +132,9 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         socket.on("openAIStart", args -> {
-            Toast.makeText(ChatActivity.this, "AI language assistant is now on.", Toast.LENGTH_SHORT).show();
+            runOnUiThread(() -> {
+                Toast.makeText(ChatActivity.this, "AI language assistant is now on.", Toast.LENGTH_SHORT).show();
+            });
         });
     }
 
