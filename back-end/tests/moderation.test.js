@@ -7,8 +7,6 @@ jest.mock('../models/report');
 const { mockedUsers } = require('../models/__mocks__/user');    
 const { mockedReports } = require('../models/__mocks__/mockedReports');
 const { ObjectId } = require('mongodb');
-const { UserRefreshClient } = require('google-auth-library');
-
 
 describe('GET /moderation/:adminId', () => {
 
