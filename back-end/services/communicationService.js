@@ -87,9 +87,21 @@ async function openAIMessage(message) {
             { role: "assistant", content: "The grammar and sentence structure is correct." },
             { role: "user", content: "Helo my name is Daniel" },
             { role: "assistant", content: "The correct sentence is 'Hello, my name is Daniel'." },
+            { role: "user", content: "Eu gostar você também." },
+            { role: "assistant", content: "The correct sentence is: 'Eu gosto de você também'." },
+            { role: "user", content: "Há muitas pessoas aqui." },
+            { role: "assistant", content: "The grammar and sentence structure is correct." },
+            { role: "user", content: "Olá meu nome é Ana" },
+            { role: "assistant", content: "The correct sentence is: 'Olá, meu nome é Ana'." },
+            { role: "user", content: "J'aime vous aussi." },
+            { role: "assistant", content: "The correct sentence is: 'Je vous aime aussi'." },
+            { role: "user", content: "Il y a beaucoup de gens ici." },
+            { role: "assistant", content: "The grammar and sentence structure is correct." },
+            { role: "user", content: "Bonjour je m'appelle Pierre" },
+            { role: "assistant", content: "The correct sentence is: 'Bonjour, je m'appelle Pierre'." },
             { role: "user", content: formattedMessage },
     ],
-        model: "gpt-3.5-turbo",
+        model: "gpt-4",
     }
     const openai = new OpenAI({
         apiKey: process.env.OPENAIKEY
