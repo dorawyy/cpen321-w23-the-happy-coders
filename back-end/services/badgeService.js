@@ -1,3 +1,4 @@
+// ChatGPT Usage: Partial
 const {Badge} = require('../models/badge');
 
 async function assignBadge(user, type)
