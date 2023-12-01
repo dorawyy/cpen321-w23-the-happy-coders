@@ -30,7 +30,7 @@ describe('Assigning badges to users', () => {
     // Expected behaviour: gold badge is assigned to mockedUsers[6] 
     // Expected output: true
     // ChatGPT Usage: No
-    test('Get chatrooms for valid user 0', async () => {
+    test('Assigning silver badge to user', async () => {
         let response = await badgeService.assignBadge(mockedUsers[6], "Lesson");
         expect(response).toBe(true);
         expect(mockedUsers[6].badges).toContainEqual(mockedBadges[3]._id);
